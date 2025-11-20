@@ -1,0 +1,71 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: poo-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ..:/var/www/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - php
+    networks:
+      - poo-network
+    restart: unless-stopped
+
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: poo-php
+    volumes:
+      - ..:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    environment:
+      - XDEBUG_MODE=debug
+      - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003
+      - PHP_IDE_CONFIG=serverName=poo.localhost
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - poo-network
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:9
+    container_name: poo-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: poo_project
+      MYSQL_USER: poo_user
+      MYSQL_PASSWORD: poo_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - poo-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: poo-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - poo-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+networks:
+  poo-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:
