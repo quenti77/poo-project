@@ -3,6 +3,7 @@
 use Tuto\Base\Environment;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
+use Tuto\Http\Request;
 
 if (!function_exists('container')) {
     /**
@@ -44,5 +45,13 @@ if (!function_exists('env')) {
     {
         static $environment = new Environment();
         return $key === null ? $environment : $environment->get($key, $defaultValue);
+    }
+}
+
+if (!function_exists('request')) {
+    function request(): Request
+    {
+        static $request = Request::fromGlobals();
+        return $request;
     }
 }

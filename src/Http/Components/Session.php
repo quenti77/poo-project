@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Http;
+namespace Tuto\Http\Components;
 
 use Tuto\Collection\Collection;
 
