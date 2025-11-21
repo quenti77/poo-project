@@ -7,20 +7,31 @@ use Countable;
 use Iterator;
 
 /**
- * @template T
+ * @template TKey
+ * @template TVal
  */
 class Collection implements ArrayAccess, Countable, Iterator
 {
-    /** @uses CollectionArrayable<T> */
+    /** @uses CollectionArrayable<TVal> */
     use CollectionArrayable;
 
     /**
-     * @param array<string|int, T> $items
+     * @param array<TKey, TVal> $items
      */
     public function __construct(array $items = [])
     {
         $this->items = $items;
         $this->counter = 0;
+        $this->keys = array_keys($this->items);
+    }
+
+    /**
+     * @param T $value
+     * @return void
+     */
+    public function push(mixed $value): void
+    {
+        $this->items[] = $value;
         $this->keys = array_keys($this->items);
     }
 
@@ -37,5 +48,14 @@ class Collection implements ArrayAccess, Countable, Iterator
     public function reduce(callable $handler, mixed $initialValue = null): mixed
     {
         return array_reduce($this->items, $handler, $initialValue);
+    }
+
+    /**
+     * @param callable $handler
+     * @return TVal|null
+     */
+    public function find(callable $handler): mixed
+    {
+        return array_find($this->items, $handler);
     }
 }

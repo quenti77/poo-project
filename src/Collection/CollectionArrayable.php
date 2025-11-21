@@ -3,18 +3,19 @@
 namespace Tuto\Collection;
 
 /**
- * @template T
+ * @template TKey
+ * @template TVal
  */
 trait CollectionArrayable
 {
-    /** @uses CollectionIterable<T> */
+    /** @uses CollectionIterable<TKey> */
     use CollectionIterable;
 
-    /** @var array<string|int, T> */
+    /** @var array<TKey, TVal> */
     protected array $items;
 
     /**
-     * @param string|int $offset
+     * @param TKey $offset
      * @return bool
      */
     public function offsetExists(mixed $offset): bool
@@ -23,8 +24,8 @@ trait CollectionArrayable
     }
 
     /**
-     * @param string|null $offset
-     * @return T|null
+     * @param TKey|null $offset
+     * @return TVal|null
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -32,8 +33,8 @@ trait CollectionArrayable
     }
 
     /**
-     * @param string|int $offset
-     * @param T $value
+     * @param TKey $offset
+     * @param TVal $value
      * @return void
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -43,7 +44,7 @@ trait CollectionArrayable
     }
 
     /**
-     * @param string|int $offset
+     * @param TKey $offset
      * @return void
      */
     public function offsetUnset(mixed $offset): void

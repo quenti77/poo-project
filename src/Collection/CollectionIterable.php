@@ -3,13 +3,13 @@
 namespace Tuto\Collection;
 
 /**
- * @template T
+ * @template TKey
  */
 trait CollectionIterable
 {
     private int $counter;
 
-    /** @var array<int, string|int> $keys */
+    /** @var array<int, TKey> $keys */
     private array $keys;
 
     /**
