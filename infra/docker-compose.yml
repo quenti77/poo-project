@@ -24,7 +24,7 @@ services:
       - ..:/var/www/html
       - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
-      - XDEBUG_MODE=debug
+      - XDEBUG_MODE=debug,develop
       - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003
       - PHP_IDE_CONFIG=serverName=poo.localhost
     extra_hosts:
