@@ -5,7 +5,9 @@ namespace Tuto\Container;
 use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionFunction;
 use ReflectionIntersectionType;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
@@ -61,6 +63,41 @@ class Resolver
     }
 
     /**
+     * @param array{string, string} $handler
+     * @param array $context
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function resolveArray(array $handler, array $context = []): mixed
+    {
+        if (count($handler) !== 2) {
+            throw new InvalidArgumentException("Handler array must be only 2 items [className, methodName]");
+        }
+
+        [$className, $methodName] = $handler;
+        $instance = $this->instantiate($className);
+
+        $reflectionMethod = new ReflectionMethod($instance, $methodName);
+        $parameters = $this->getParameters($reflectionMethod->getParameters(), $context);
+
+        return $reflectionMethod->invoke($instance, ...$parameters);
+    }
+
+    /**
+     * @param callable $handler
+     * @param array $context
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function resolveCallable(callable $handler, array $context = []): mixed
+    {
+        $reflectionCallable = new ReflectionFunction($handler);
+        $parameters = $this->getParameters($reflectionCallable->getParameters(), $context);
+
+        return $reflectionCallable->invoke(...$parameters);
+    }
+
+    /**
      * @param ReflectionParameter $parameter
      * @return mixed
      * @throws ReflectionException
@@ -78,13 +115,14 @@ class Resolver
                 $type->getTypes(),
                 static fn (ReflectionNamedType|ReflectionIntersectionType $type) => $type instanceof ReflectionNamedType,
             ),
-            default => throw new RuntimeException("Resolver cannot be resolved '{$type::class}'"),
+            default => throw new RuntimeException("Resolver cannot be resolved '{$type->getName()}'"),
         };
 
         return $this->resolveParameterTypes($parameter, $typeArgs);
     }
 
     /**
+     * @param ReflectionParameter $parameter
      * @param ReflectionNamedType[] $types
      * @return mixed
      * @throws ReflectionException

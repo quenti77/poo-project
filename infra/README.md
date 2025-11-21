@@ -73,7 +73,7 @@ La première fois, Docker va construire l'image PHP avec Xdebug, cela peut prend
   - Password: `poo_password`
   - Database: `poo_project`
   - Root password: `root`
-- **Redis**: localhost:6379
+- **Redis**: localhost:6389
 
 ## Commandes utiles
 

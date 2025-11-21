@@ -4,6 +4,7 @@ namespace Tuto\Collection;
 
 /**
  * @template TKey
+ * @template TVal
  */
 trait CollectionIterable
 {
@@ -13,7 +14,7 @@ trait CollectionIterable
     private array $keys;
 
     /**
-     * @return T
+     * @return TVal
      */
     public function current(): mixed
     {

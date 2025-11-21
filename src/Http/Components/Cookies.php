@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use Tuto\Collection\Collection;
 
 /**
- * @implements Collection<Cookie>
+ * @implements Collection<int, Cookie>
  */
 class Cookies extends Collection
 {

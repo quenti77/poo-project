@@ -89,7 +89,7 @@ class Router
      * @param array<string, string> $parameters
      * @return string
      */
-    public function generate(string $name, array $parameters): string
+    public function generate(string $name, array $parameters = []): string
     {
         if (!isset($this->namedRoutes[$name])) {
             throw new InvalidArgumentException("No route found with name '{$name}'");

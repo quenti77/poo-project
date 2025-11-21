@@ -24,6 +24,14 @@ class DependencyInjectionContainer
     {
     }
 
+    public function resolver(): Resolver
+    {
+        if ($this->resolver === null) {
+            throw new RuntimeException("Resolver must be set before used");
+        }
+        return $this->resolver;
+    }
+
     public function withResolver(Resolver $resolver): void
     {
         $this->resolver = $resolver;
@@ -51,6 +59,11 @@ class DependencyInjectionContainer
         $this->interfaces[$interface] = $concrete;
     }
 
+    public function addFactory(string $name, callable $value): void
+    {
+        $this->factories[$name] = $value;
+    }
+
     /**
      * @param string $name
      * @return mixed
@@ -72,11 +85,7 @@ class DependencyInjectionContainer
             return $this->instances[$name] = $this->callFactory($this->factories[$name]);
         }
 
-        if ($this->resolver === null) {
-            throw new RuntimeException("Resolver must be set before used");
-        }
-
-        $instance = $this->resolver->instantiate($name);
+        $instance = $this->resolver()->instantiate($name);
         if ($instance) {
             return $this->instances[$name] = $instance;
         }

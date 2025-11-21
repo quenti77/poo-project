@@ -26,7 +26,7 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
-     * @param T $value
+     * @param TVal $value
      * @return void
      */
     public function push(mixed $value): void
@@ -57,5 +57,13 @@ class Collection implements ArrayAccess, Countable, Iterator
     public function find(callable $handler): mixed
     {
         return array_find($this->items, $handler);
+    }
+
+    /**
+     * @return array<TKey, TVal>
+     */
+    public function all(): array
+    {
+        return $this->items;
     }
 }

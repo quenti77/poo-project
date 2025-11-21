@@ -2,7 +2,6 @@
 
 namespace Tuto\Base;
 
-use ArrayAccess;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -27,8 +26,6 @@ class Environment
         if (!$handler) {
             throw new RuntimeException("'{$path}' cannot be opened");
         }
-
-        $fields = [];
 
         while (($line = fgets($handler)) !== false) {
             $line = trim($line);
