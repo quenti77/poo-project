@@ -1,34 +1,16 @@
 <?php
 
-use App\Commands\HelpCommand;
-use App\Commands\MigrationUpCommand;
-use Tuto\Base\Command;
+use App\Commands\MigrateUpCommand;
+use Tuto\CLI\ConsoleApplication;
+use Tuto\CLI\Input;
+use Tuto\CLI\Output;
 
 define('ROOT', realpath(__DIR__));
 
 require ROOT . '/src/Base/Autoloader.php';
 require ROOT . '/src/Utils/functions.php';
 
-$helpCommand = new HelpCommand();
-$commands = [
-    new MigrationUpCommand(),
-    $helpCommand,
-];
-$helpCommand->withCommands($commands);
+$app = new ConsoleApplication(ROOT . '/config', new Output());
+$app->addCommand(MigrateUpCommand::class);
 
-array_shift($argv);
-
-$commandName = 'help';
-if (!empty($argv)) {
-    $commandName = array_shift($argv);
-}
-
-$commandNames = array_map(static fn (Command $command) => $command->name, $commands);
-if (!in_array($commandName, $commandNames, true)) {
-    $commandName = 'help';
-    echo "\e[1;31mCommand non trouvé ! Commande '{$commandName}'\e[0m\n";
-}
-
-/** @var Command $currentCommand */
-$currentCommand = array_find($commands, static fn (Command $command) => $command->name === $commandName);
-exit($currentCommand->run($argv));
+exit($app->run(Input::fromArgv($argv ?? $_SERVER['argv'] ?? [])));

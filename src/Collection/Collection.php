@@ -60,10 +60,25 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * @param int $offset
+     * @param int|null $length
+     * @return Collection<TKey, TVal>
+     */
+    public function slice(int $offset, int|null $length = null): Collection
+    {
+        return new Collection(array_slice($this->items, $offset, $length));
+    }
+
+    /**
      * @return array<TKey, TVal>
      */
     public function all(): array
     {
         return $this->items;
+    }
+
+    public function reverse(): self
+    {
+        return new Collection(array_reverse($this->items));
     }
 }

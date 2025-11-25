@@ -3,11 +3,14 @@
 namespace Tuto\Database\Pdo;
 
 use PDO;
+use Throwable;
 use Tuto\Database\ConnectionInterface;
 use Tuto\Database\StatementInterface;
 
 class PdoConnection extends PDO implements ConnectionInterface
 {
+    private bool $isTransaction = false;
+
     public function __construct(
         string $type,
         string $host,
@@ -35,4 +38,50 @@ class PdoConnection extends PDO implements ConnectionInterface
         $request->execute();
         return $request;
     }
+
+    public function startTransaction(): bool
+    {
+        if ($this->isTransaction) {
+            return false;
+        }
+        $this->isTransaction = true;
+
+        try {
+            $this->setAttribute(parent::ATTR_AUTOCOMMIT, 0);
+        } catch (Throwable) {
+            return false;
+        }
+        return $this->beginTransaction();
+    }
+
+    public function commit(): bool
+    {
+        if (!$this->isTransaction) {
+            return false;
+        }
+        $this->isTransaction = false;
+
+        try {
+            $this->setAttribute(parent::ATTR_AUTOCOMMIT, 1);
+        } catch (Throwable) {
+            return false;
+        }
+        return $this->commit();
+    }
+
+    public function rollback(): bool
+    {
+        if (!$this->isTransaction) {
+            return false;
+        }
+        $this->isTransaction = false;
+
+        try {
+            $this->setAttribute(parent::ATTR_AUTOCOMMIT, 1);
+        } catch (Throwable) {
+            return false;
+        }
+        return $this->rollBack();
+    }
+
 }
