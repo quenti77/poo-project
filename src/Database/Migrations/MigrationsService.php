@@ -13,7 +13,6 @@ use Tuto\CLI\Ansi;
 use Tuto\CLI\Output;
 use Tuto\CLI\Style;
 use Tuto\Collection\Collection;
-use Tuto\Database\ConnectionInterface;
 
 class MigrationsService
 {
@@ -73,6 +72,43 @@ class MigrationsService
         }
     }
 
+    /**
+     * @param Output $output
+     * @return void
+     * @throws DateMalformedStringException
+     * @throws ReflectionException
+     */
+    public function down(Output $output): void
+    {
+        $this->assertTableExist($output);
+
+        $currentStep = $this->migrationsRepository->getMaxStep();
+        $migrated = $this->migrationsRepository->latestMigrations($currentStep);
+
+        /** @var MigrationEntity $migration */
+        foreach ($migrated as $migration) {
+            $baseName = $migration->getName();
+            $output->write("Process migration '{$baseName}' ");
+            $output->block("DOING", Ansi::FG_YELLOW);
+
+            try {
+                $this->rollbackMigration($migration);
+
+                $output->write("Process migration '{$baseName}' ");
+                $output->block("DONE", Ansi::FG_GREEN);
+            } catch (Throwable $exception) {
+                $output->write("Process migration '{$baseName}' ");
+                $output->block("ERROR", Ansi::FG_RED);
+                $output->writeln();
+
+                $errorStyle = Style::create()->fgStandard(Ansi::BG_WHITE)->bgStandard(Ansi::BG_RED);
+                $output->write($errorStyle->apply($exception->getMessage()));
+            }
+
+            $output->writeln();
+        }
+    }
+
     private function assertTableExist(Output $output): void
     {
         $migrationExist = $this->migrationsRepository->assertExist();
@@ -98,11 +134,36 @@ class MigrationsService
 
         $connection = $this->migrationsRepository->connection;
         try {
-            $connection->beginTransaction();
+            $connection->startTransaction();
             $instance->up($connection);
 
             $this->migrationsRepository->create($migration, $step);
             $connection->commit();
+        } catch (Throwable $exception) {
+            $connection->rollback();
+            throw $exception;
+        }
+    }
+
+    /**
+     * @param MigrationEntity $migrationEntity
+     * @return void
+     * @throws Throwable
+     */
+    private function rollbackMigration(MigrationEntity $migrationEntity): void
+    {
+        $instance = require $migrationEntity->getFile()->getRealPath();
+        if (!($instance instanceof Migration)) {
+            throw new InvalidArgumentException($instance::class . " must be an instance of " . Migration::class);
+        }
+
+        $connection = $this->migrationsRepository->connection;
+        try {
+            $connection->startTransaction();
+            $instance->down($connection);
+
+            $this->migrationsRepository->delete($migrationEntity);
+            $connection->rollback();
         } catch (Throwable $exception) {
             $connection->rollback();
             throw $exception;

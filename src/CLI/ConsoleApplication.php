@@ -88,9 +88,9 @@ class ConsoleApplication
             $max = max($max, strlen($row[0]));
 
             $parts = explode(':', $row[0]);
-            $commandName = array_pop($parts);
-            $groupName = implode(':', $parts + ['__global']);
+            array_pop($parts);
 
+            $groupName = implode(':', $parts + ['__global']);
             $groups[$groupName][] = $row;
         }
 
@@ -98,10 +98,11 @@ class ConsoleApplication
             $this->output->styled("{$groupName}:\n", Style::create()->fgStandard(Ansi::FG_YELLOW));
             foreach ($commands as [$name, $description]) {
                 $this->output->write("- ");
-                $this->output->write(Style::create()->fgStandard(Ansi::FG_GREEN)->apply($name));
+                $this->output->write(Style::create()->fgStandard(Ansi::FG_GREEN)->apply(str_pad($name, $max)));
                 $this->output->write(" | {$description}");
+                $this->output->writeln(Ansi::RESET);
             }
-            $this->output->writeln("\n\n");
+            $this->output->writeln();
         }
 
         $this->output->writeln();

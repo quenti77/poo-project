@@ -60,7 +60,7 @@ class Input
         return $this->commandName;
     }
 
-    public function getArgument(int $index, mixed $default = null): Collection
+    public function getArgument(int $index, string|null $default = null): string|null
     {
         return $this->arguments[$index] ?? $default;
     }

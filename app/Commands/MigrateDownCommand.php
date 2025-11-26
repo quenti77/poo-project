@@ -9,7 +9,7 @@ use Tuto\CLI\Input;
 use Tuto\CLI\Output;
 use Tuto\Database\Migrations\MigrationsService;
 
-class MigrateUpCommand extends Command
+class MigrateDownCommand extends Command
 {
     public function __construct(private readonly MigrationsService $migrationsService)
     {
@@ -17,12 +17,12 @@ class MigrateUpCommand extends Command
 
     public function getName(): string
     {
-        return "migrate:up";
+        return "migrate:down";
     }
 
     public function getDescription(): string
     {
-        return "Migrate the database to the last migration can be run";
+        return "Revert latest migration of the database";
     }
 
     /**
@@ -34,7 +34,7 @@ class MigrateUpCommand extends Command
      */
     public function execute(Input $input, Output $output): int
     {
-        $this->migrationsService->up($output);
+        $this->migrationsService->down($output);
         return self::EXIT_SUCCESS;
     }
 }

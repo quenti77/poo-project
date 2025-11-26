@@ -5,7 +5,7 @@ use Tuto\Database\Migrations\Migration;
 
 return new class extends Migration
 {
-    public function up(ConnectionInterface $connection)
+    public function up(ConnectionInterface $connection): void
     {
         $createRequest = <<<EOS
         create table users
@@ -27,7 +27,7 @@ return new class extends Migration
         $connection->request($createRequest);
     }
 
-    public function down(ConnectionInterface $connection)
+    public function down(ConnectionInterface $connection): void
     {
         $connection->request("drop table if exists `users`;");
     }

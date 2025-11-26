@@ -1,5 +1,7 @@
 <?php
 
+use App\Commands\MigrateDownCommand;
+use App\Commands\MigrateMakeCommand;
 use App\Commands\MigrateUpCommand;
 use Tuto\CLI\ConsoleApplication;
 use Tuto\CLI\Input;
@@ -12,5 +14,7 @@ require ROOT . '/src/Utils/functions.php';
 
 $app = new ConsoleApplication(ROOT . '/config', new Output());
 $app->addCommand(MigrateUpCommand::class);
+$app->addCommand(MigrateDownCommand::class);
+$app->addCommand(MigrateMakeCommand::class);
 
 exit($app->run(Input::fromArgv($argv ?? $_SERVER['argv'] ?? [])));
