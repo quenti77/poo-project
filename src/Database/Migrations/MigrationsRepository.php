@@ -64,7 +64,7 @@ class MigrationsRepository
      */
     public function latestMigrations(int|null $step = null): Collection
     {
-        $request = $this->connection->request('select id, name, step, created_at from migrations where step >= :step', [
+        $request = $this->connection->request('select id, name, step, created_at from migrations where step >= :step order by id desc', [
             ':step' => $step ?? $this->getMaxStep(),
         ]);
 
@@ -72,7 +72,7 @@ class MigrationsRepository
         while ($migrationData = $request->fetch()) {
             $migrations->push($this->dataToEntity($migrationData));
         }
-        return $migrations->reverse();
+        return $migrations;
     }
 
     public function getMaxStep(): int
@@ -98,6 +98,11 @@ class MigrationsRepository
                 ':step' => $step,
             ],
         );
+    }
+
+    public function delete(MigrationEntity $migration): void
+    {
+        $this->connection->request('delete from migrations where id = :id', [':id' => $migration->getId()]);
     }
 
     /**
