@@ -14,22 +14,22 @@ class Style
 
     public static function success(): self
     {
-        return self::create()->fgStandard(Ansi::FG_GREEN);
+        return self::create()->standard(Ansi::FG_GREEN);
     }
 
     public static function error(): self
     {
-        return self::create()->fgStandard(Ansi::FG_RED)->bold();
+        return self::create()->standard(Ansi::FG_RED)->bold();
     }
 
     public static function warning(): self
     {
-        return self::create()->fgStandard(Ansi::FG_YELLOW);
+        return self::create()->standard(Ansi::FG_YELLOW);
     }
 
     public static function info(): self
     {
-        return self::create()->fgStandard(Ansi::FG_CYAN);
+        return self::create()->standard(Ansi::FG_CYAN);
     }
 
     public static function comment(): self
@@ -85,13 +85,7 @@ class Style
         return $this;
     }
 
-    public function fgStandard(string $code): self
-    {
-        $this->prefix .= $code;
-        return $this;
-    }
-
-    public function bgStandard(string $code): self
+    public function standard(string $code): self
     {
         $this->prefix .= $code;
         return $this;

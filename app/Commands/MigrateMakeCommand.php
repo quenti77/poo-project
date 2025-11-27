@@ -50,7 +50,7 @@ class MigrateMakeCommand extends Command
         }
 
         $output->write("Creating file '{$filename}' ");
-        $output->block("DOING", Ansi::FG_YELLOW);
+        $output->badge("DOING", Ansi::FG_YELLOW);
         $fileContents = <<<EOF
 <?php
 
@@ -72,7 +72,7 @@ EOF;
         file_put_contents($migrationPath, $fileContents);
 
         $output->write("Creating file '{$filename}' ");
-        $output->block("DONE", Ansi::FG_GREEN);
+        $output->badge("DONE", Ansi::FG_GREEN);
         $output->writeln();
 
         return self::EXIT_SUCCESS;

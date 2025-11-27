@@ -52,16 +52,16 @@ class MigrationsService
         foreach ($migrationFiles as $migration) {
             $baseName = $migration->getBasename('.php');
             $output->write("Process migration '{$baseName}' ");
-            $output->block("DOING", Ansi::FG_YELLOW);
+            $output->badge("DOING", Ansi::FG_YELLOW);
 
             try {
                 $this->processMigration($migration, $newStep);
 
                 $output->write("Process migration '{$baseName}' ");
-                $output->block("DONE", Ansi::FG_GREEN);
+                $output->badge("DONE", Ansi::FG_GREEN);
             } catch (Throwable $exception) {
                 $output->write("Process migration '{$baseName}' ");
-                $output->block("ERROR", Ansi::FG_RED);
+                $output->badge("ERROR", Ansi::FG_RED);
                 $output->writeln();
 
                 $output->error($exception->getMessage());
@@ -88,16 +88,16 @@ class MigrationsService
         foreach ($migrated as $migration) {
             $baseName = $migration->getName();
             $output->write("Process migration '{$baseName}' ");
-            $output->block("DOING", Ansi::FG_YELLOW);
+            $output->badge("DOING", Ansi::FG_YELLOW);
 
             try {
                 $this->rollbackMigration($migration);
 
                 $output->write("Process migration '{$baseName}' ");
-                $output->block("DONE", Ansi::FG_GREEN);
+                $output->badge("DONE", Ansi::FG_GREEN);
             } catch (Throwable $exception) {
                 $output->write("Process migration '{$baseName}' ");
-                $output->block("ERROR", Ansi::FG_RED);
+                $output->badge("ERROR", Ansi::FG_RED);
                 $output->writeln();
 
                 $output->error($exception->getMessage());
