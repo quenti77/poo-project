@@ -64,8 +64,7 @@ class MigrationsService
                 $output->block("ERROR", Ansi::FG_RED);
                 $output->writeln();
 
-                $errorStyle = Style::create()->fgStandard(Ansi::BG_WHITE)->bgStandard(Ansi::BG_RED);
-                $output->write($errorStyle->apply($exception->getMessage()));
+                $output->error($exception->getMessage());
             }
 
             $output->writeln();
@@ -101,8 +100,7 @@ class MigrationsService
                 $output->block("ERROR", Ansi::FG_RED);
                 $output->writeln();
 
-                $errorStyle = Style::create()->fgStandard(Ansi::BG_WHITE)->bgStandard(Ansi::BG_RED);
-                $output->write($errorStyle->apply($exception->getMessage()));
+                $output->error($exception->getMessage());
             }
 
             $output->writeln();
@@ -113,9 +111,9 @@ class MigrationsService
     {
         $migrationExist = $this->migrationsRepository->assertExist();
         if (!$migrationExist) {
-            $output->styled("Migration table does not exist. Creating ...", Style::create()->fgStandard(Ansi::FG_YELLOW));
+            $output->warning("Migration table does not exist. Creating ...");
             $this->migrationsRepository->createMigrationTable();
-            $output->styled("Migration table created", Style::create()->fgStandard(Ansi::FG_GREEN));
+            $output->success("Migration table created");
         }
     }
 

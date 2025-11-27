@@ -59,7 +59,7 @@ class ConsoleApplication
 
         $command = $this->find($commandName);
         if ($command === null) {
-            $this->output->writeln(Ansi::BG_RED . Ansi::FG_WHITE . "Command not found '{$commandName}'" . Ansi::RESET);
+            $this->output->error("Command not found '{$commandName}'");
             $this->runHelp();
             return Command::EXIT_FAILURE;
         }
@@ -67,7 +67,7 @@ class ConsoleApplication
         try {
             return $command->execute($input, $this->output);
         } catch (Throwable $exception) {
-            $this->output->writeln(Ansi::BG_RED . Ansi::FG_WHITE . $exception->getMessage() . Ansi::RESET);
+            $this->output->error($exception->getMessage());
             return Command::EXIT_FAILURE;
         }
     }
@@ -95,10 +95,10 @@ class ConsoleApplication
         }
 
         foreach ($groups as $groupName => $commands) {
-            $this->output->styled("{$groupName}:\n", Style::create()->fgStandard(Ansi::FG_YELLOW));
+            $this->output->styled("{$groupName}:\n", Style::warning());
             foreach ($commands as [$name, $description]) {
                 $this->output->write("- ");
-                $this->output->write(Style::create()->fgStandard(Ansi::FG_GREEN)->apply(str_pad($name, $max)));
+                $this->output->write(Style::success()->apply(str_pad($name, $max)));
                 $this->output->write(" | {$description}");
                 $this->output->writeln(Ansi::RESET);
             }
