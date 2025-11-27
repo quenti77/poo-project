@@ -74,7 +74,7 @@ class ConsoleApplication
 
     private function runHelp(): void
     {
-        $this->output->title(Ansi::FG_GREEN . "Available commands");
+        $this->output->successBlock("Available commands");
 
         $rows = $this->commands
             ->map(static fn (Command $c) => [$c->getName(), $c->getDescription()])

@@ -2,6 +2,8 @@
 
 namespace Tuto\CLI;
 
+use Tuto\CLI\Components\ProgressBar;
+
 class Output
 {
     public function write(string $text): void
@@ -19,17 +21,39 @@ class Output
         $this->writeln($style->apply($text));
     }
 
-    public function title(string $text): void
-    {
-        $this->writeln();
-        $this->writeln("=== " . Style::create()->apply($text) . " ===");
-        $this->writeln();
-    }
-
-    public function block(string $text, string $color = Ansi::FG_BLUE): void
+    public function badge(string $text, string $color = Ansi::FG_BLUE): void
     {
         $styled = $color . $text . Ansi::RESET;
         $this->writeln("[{$styled}]");
+    }
+
+    public function block(
+        string $text,
+        string $fgColor = Ansi::FG_WHITE,
+        string $bgColor = Ansi::BG_BLUE,
+        int $padding = 2,
+        bool $verticalPadding = true
+    ): void {
+        $lines = explode("\n", $text);
+        $maxLength = max(array_map('strlen', $lines));
+        $paddedWidth = $maxLength + ($padding * 2);
+
+        $emptyLine = str_repeat(' ', $paddedWidth);
+        $style = $fgColor . $bgColor;
+
+        if ($verticalPadding) {
+            $this->writeln($style . $emptyLine . Ansi::RESET);
+        }
+
+        foreach ($lines as $line) {
+            $paddedLine = str_repeat(' ', $padding) . str_pad($line, $maxLength) . str_repeat(' ', $padding);
+            $this->writeln($style . $paddedLine . Ansi::RESET);
+        }
+
+        if ($verticalPadding) {
+            $this->writeln($style . $emptyLine . Ansi::RESET);
+        }
+        $this->writeln();
     }
 
     public function table(array $rows): void
@@ -59,26 +83,46 @@ class Output
 
     public function success(string $text): void
     {
-        $this->styled($text, Style::create()->fgStandard(Ansi::FG_GREEN));
+        $this->styled($text, Style::create()->standard(Ansi::FG_GREEN));
     }
 
     public function error(string $text): void
     {
-        $this->styled($text, Style::create()->fgStandard(Ansi::FG_RED)->bold());
+        $this->styled($text, Style::create()->standard(Ansi::FG_RED)->bold());
     }
 
     public function warning(string $text): void
     {
-        $this->styled($text, Style::create()->fgStandard(Ansi::FG_YELLOW));
+        $this->styled($text, Style::create()->standard(Ansi::FG_YELLOW));
     }
 
     public function info(string $text): void
     {
-        $this->styled($text, Style::create()->fgStandard(Ansi::FG_CYAN));
+        $this->styled($text, Style::create()->standard(Ansi::FG_CYAN));
     }
 
     public function comment(string $text): void
     {
         $this->styled($text, Style::create()->dim());
+    }
+
+    public function successBlock(string $text, int $padding = 2): void
+    {
+        $this->block($text, Ansi::FG_WHITE, Ansi::BG_GREEN, $padding);
+    }
+
+    public function errorBlock(string $text, int $padding = 2): void
+    {
+        $this->block($text, Ansi::FG_WHITE, Ansi::BG_RED, $padding);
+    }
+
+    public function warningBlock(string $text, int $padding = 2): void
+    {
+        $this->block($text, Ansi::FG_BLACK, Ansi::BG_YELLOW, $padding);
+    }
+
+    public function infoBlock(string $text, int $padding = 2): void
+    {
+        $this->block($text, Ansi::FG_WHITE, Ansi::BG_CYAN, $padding);
     }
 }

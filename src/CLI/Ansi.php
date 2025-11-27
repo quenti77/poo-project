@@ -35,7 +35,7 @@ class Ansi
     public const string BG_CYAN = "\e[46m";
     public const string BG_WHITE = "\e[47m";
 
-    // Truecolor
+    // True-color
     public static function fgRgb(int $r, int $g, int $b): string
     {
         return "\e[38;2;{$r};{$g};{$b}m";
