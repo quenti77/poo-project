@@ -12,6 +12,31 @@ class Style
         return new self();
     }
 
+    public static function success(): self
+    {
+        return self::create()->fgStandard(Ansi::FG_GREEN);
+    }
+
+    public static function error(): self
+    {
+        return self::create()->fgStandard(Ansi::FG_RED)->bold();
+    }
+
+    public static function warning(): self
+    {
+        return self::create()->fgStandard(Ansi::FG_YELLOW);
+    }
+
+    public static function info(): self
+    {
+        return self::create()->fgStandard(Ansi::FG_CYAN);
+    }
+
+    public static function comment(): self
+    {
+        return self::create()->dim();
+    }
+
     public function bold(): self
     {
         $this->prefix .= Ansi::BOLD;

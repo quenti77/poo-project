@@ -56,4 +56,29 @@ class Output
     {
         return new ProgressBar($this, $max);
     }
+
+    public function success(string $text): void
+    {
+        $this->styled($text, Style::create()->fgStandard(Ansi::FG_GREEN));
+    }
+
+    public function error(string $text): void
+    {
+        $this->styled($text, Style::create()->fgStandard(Ansi::FG_RED)->bold());
+    }
+
+    public function warning(string $text): void
+    {
+        $this->styled($text, Style::create()->fgStandard(Ansi::FG_YELLOW));
+    }
+
+    public function info(string $text): void
+    {
+        $this->styled($text, Style::create()->fgStandard(Ansi::FG_CYAN));
+    }
+
+    public function comment(string $text): void
+    {
+        $this->styled($text, Style::create()->dim());
+    }
 }

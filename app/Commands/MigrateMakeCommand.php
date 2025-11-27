@@ -35,11 +35,9 @@ class MigrateMakeCommand extends Command
      */
     public function execute(Input $input, Output $output): int
     {
-        $errorStyle = Style::create()->fgStandard(Ansi::FG_RED);
-
         $migrationName = $input->getArgument(0);
         if ($migrationName === null) {
-            $output->writeln($errorStyle->apply("Command needs a migration name : 'php cli.php migrate:make <name>'"));
+            $output->error("Command needs a migration name : 'php cli.php migrate:make <name>'");
             return self::EXIT_FAILURE;
         }
 
@@ -47,7 +45,7 @@ class MigrateMakeCommand extends Command
         $filename = "{$currentDate}_{$migrationName}.php";
         $migrationPath = container('path.database') . "/migrations/{$filename}";
         if (file_exists($migrationPath)) {
-            $output->writeln($errorStyle->apply("File '{$migrationPath}' already exist"));
+            $output->error("File '{$migrationPath}' already exist");
             return self::EXIT_FAILURE;
         }
 
