@@ -8,6 +8,9 @@ use Tuto\CLI\Components\Question;
 use Tuto\CLI\Components\Confirm;
 use Tuto\CLI\Components\Choice;
 use Tuto\CLI\Components\Password;
+use Tuto\CLI\Components\Suggest;
+use Tuto\CLI\Components\Select;
+use Tuto\CLI\Components\MultiSelect;
 
 class Output
 {
@@ -40,18 +43,23 @@ class Output
         bool $verticalPadding = true
     ): void {
         $lines = explode("\n", $text);
-        $maxLength = max(array_map('strlen', $lines));
-        $paddedWidth = $maxLength + ($padding * 2);
-
-        $emptyLine = str_repeat(' ', $paddedWidth);
+        // Use mb_strlen to count visual characters, not bytes (UTF-8 support)
+        $maxLength = max(array_map('mb_strlen', $lines));
         $style = $fgColor . $bgColor;
+
+        // Calculate total width (text + padding on both sides)
+        $totalWidth = $maxLength + ($padding * 2);
+        $emptyLine = str_repeat(' ', $totalWidth);
 
         if ($verticalPadding) {
             $this->writeln($style . $emptyLine . Ansi::RESET);
         }
 
         foreach ($lines as $line) {
-            $paddedLine = str_repeat(' ', $padding) . str_pad($line, $maxLength) . str_repeat(' ', $padding);
+            // Use mb_str_pad for UTF-8 support (or manual padding)
+            $lineLength = mb_strlen($line);
+            $rightPadding = str_repeat(' ', $maxLength - $lineLength);
+            $paddedLine = str_repeat(' ', $padding) . $line . $rightPadding . str_repeat(' ', $padding);
             $this->writeln($style . $paddedLine . Ansi::RESET);
         }
 
@@ -179,5 +187,45 @@ class Output
         int|null $minLength = null
     ): Password {
         return new Password($this, $question, $requireConfirmation, $minLength);
+    }
+
+    /**
+     * Ask with autocomplete suggestions
+     * @param array<string> $options
+     */
+    public function suggest(
+        string $question,
+        array $options,
+        string|null $default = null,
+        int $maxSuggestions = 5
+    ): Suggest {
+        return new Suggest($this, $question, $options, $default, $maxSuggestions);
+    }
+
+    /**
+     * Select a single option from a list
+     * @param array<int|string, string> $options
+     */
+    public function select(
+        string $question,
+        array $options,
+        string|int|null $default = null,
+        bool $searchable = false
+    ): Select {
+        return new Select($this, $question, $options, $default, $searchable);
+    }
+
+    /**
+     * Select multiple options from a list
+     * @param array<int|string, string> $options
+     * @param array<int|string> $defaults
+     */
+    public function multiSelect(
+        string $question,
+        array $options,
+        array $defaults = [],
+        bool $required = false
+    ): MultiSelect {
+        return new MultiSelect($this, $question, $options, $defaults, $required);
     }
 }
