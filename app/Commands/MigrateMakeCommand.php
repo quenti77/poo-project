@@ -37,8 +37,14 @@ class MigrateMakeCommand extends Command
     {
         $migrationName = $input->getArgument(0);
         if ($migrationName === null) {
-            $output->error("Command needs a migration name : 'php cli.php migrate:make <name>'");
-            return self::EXIT_FAILURE;
+            $migrationName = $output->ask('Nom de la migration')
+                ->setValidator(function (string $value): bool|string {
+                    if (!preg_match('/^[a-z0-9_]+$/', $value)) {
+                        return "Le nom doit être en snake_case (lettres minuscules, chiffres et underscores uniquement).";
+                    }
+                    return true;
+                })
+                ->ask();
         }
 
         $currentDate = new DateTimeImmutable()->format("Y_m_d_H_i_s");

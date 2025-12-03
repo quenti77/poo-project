@@ -3,6 +3,11 @@
 namespace Tuto\CLI;
 
 use Tuto\CLI\Components\ProgressBar;
+use Tuto\CLI\Components\ListComponent;
+use Tuto\CLI\Components\Question;
+use Tuto\CLI\Components\Confirm;
+use Tuto\CLI\Components\Choice;
+use Tuto\CLI\Components\Password;
 
 class Output
 {
@@ -124,5 +129,55 @@ class Output
     public function infoBlock(string $text, int $padding = 2): void
     {
         $this->block($text, Ansi::FG_WHITE, Ansi::BG_CYAN, $padding);
+    }
+
+    /**
+     * Create a list component for displaying formatted lists
+     */
+    public function list(
+        string $bullet = ListComponent::BULLET_DOT,
+        string $color = Ansi::FG_CYAN,
+        int $indent = 2
+    ): ListComponent {
+        return new ListComponent($this, $bullet, $color, $indent);
+    }
+
+    /**
+     * Ask a question and get user input
+     */
+    public function ask(string $question, string|null $default = null): Question
+    {
+        return new Question($this, $question, $default);
+    }
+
+    /**
+     * Ask for confirmation (yes/no)
+     */
+    public function confirm(string $question, bool $default = false): Confirm
+    {
+        return new Confirm($this, $question, $default);
+    }
+
+    /**
+     * Ask user to choose from options
+     * @param array<int|string, string> $choices
+     */
+    public function choice(
+        string $question,
+        array $choices,
+        string|int|null $default = null
+    ): Choice {
+        return new Choice($this, $question, $choices, $default);
+    }
+
+    /**
+     * Ask for a password (hidden input)
+     */
+    public function password(
+        string $question,
+        bool $requireConfirmation = false,
+        int|null $minLength = null
+    ): Password {
+        return new Password($this, $question, $requireConfirmation, $minLength);
     }
 }
