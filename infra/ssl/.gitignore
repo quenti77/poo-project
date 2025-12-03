@@ -1,5 +1,0 @@
-# Ignorer les certificats SSL générés
-*.pem
-*.crt
-*.key
-*.csr
