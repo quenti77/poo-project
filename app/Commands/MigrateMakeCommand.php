@@ -8,15 +8,9 @@ use Tuto\CLI\Ansi;
 use Tuto\CLI\Command;
 use Tuto\CLI\Input;
 use Tuto\CLI\Output;
-use Tuto\CLI\Style;
-use Tuto\Database\Migrations\MigrationsRepository;
 
 class MigrateMakeCommand extends Command
 {
-    public function __construct(private readonly MigrationsRepository $migrationsRepository)
-    {
-    }
-
     public function getName(): string
     {
         return "migrate:make";

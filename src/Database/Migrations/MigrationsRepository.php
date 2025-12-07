@@ -50,7 +50,7 @@ class MigrationsRepository
     {
         $request = $this->connection->request('select id, name, step, created_at from migrations order by step');
 
-        $migrations = new Collection();
+        $migrations = collect();
         while ($migrationData = $request->fetch()) {
             $migrations->push($this->dataToEntity($migrationData));
         }
@@ -68,7 +68,7 @@ class MigrationsRepository
             ':step' => $step ?? $this->getMaxStep(),
         ]);
 
-        $migrations = new Collection();
+        $migrations = collect();
         while ($migrationData = $request->fetch()) {
             $migrations->push($this->dataToEntity($migrationData));
         }

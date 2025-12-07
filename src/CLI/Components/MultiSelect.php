@@ -2,6 +2,7 @@
 
 namespace Tuto\CLI\Components;
 
+use Throwable;
 use Tuto\CLI\Ansi;
 use Tuto\CLI\Output;
 use Tuto\CLI\Terminal;
@@ -37,6 +38,7 @@ class MultiSelect extends AbstractInput
     /**
      * Ask and return selected keys
      * @return array<int|string>
+     * @throws Throwable
      */
     public function ask(): array
     {
@@ -50,6 +52,7 @@ class MultiSelect extends AbstractInput
     /**
      * Ask using keyboard navigation (arrows + space to toggle)
      * @return array<int|string>
+     * @throws Throwable
      */
     private function askWithKeyboard(): array
     {
@@ -79,8 +82,8 @@ class MultiSelect extends AbstractInput
                 } elseif ($key === Terminal::KEY_SPACE || $key === ' ') {
                     // Toggle selection
                     $currentKey = $keys[$highlightedIndex];
-                    if (in_array($currentKey, $selected)) {
-                        $selected = array_values(array_filter($selected, fn($k) => $k !== $currentKey));
+                    if (in_array($currentKey, $selected, true)) {
+                        $selected = array_values(array_filter($selected, static fn($k) => $k !== $currentKey));
                     } else {
                         $selected[] = $currentKey;
                     }
@@ -108,7 +111,7 @@ class MultiSelect extends AbstractInput
             $this->out->success('Sélectionné: ' . implode(', ', $selectedValues));
 
             return $selected;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Terminal::disableRawMode();
             Terminal::showCursor();
             throw $e;

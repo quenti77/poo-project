@@ -2,6 +2,8 @@
 
 namespace Tuto\Collection;
 
+use InvalidArgumentException;
+
 /**
  * @template TKey
  * @template TVal
@@ -29,7 +31,7 @@ trait CollectionArrayable
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->items[$offset] ?? null;
+        return $this->items[$offset] ?? throw new InvalidArgumentException("'{$offset}' not in current collection");
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tuto\Container\Items;
 
+use InvalidArgumentException;
 use Tuto\Container\DependencyInjectionContainer;
 
 class DependencyInterfaceItem extends DependencyItem
@@ -14,14 +15,27 @@ class DependencyInterfaceItem extends DependencyItem
         private readonly string $interface,
         private readonly string $concrete,
     ) {
+        if (!interface_exists($this->interface)) {
+            throw new InvalidArgumentException("Interface '{$this->interface}' does not exist");
+        }
+        if (!class_exists($this->concrete)) {
+            throw new InvalidArgumentException("Class '{$this->concrete}' does not exist");
+        }
     }
 
     /**
-     * @param DependencyInjectionContainer $container
-     * @return void
+     * @return class-string
      */
-    public function add(DependencyInjectionContainer $container): void
+    public function getKeyName(): string
     {
-        $container->addInterface($this->interface, $this->concrete);
+        return $this->interface;
+    }
+
+    /**
+     * @return class-string
+     */
+    public function getConcrete(): string
+    {
+        return $this->concrete;
     }
 }

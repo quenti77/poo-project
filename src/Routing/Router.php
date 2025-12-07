@@ -16,8 +16,8 @@ class Router
 
     public function __construct()
     {
-        $this->routes = new Collection();
-        $this->namedRoutes = new Collection();
+        $this->routes = collect();
+        $this->namedRoutes = collect();
     }
 
     public function get(string $path, callable|array $handler, string|null $name = null): Route
@@ -65,7 +65,7 @@ class Router
         $path = Request::trimPath($path);
 
         $route = new Route($method, $path, $handler, $name);
-        $this->routes[$method] ??= new Collection();
+        $this->routes[$method] ??= collect();
         $this->routes[$method]->push($route);
 
         if ($name) {
@@ -81,7 +81,7 @@ class Router
             return null;
         }
 
-        return $this->routes[$request->method]->find(static fn (Route $route) => $route->match($request));
+        return $this->routes[$request->method]->find(static fn ($key, Route $route) => $route->match($request));
     }
 
     /**

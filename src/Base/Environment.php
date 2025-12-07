@@ -49,7 +49,7 @@ class Environment
                 $value = substr($value, 1, -1);
             }
 
-            $this->fields[$key] = $value;
+            $this->fields[$key] = $this->processValue($value);
             $_ENV[$key] = $value;
         }
     }

@@ -2,20 +2,21 @@
 
 namespace Tuto\Container\Items;
 
-use Tuto\Container\DependencyInjectionContainer;
-
 abstract class DependencyItem
 {
-    abstract public function add(DependencyInjectionContainer $container): void;
-
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return static
+     */
     public static function primitive(string $name, mixed $value): static
     {
         return new DependencyPrimitiveItem($name, $value);
     }
 
-    public static function factory(string $name, callable $factory): static
+    public static function factory(string $name, callable $factory, bool $singleInstance = true): static
     {
-        return new DependencyFactoryItem($name, $factory);
+        return new DependencyFactoryItem($name, $factory, $singleInstance);
     }
 
     /**
@@ -27,4 +28,6 @@ abstract class DependencyItem
     {
         return new DependencyInterfaceItem($interface, $concrete);
     }
+
+    abstract public function getKeyName(): string;
 }

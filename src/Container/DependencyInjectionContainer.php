@@ -5,23 +5,24 @@ namespace Tuto\Container;
 use InvalidArgumentException;
 use ReflectionException;
 use RuntimeException;
+use Tuto\Collection\Collection;
+use Tuto\Container\Items\DependencyFactoryItem;
+use Tuto\Container\Items\DependencyInterfaceItem;
+use Tuto\Container\Items\DependencyItem;
+use Tuto\Container\Items\DependencyPrimitiveItem;
 
 class DependencyInjectionContainer
 {
-    /** @var array<string, mixed> */
-    private array $primitives = [];
+    /** @var Collection<string, DependencyItem> $dependencies */
+    private Collection $dependencies;
 
-    /** @var array<class-string, class-string> */
-    private array $interfaces = [];
-
-    /** @var array<string, callable> */
-    private array $factories = [];
-
-    /** @var array<string, mixed> */
-    private array $instances = [];
+    /** @var Collection<string, mixed> $instances */
+    private Collection $instances;
 
     public function __construct(private Resolver|null $resolver = null)
     {
+        $this->dependencies = collect();
+        $this->instances = collect();
     }
 
     public function resolver(): Resolver
@@ -37,31 +38,9 @@ class DependencyInjectionContainer
         $this->resolver = $resolver;
     }
 
-    public function addPrimitive(string $name, mixed $value): void
+    public function addDependencyItem(DependencyItem $dependencyItem): void
     {
-        $this->primitives[$name] = $value;
-    }
-
-    /**
-     * @param class-string $interface
-     * @param class-string $concrete
-     * @return void
-     * @throws InvalidArgumentException
-     */
-    public function addInterface(string $interface, string $concrete): void
-    {
-        if (!interface_exists($interface)) {
-            throw new InvalidArgumentException("Interface '{$interface}' does not exist");
-        }
-        if (!class_exists($concrete)) {
-            throw new InvalidArgumentException("Class '{$concrete}' does not exist");
-        }
-        $this->interfaces[$interface] = $concrete;
-    }
-
-    public function addFactory(string $name, callable $value): void
-    {
-        $this->factories[$name] = $value;
+        $this->dependencies[$dependencyItem->getKeyName()] = $dependencyItem;
     }
 
     /**
@@ -72,25 +51,37 @@ class DependencyInjectionContainer
      */
     public function get(string $name): mixed
     {
-        if (array_key_exists($name, $this->primitives)) {
-            return $this->primitives[$name];
-        }
-        if (array_key_exists($name, $this->instances)) {
+        if ($this->instances->offsetExists($name)) {
             return $this->instances[$name];
         }
-        if (array_key_exists($name, $this->interfaces)) {
-            return $this->instances[$name] = $this->get($this->interfaces[$name]);
-        }
-        if (array_key_exists($name, $this->factories)) {
-            return $this->instances[$name] = $this->callFactory($this->factories[$name]);
+
+        if (!$this->dependencies->offsetExists($name)) {
+            $instance = $this->resolver()->instantiate($name);
+            if ($instance) {
+                return $this->instances[$name] = $instance;
+            }
+
+            throw new InvalidArgumentException("Can not be resolve the unknown '{$name}'");
         }
 
-        $instance = $this->resolver()->instantiate($name);
-        if ($instance) {
-            return $this->instances[$name] = $instance;
+        $dependency = $this->dependencies[$name];
+        if ($dependency instanceof DependencyPrimitiveItem) {
+            return $dependency->getValue();
         }
 
-        throw new InvalidArgumentException("Cannot be resolve the unknown '{$name}'");
+        if ($dependency instanceof DependencyInterfaceItem) {
+            return $this->instances[$name] = $this->get($dependency->getConcrete());
+        }
+
+        if ($dependency instanceof DependencyFactoryItem) {
+            $instance = $this->callFactory($dependency->getFactory());
+            if ($dependency->isSingleInstance()) {
+                $this->instances[$name] = $instance;
+            }
+            return $instance;
+        }
+
+        throw new InvalidArgumentException("Can not be resolve dependency item '" . $dependency::class . "'");
     }
 
     private function callFactory(callable $factory): mixed

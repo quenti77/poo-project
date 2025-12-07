@@ -2,8 +2,6 @@
 
 namespace Tuto\Container\Items;
 
-use Tuto\Container\DependencyInjectionContainer;
-
 class DependencyPrimitiveItem extends DependencyItem
 {
     public function __construct(
@@ -12,8 +10,13 @@ class DependencyPrimitiveItem extends DependencyItem
     ) {
     }
 
-    public function add(DependencyInjectionContainer $container): void
+    public function getKeyName(): string
     {
-        $container->addPrimitive($this->name, $this->value);
+        return $this->name;
+    }
+
+    public function getValue(): mixed
+    {
+        return $this->value;
     }
 }

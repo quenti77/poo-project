@@ -20,7 +20,7 @@ class ConsoleApplication
     {
         $this->configPath = $configPath;
         $this->output = $output;
-        $this->commands = new Collection();
+        $this->commands = collect();
 
         try {
             $this->initConfig();
@@ -77,7 +77,7 @@ class ConsoleApplication
         $this->output->successBlock("Available commands");
 
         $rows = $this->commands
-            ->map(static fn (Command $c) => [$c->getName(), $c->getDescription()])
+            ->map(static fn ($key, Command $c) => [$c->getName(), $c->getDescription()])
             ->all();
         $rows[] = ['help', 'Get the list of available commands'];
         usort($rows, static fn (array $a, array $b) => strcmp($a[0], $b[0]));

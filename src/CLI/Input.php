@@ -20,8 +20,8 @@ class Input
         $this->scriptName = $argv[0] ?? null;
         $this->commandName = $argv[1] ?? null;
 
-        $this->arguments = new Collection();
-        $this->options = new Collection();
+        $this->arguments = collect();
+        $this->options = collect();
 
         $rest = $argv->slice(2);
         foreach ($rest as $item) {
@@ -47,7 +47,7 @@ class Input
 
     public static function fromArgv(array $argv): self
     {
-        return new self(new Collection($argv));
+        return new self(collect($argv));
     }
 
     public function getScriptName(): string|null

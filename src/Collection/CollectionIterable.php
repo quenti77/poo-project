@@ -2,6 +2,8 @@
 
 namespace Tuto\Collection;
 
+use RuntimeException;
+
 /**
  * @template TKey
  * @template TVal
@@ -18,7 +20,10 @@ trait CollectionIterable
      */
     public function current(): mixed
     {
-        return $this[$this->counter];
+        if (!method_exists($this, 'offsetGet')) {
+            throw new RuntimeException("This trait must be used with class who implements the ArrayAccess interface");
+        }
+        return $this->offsetGet($this->key());
     }
 
     public function next(): void

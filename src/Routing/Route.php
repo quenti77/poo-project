@@ -28,8 +28,8 @@ class Route
         }
 
         $this->handler = $handler;
-        $this->pathParameters = new Collection();
-        $this->matches = new Collection();
+        $this->pathParameters = collect();
+        $this->matches = collect();
     }
 
     public function getHandler(): callable|array

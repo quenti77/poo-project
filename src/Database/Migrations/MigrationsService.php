@@ -31,7 +31,7 @@ class MigrationsService
         $this->assertTableExist($output);
 
         $migrated = $this->migrationsRepository->all();
-        $migrationFiles = new Collection();
+        $migrationFiles = collect();
 
         $di = new DirectoryIterator(container('path.database') . '/migrations');
         $ii = new IteratorIterator($di);
@@ -42,7 +42,7 @@ class MigrationsService
                 continue;
             }
 
-            $migration = $migrated->find(static fn (MigrationEntity $entity) => $entity->getName() === $file->getBasename('.php'));
+            $migration = $migrated->find(static fn ($key, MigrationEntity $entity) => $entity->getName() === $file->getBasename('.php'));
             if ($migration === null) {
                 $migrationFiles->push($file->getFileInfo());
             }

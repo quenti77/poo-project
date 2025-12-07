@@ -38,7 +38,7 @@ trait ApplicationConfigurable
                     $value = DependencyItem::primitive($key, $value);
                 }
                 if ($value instanceof DependencyItem) {
-                    $value->add(container());
+                    container()->addDependencyItem($value);
                 }
             }
         }

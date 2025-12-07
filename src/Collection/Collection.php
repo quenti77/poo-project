@@ -35,28 +35,58 @@ class Collection implements ArrayAccess, Countable, Iterator
         $this->keys = array_keys($this->items);
     }
 
+    /**
+     * @template-covariant TNewVal
+     *
+     * @param callable(TKey $key, TVal $value): TNewVal $handler
+     * @return self<TKey, TNewVal>
+     */
     public function map(callable $handler): self
     {
-        return new self(array_map($handler, $this->items));
-    }
-
-    public function filter(callable $handler): self
-    {
-        return new self(array_filter($this->items, $handler));
-    }
-
-    public function reduce(callable $handler, mixed $initialValue = null): mixed
-    {
-        return array_reduce($this->items, $handler, $initialValue);
+        $newItems = array_map(
+            fn (string|int $key) => $handler($key, $this->items[$key]),
+            $this->keys
+        );
+        return new self($newItems);
     }
 
     /**
-     * @param callable $handler
+     * @param callable(TKey $key, TVal $value): bool $handler
+     * @return self<TKey, TVal>
+     */
+    public function filter(callable $handler): self
+    {
+        $newItems = array_filter(
+            $this->items,
+            static fn (mixed $value, string|int $key) => $handler($key, $value),
+            ARRAY_FILTER_USE_BOTH,
+        );
+        return new self($newItems);
+    }
+
+    /**
+     * @template-covariant TReduceVal
+     *
+     * @param callable(TKey $key, TVal $value, TReduceVal $acc): TReduceVal $handler
+     * @param TReduceVal|null $initialValue
+     * @return TReduceVal
+     */
+    public function reduce(callable $handler, mixed $initialValue = null): mixed
+    {
+        $result = $initialValue;
+        foreach ($this->items as $key => $value) {
+            $result = $handler($key, $value, $result);
+        }
+        return $result;
+    }
+
+    /**
+     * @param callable(TKey $key, TVal $value): bool $handler
      * @return TVal|null
      */
     public function find(callable $handler): mixed
     {
-        return array_find($this->items, $handler);
+        return array_find($this->items, static fn (mixed $value, string|int $key) => $handler($key, $value));
     }
 
     /**
@@ -66,7 +96,7 @@ class Collection implements ArrayAccess, Countable, Iterator
      */
     public function slice(int $offset, int|null $length = null): Collection
     {
-        return new Collection(array_slice($this->items, $offset, $length));
+        return collect(array_slice($this->items, $offset, $length));
     }
 
     /**
@@ -77,8 +107,11 @@ class Collection implements ArrayAccess, Countable, Iterator
         return $this->items;
     }
 
+    /**
+     * @return self<TKey, TVal>
+     */
     public function reverse(): self
     {
-        return new Collection(array_reverse($this->items));
+        return collect(array_reverse($this->items));
     }
 }

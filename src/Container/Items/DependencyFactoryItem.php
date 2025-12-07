@@ -2,8 +2,6 @@
 
 namespace Tuto\Container\Items;
 
-use Tuto\Container\DependencyInjectionContainer;
-
 class DependencyFactoryItem extends DependencyItem
 {
     /** @var callable $factory */
@@ -11,13 +9,24 @@ class DependencyFactoryItem extends DependencyItem
 
     public function __construct(
         private readonly string $name,
-        callable $factory
+        callable $factory,
+        private readonly bool $singleInstance = true,
     ) {
         $this->factory = $factory;
     }
 
-    public function add(DependencyInjectionContainer $container): void
+    public function getKeyName(): string
     {
-        $container->addFactory($this->name, $this->factory);
+        return $this->name;
+    }
+
+    public function isSingleInstance(): bool
+    {
+        return $this->singleInstance;
+    }
+
+    public function getFactory(): callable
+    {
+        return $this->factory;
     }
 }

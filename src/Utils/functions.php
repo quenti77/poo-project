@@ -2,6 +2,7 @@
 
 use Tuto\Base\Application;
 use Tuto\Base\Environment;
+use Tuto\Collection\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
 use Tuto\Http\Request;
@@ -9,6 +10,20 @@ use Tuto\Http\Response\JsonResponse;
 use Tuto\Http\Response\RedirectResponse;
 use Tuto\Http\Response\ViewResponse;
 use Tuto\Routing\Router;
+
+if (!function_exists('collect')) {
+    /**
+     * @template TKey of array-key
+     * @template-covariant TValue
+     *
+     * @param array<TKey, TValue> $items
+     * @return Collection<TKey, TValue>
+     */
+    function collect(array $items = []): Collection
+    {
+        return new Collection($items);
+    }
+}
 
 if (!function_exists('container')) {
     /**
