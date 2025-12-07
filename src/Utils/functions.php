@@ -1,5 +1,6 @@
 <?php
 
+use Tuto\Base\Environment;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
@@ -43,5 +44,18 @@ if (!function_exists('container')) {
         }
 
         return $item === null ? $container : $container->get($item);
+    }
+}
+
+if (!function_exists('env')) {
+    /**
+     * @param string|null $key
+     * @param bool|float|int|string|null $defaultValue
+     * @return ($key is null ? Environment : bool|float|int|string|null)
+     */
+    function env(string|null $key = null, bool|float|int|string|null $defaultValue = null): bool|float|int|string|null|Environment
+    {
+        static $environment = new Environment();
+        return $key === null ? $environment : $environment->get($key, $defaultValue);
     }
 }
