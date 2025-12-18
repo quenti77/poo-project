@@ -113,6 +113,24 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * @return Collection<int, TValue>
+     */
+    public function values(): Collection
+    {
+        return collect(array_values($this->items));
+    }
+
+    /**
+     * @param TValue ...$values
+     * @return bool
+     */
+    public function has(mixed ...$values): bool
+    {
+        $search = $this->values()->all();
+        return array_any($values, static fn($value) => in_array($value, $search, true));
+    }
+
+    /**
      * @return array<TKey, TValue>
      */
     public function all(): array

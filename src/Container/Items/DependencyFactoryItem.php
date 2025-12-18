@@ -7,6 +7,11 @@ class DependencyFactoryItem extends DependencyItem
     /** @var callable $factory */
     private $factory;
 
+    /**
+     * @param string $name
+     * @param callable $factory
+     * @param bool $singleInstance
+     */
     public function __construct(
         private readonly string $name,
         callable $factory,
