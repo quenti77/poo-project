@@ -48,6 +48,10 @@ class DependencyInjectionContainer
         return $this->resolver;
     }
 
+    /**
+     * @param DependencyItem $dependencyItem
+     * @return void
+     */
     public function addDependencyItem(DependencyItem $dependencyItem): void
     {
         $this->dependencies[$dependencyItem->getKeyName()] = $dependencyItem;

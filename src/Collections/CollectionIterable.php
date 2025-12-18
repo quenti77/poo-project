@@ -17,6 +17,23 @@ trait CollectionIterable
     protected array $keys;
 
     /**
+     * @return Collection<int, TKey>
+     */
+    public function keys(): Collection
+    {
+        return collect($this->keys);
+    }
+
+    /**
+     * @param TKey ...$keys
+     * @return bool
+     */
+    public function hasKeys(mixed ...$keys): bool
+    {
+        return array_any($keys, fn($key) => in_array($key, $this->keys, true));
+    }
+
+    /**
      * @return TValue
      */
     public function current(): mixed

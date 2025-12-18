@@ -69,6 +69,7 @@ class Resolver
      * @param ReflectionParameter[] $parameters
      * @param array<string, mixed> $context
      * @return array<int, mixed>
+     * @throws ReflectionException
      */
     public function getParameters(array $parameters, array $context = []): array
     {
@@ -123,6 +124,7 @@ class Resolver
     /**
      * @param ReflectionParameter $parameter
      * @return mixed
+     * @throws ReflectionException
      */
     private function resolveParameter(ReflectionParameter $parameter): mixed
     {
@@ -147,6 +149,7 @@ class Resolver
      * @param ReflectionParameter $parameter
      * @param ReflectionNamedType[] $types
      * @return mixed
+     * @throws ReflectionException
      */
     private function resolveParameterTypes(ReflectionParameter $parameter, array $types): mixed
     {
