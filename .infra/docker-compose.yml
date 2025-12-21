@@ -1,0 +1,71 @@
+networks:
+  poo_network:
+    driver: bridge
+
+volumes:
+  mysql_data: {}
+  redis_data: {}
+
+services:
+  nginx:
+    image: nginx:1.29.4
+    container_name: poo_proxy
+    ports:
+      - "${PROXY_HTTP_PORT:-80}:80"
+      - "${PROXY_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/configs:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ..:/var/www/html:rw
+    networks:
+      - poo_network
+    depends_on:
+      - php
+    restart: unless-stopped
+
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: poo_php
+    volumes:
+      - ./php/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ..:/var/www/html
+    environment:
+      - XDEBUG_MODE=debug,develop
+      - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003
+      - PHP_IDE_CONFIG=serverName=poo.localhost
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - poo_network
+    restart: unless-stopped
+
+  db:
+    image: mysql:9.5
+    container_name: poo_db
+    ports:
+      - "${DB_ACCESS_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root}"
+      MYSQL_DATABASE: "${DB_DATABASE:-poo_project}"
+      MYSQL_USER: "${DB_USER:-poo_user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-poo_password}"
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    networks:
+      - poo_network
+    restart: unless-stopped
+
+  redis:
+    image: redis:8.4.0-alpine
+    container_name: poo_redis
+    ports:
+      - "${REDIS_ACCESS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - poo_network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
