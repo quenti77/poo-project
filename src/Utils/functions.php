@@ -1,5 +1,6 @@
 <?php
 
+use Tuto\Application\HttpApplication;
 use Tuto\Base\Environment;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
@@ -34,7 +35,6 @@ if (!function_exists('container')) {
      *         $item is class-string ? T : mixed
      *     )
      * )
-     * @throws ReflectionException
      */
     function container(string|null $item = null): mixed
     {
@@ -49,7 +49,10 @@ if (!function_exists('container')) {
             $container->withResolver($resolver);
         }
 
-        return $item === null ? $container : $container->get($item);
+        try {
+            return $item === null ? $container : $container->get($item);
+        } catch (ReflectionException) {
+        }
     }
 }
 
@@ -88,6 +91,17 @@ if (!function_exists('router')) {
     }
 }
 
+if (!function_exists('app')) {
+    /**
+     * @return HttpApplication
+     */
+    function app(): HttpApplication
+    {
+        static $app = new HttpApplication(request());
+        return $app;
+    }
+}
+
 if (!function_exists('view')) {
     /**
      * @param string $view
@@ -113,7 +127,7 @@ if (!function_exists('view')) {
 
 if (!function_exists('json')) {
     /**
-     * @param array $data
+     * @param mixed $data
      * @param HttpCode $code
      * @param array $headers
      * @param string $httpVersion
@@ -121,7 +135,7 @@ if (!function_exists('json')) {
      * @throws JsonException
      */
     function json(
-        array $data = [],
+        mixed $data = null,
         HttpCode $code = HttpCode::OK,
         array $headers = [],
         string $httpVersion = 'HTTP/1.1',

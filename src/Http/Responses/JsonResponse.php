@@ -10,7 +10,7 @@ class JsonResponse extends AbstractResponse
      * @throws JsonException
      */
     public function __construct(
-        array $data = [],
+        mixed $data = null,
         HttpCode $code = HttpCode::OK,
         array $headers = [],
         string $httpVersion = 'HTTP/2',
