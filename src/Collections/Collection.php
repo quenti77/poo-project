@@ -104,6 +104,14 @@ class Collection implements ArrayAccess, Countable, Iterator
         return new self(array_slice($this->items, $offset, $length));
     }
 
+    public function merge(array|self $items): self
+    {
+        if ($items instanceof self) {
+            $items = $items->all();
+        }
+        return new self(array_merge($this->items, $items));
+    }
+
     /**
      * @return self<TKey, TValue>
      */
