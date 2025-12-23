@@ -9,6 +9,7 @@ use Tuto\Http\Responses\HttpCode;
 use Tuto\Http\Responses\JsonResponse;
 use Tuto\Http\Responses\RedirectResponse;
 use Tuto\Http\Responses\ViewResponse;
+use Tuto\Routing\Router;
 
 if (!function_exists('collect')) {
     /**
@@ -73,6 +74,17 @@ if (!function_exists('request')) {
     {
         static $request = Request::fromGlobals();
         return $request;
+    }
+}
+
+if (!function_exists('router')) {
+    /**
+     * @return Router
+     */
+    function router(): Router
+    {
+        static $router = new Router();
+        return $router;
     }
 }
 
