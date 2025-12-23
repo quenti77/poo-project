@@ -42,6 +42,14 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * @return TValue|null
+     */
+    public function pop(): mixed
+    {
+        return array_pop($this->items);
+    }
+
+    /**
      * @template-covariant TNewValue
      *
      * @param callable(TKey $key, TValue $value): TNewValue $handler
@@ -50,7 +58,7 @@ class Collection implements ArrayAccess, Countable, Iterator
     public function map(callable $handler): self
     {
         return new self(
-            array_map(static fn(string|int $key) => $handler($key, $this->items[$key]), $this->keys),
+            array_map(fn(string|int $key) => $handler($key, $this->items[$key]), $this->keys),
         );
     }
 
@@ -144,5 +152,14 @@ class Collection implements ArrayAccess, Countable, Iterator
     public function all(): array
     {
         return $this->items;
+    }
+
+    /**
+     * @param string $delimiter
+     * @return string
+     */
+    public function join(string $delimiter = ''): string
+    {
+        return implode($delimiter, $this->items);
     }
 }

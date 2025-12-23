@@ -60,11 +60,24 @@ class Route
     }
 
     /**
+     * @param Collection<string, string>|array<string, string> $parameters
+     * @return void
+     */
+    public function setPathParameters(Collection|array $parameters): void
+    {
+        if (is_array($parameters)) {
+            $parameters = collect($parameters);
+        }
+        $this->pathParameters = $parameters;
+    }
+
+    /**
      * @param Request $request
      * @return bool
      */
     public function match(Request $request): bool
     {
+
         if ($request->method !== $this->method) {
             return false;
         }
@@ -125,7 +138,7 @@ class Route
         $parameter = $matches[0] ?? null;
 
         $pathParam = $this->pathParameters[$parameter] ?? null;
-        $pathRegex = $pathParam ?? '[^/]+';
+        $pathRegex = $pathParam ?? PathParameter::DEFAULT_PATH_REGEX;
 
         return "(?P<{$parameter}>{$pathRegex})";
     }

@@ -11,6 +11,8 @@ class Headers extends Collection
 {
     public static function fromGlobals(): self
     {
-        return new self(getallheaders() ?: []);
+        return function_exists('getallheaders')
+            ? new self(getallheaders() ?: [])
+            : new self();
     }
 }
