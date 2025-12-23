@@ -56,4 +56,18 @@ class Request
             session: Session::fromGlobals(),
         );
     }
+
+    public static function fromRoute(HttpMethod $method, string $path): self
+    {
+        return new self(
+            method: $method,
+            uri: Uri::fromString($path),
+            headers: Headers::fromGlobals(),
+            query: QueryParameters::fromGlobals(),
+            body: BodyParameters::fromGlobals(),
+            files: FileParameters::fromGlobals(),
+            cookies: Cookies::fromGlobals(),
+            session: Session::fromGlobals(),
+        );
+    }
 }

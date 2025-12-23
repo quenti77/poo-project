@@ -16,10 +16,14 @@ class Router
     /** @var Collection<string, Route> $namedRoutes */
     private Collection $namedRoutes;
 
+    /** @var RouteGroupStack $groups */
+    private RouteGroupStack $groups;
+
     public function __construct()
     {
         $this->routes = collect();
         $this->namedRoutes = collect();
+        $this->groups = new RouteGroupStack();
     }
 
     /**
@@ -100,6 +104,24 @@ class Router
     }
 
     /**
+     * @param array{prefix?: string, name?: string, where?: array<string, string>}|RouteGroup $group
+     * @param callable $callback
+     * @return RouteGroup
+     */
+    public function group(array|RouteGroup $group, callable $callback): RouteGroup
+    {
+        if (is_array($group)) {
+            $group = RouteGroup::fromArray($group);
+        }
+
+        $this->groups->push($group);
+        $callback($this);
+        $this->groups->pop();
+
+        return $group;
+    }
+
+    /**
      * @param HttpMethod $method
      * @param string $path
      * @param callable|array{class-string, string} $handler
@@ -113,8 +135,14 @@ class Router
         string|null $name = null,
     ): Route {
         $path = Uri::trimPath($path);
+        $path = Uri::trimPath($this->groups->getPrefix() . '/' . $path);
+        if ($name !== null) {
+            $name = $this->groups->getName() . $name;
+        }
 
         $route = new Route($method, $path, $handler, $name);
+        $route->setPathParameters($this->groups->getParameters());
+
         $this->routes[$method->value] ??= collect();
         $this->routes[$method->value]->push($route);
 
