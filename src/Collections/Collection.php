@@ -46,7 +46,12 @@ class Collection implements ArrayAccess, Countable, Iterator
      */
     public function pop(): mixed
     {
-        return array_pop($this->items);
+        $value = array_pop($this->items);
+
+        $this->counter = min(count($this->items), $this->counter);
+        $this->keys = array_keys($this->items);
+
+        return $value;
     }
 
     /**

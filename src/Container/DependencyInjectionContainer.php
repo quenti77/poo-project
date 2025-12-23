@@ -96,7 +96,8 @@ class DependencyInjectionContainer
             return $instance;
         }
 
-        throw new InvalidArgumentException("Can not be resolve the dependency item '{$dependency::class}'");
+        $dep = $dependency::class;
+        throw new InvalidArgumentException("Can not be resolve the dependency item '{$dep}'");
     }
 
     private function callFactory(callable $factory): mixed
