@@ -11,17 +11,18 @@ class QueryRender
     }
 
     /**
-     * @return string
-     */
-    public function toSql(): string
-    {
-    }
-
-    /**
      * @return Collection<string, mixed>
      */
     public function getParameters(): Collection
     {
         return $this->queryBuilder->getParameters();
+    }
+
+    /**
+     * @return string
+     */
+    public function toSql(): string
+    {
+        return 'select 1';
     }
 }
