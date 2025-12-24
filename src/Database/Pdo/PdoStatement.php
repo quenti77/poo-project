@@ -1,0 +1,64 @@
+<?php
+
+namespace Tuto\Database\Pdo;
+
+use DateTimeInterface;
+use PDO;
+use Tuto\Database\StatementInterface;
+
+class PdoStatement implements StatementInterface
+{
+    private const array TYPE = [
+        'integer' => PDO::PARAM_INT,
+        'boolean' => PDO::PARAM_BOOL,
+    ];
+
+    public function __construct(private readonly \PDOStatement $statement)
+    {
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public function bind(string $name, mixed $value): bool
+    {
+        $parameterType = gettype($value);
+        $bindType = PDO::PARAM_STR;
+
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('Y-m-d H:i:s');
+        } elseif (array_key_exists($parameterType, self::TYPE)) {
+            $bindType = self::TYPE[$parameterType];
+        } elseif ($value === null) {
+            $bindType = PDO::PARAM_NULL;
+        }
+
+        return $this->statement->bindValue($name, $value, $bindType);
+    }
+
+    /**
+     * @return bool
+     */
+    public function execute(): bool
+    {
+        return $this->statement->execute();
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     */
+    public function fetch(): array|false
+    {
+        return $this->statement->fetch();
+    }
+
+    /**
+     * @return array<array<string, mixed>>
+     */
+    public function fetchAll(): array
+    {
+        return $this->statement->fetchAll();
+    }
+}
