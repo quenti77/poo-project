@@ -167,4 +167,12 @@ class Collection implements ArrayAccess, Countable, Iterator
     {
         return implode($delimiter, $this->items);
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return $this->count() === 0;
+    }
 }
