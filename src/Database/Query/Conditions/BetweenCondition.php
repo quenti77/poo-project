@@ -2,8 +2,6 @@
 
 namespace Tuto\Database\Query\Conditions;
 
-use InvalidArgumentException;
-
 class BetweenCondition extends BaseCondition
 {
     /**

@@ -22,6 +22,6 @@ class SimpleCondition extends BaseCondition
 
     public function render(): string
     {
-        return "{$this->type->value} {$this->column} {$this->operator->value} {$this->value}";
+        return "{$this->type->value} {$this->column} {$this->operator->value} {$this->escapeValue($this->value)}";
     }
 }

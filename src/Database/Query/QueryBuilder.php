@@ -3,9 +3,12 @@
 namespace Tuto\Database\Query;
 
 use Tuto\Collections\Collection;
+use Tuto\Database\Query\Conditions\ConditionWhereTrait;
 
 class QueryBuilder
 {
+    use ConditionWhereTrait;
+
     private QueryType $type;
 
     /** @var Collection<int|string, string|QueryBuilder> $from */
@@ -17,8 +20,8 @@ class QueryBuilder
     /** @var Collection<int, mixed> $values */
     private Collection $values;
 
-    /** @var Collection<string, mixed> $parameters */
-    private Collection $parameters;
+    /** @var Collection<string, > $join */
+    private Collection $join;
 
     public function __construct(QueryType $type)
     {
@@ -27,14 +30,48 @@ class QueryBuilder
         $this->fields = collect();
         $this->values = collect();
         $this->parameters = collect();
+        $this->join = collect();
+        $this->where = collect();
     }
 
     /**
-     * @return Collection<string, mixed>
+     * @return QueryType
      */
-    public function getParameters(): Collection
+    public function getType(): QueryType
     {
-        return $this->parameters;
+        return $this->type;
+    }
+
+    /**
+     * @return Collection<int|string, string|QueryBuilder>
+     */
+    public function getFrom(): Collection
+    {
+        return $this->from;
+    }
+
+    /**
+     * @return Collection<int|string, string>
+     */
+    public function getFields(): Collection
+    {
+        return $this->fields;
+    }
+
+    /**
+     * @return Collection<int, mixed>
+     */
+    public function getValues(): Collection
+    {
+        return $this->values;
+    }
+
+    /**
+     * @return Collection<string, >
+     */
+    public function getJoin(): Collection
+    {
+        return $this->join;
     }
 
     /**
@@ -111,12 +148,8 @@ class QueryBuilder
         }
 
         if ($escape) {
-            $parameterName = ":{$column}";
-
-            $this->parameters[$parameterName] = $value;
-            $value = $parameterName;
+            $value = $this->escapeValue($column, $value);
         }
-
         $this->values[$column] = $value;
     }
 

@@ -35,6 +35,7 @@ class ComplexCondition extends BaseCondition
             $values = $this->value
                 ->map(fn (int $key, mixed $value) => $this->escapeValue($value))
                 ->join(', ');
+            $values = "({$values})";
         }
         if ($this->operator->isExistOperator()) {
             $queryRender = new QueryRender($this->value);
@@ -42,23 +43,5 @@ class ComplexCondition extends BaseCondition
         }
 
         return "{$this->type->value} {$this->column} {$this->operator->value} {$values}";
-    }
-
-    /**
-     * @param mixed $value
-     * @return string
-     */
-    private function escapeValue(mixed $value): string
-    {
-        if (is_numeric($value)) {
-            return (string) $value;
-        }
-        if (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        }
-        if (is_array($value)) {
-            $value = implode(',', $value);
-        }
-        return "'{$value}'";
     }
 }
