@@ -2,6 +2,7 @@
 
 namespace Tuto\Database\Query\Conditions;
 
+use Random\RandomException;
 use Tuto\Collections\Collection;
 use Tuto\Database\Query\InvalidQuerySyntaxException;
 use Tuto\Database\Query\QueryBuilder;
@@ -196,7 +197,7 @@ trait ConditionWhereTrait
         $conditionType = $this->getCurrentType($type);
         $operator = ConditionOperator::tryFrom($op);
         if ($operator === null && $value === null) {
-            $value = $operator;
+            $value = $op;
             $operator = ConditionOperator::EQ;
         }
 
@@ -209,7 +210,7 @@ trait ConditionWhereTrait
         }
 
         if ($operator === ConditionOperator::BETWEEN) {
-            if (!is_countable($value) || count($value) !== 2) {
+            if (!is_countable($value) || !is_array($value) || count($value) !== 2) {
                 throw new InvalidQuerySyntaxException("To use BETWEEN, we need an array with 2 values");
             }
             [$start, $end] = $value;
@@ -266,7 +267,12 @@ trait ConditionWhereTrait
      */
     private function escapeValue(string $column, mixed $value): string
     {
-        $parameterName = ":{$column}";
+        try {
+            $identifier = bin2hex(random_bytes(2));
+        } catch (RandomException) {
+            $identifier = uniqid('', true);
+        }
+        $parameterName = ":{$column}_{$identifier}";
 
         $this->parameters[$parameterName] = $value;
         return $parameterName;

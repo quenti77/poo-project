@@ -58,13 +58,17 @@ class Collection implements ArrayAccess, Countable, Iterator
      * @template-covariant TNewValue
      *
      * @param callable(TKey $key, TValue $value): TNewValue $handler
+     * @param bool $preserveKeys
      * @return self<TKey, TNewValue>
      */
-    public function map(callable $handler): self
+    public function map(callable $handler, bool $preserveKeys = true): self
     {
-        return new self(
-            array_map(fn(string|int $key) => $handler($key, $this->items[$key]), $this->keys),
-        );
+        $newArray = array_map(fn(string|int $key) => $handler($key, $this->items[$key]), $this->keys);
+        if ($preserveKeys) {
+            $newArray = array_combine($this->keys, $newArray);
+        }
+
+        return new self($newArray);
     }
 
     /**
@@ -139,6 +143,14 @@ class Collection implements ArrayAccess, Countable, Iterator
     public function values(): Collection
     {
         return collect(array_values($this->items));
+    }
+
+    /**
+     * @return Collection<array{0: TKey, 1: TValue}>
+     */
+    public function entries(): Collection
+    {
+        return $this->map(static fn (int|string $key, mixed $value) => [$key, $value], false);
     }
 
     /**
