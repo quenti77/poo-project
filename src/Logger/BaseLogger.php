@@ -2,13 +2,17 @@
 
 namespace Tuto\Logger;
 
+use JsonException;
+
 abstract class BaseLogger implements LoggerInterface
 {
     /**
      * @param LoggerLevel $minLevel
      */
-    public function __construct(protected LoggerLevel $minLevel = LoggerLevel::DEBUG)
-    {
+    public function __construct(
+        protected LoggerLevel $minLevel = LoggerLevel::DEBUG,
+        protected string $environment = 'local',
+    ) {
     }
 
     /**
@@ -117,11 +121,19 @@ abstract class BaseLogger implements LoggerInterface
      * @param string $message
      * @param array $context
      * @return string
+     * @throws JsonException
      */
     protected function formatMessage(LoggerLevel $level, string $message, array $context = []): string
     {
         $timestamp = date('Y-m-d H:i:s');
-        $contextStr = !empty($context) ? json_encode($context) : '';
-        return sprintf('[%s] %s: %s %s', $timestamp, strtoupper($level->label()), $message, $contextStr);
+        $contextStr = !empty($context) ? json_encode($context, JSON_THROW_ON_ERROR) : '';
+        return sprintf(
+            '[%s] %s.%s: %s %s',
+            $timestamp,
+            $this->environment,
+            strtoupper($level->label()),
+            $message,
+            $contextStr,
+        );
     }
 }

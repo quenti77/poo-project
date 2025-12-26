@@ -16,6 +16,7 @@ class LoggerFactory
         $level = self::getValue($container, 'logger.min_level', LoggerLevel::DEBUG);
         $identifier = self::getValue($container, 'logger.identifier', 'app');
         $path = self::getValue($container, 'logger.path', 'storage/logs');
+        $environment = self::getValue($container, 'app.env', 'local');
 
         $logLevel = LoggerLevel::fromLabel($level);
 
@@ -24,8 +25,8 @@ class LoggerFactory
         }
 
         return match ($driver) {
-            'daily' => new DailyFileLogger($path, $identifier, $logLevel),
-            'syslog' => new SyslogLogger($identifier, $logLevel),
+            'daily' => new DailyFileLogger($path, $identifier, $logLevel, $environment),
+            'syslog' => new SyslogLogger($identifier, $logLevel, $environment),
         };
     }
 
