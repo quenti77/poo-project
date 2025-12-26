@@ -3,10 +3,13 @@
 namespace Tuto\Database\Query;
 
 use Tuto\Collections\Collection;
+use Tuto\Database\Query\Conditions\ConditionType;
 use Tuto\Database\Query\Conditions\ConditionWhereTrait;
+use Tuto\Database\Query\Join\ConditionJoinTrait;
 
 class QueryBuilder
 {
+    use ConditionJoinTrait;
     use ConditionWhereTrait;
 
     private QueryType $type;
@@ -20,9 +23,6 @@ class QueryBuilder
     /** @var Collection<int, mixed> $values */
     private Collection $values;
 
-    /** @var Collection<string, > $join */
-    private Collection $join;
-
     public function __construct(QueryType $type)
     {
         $this->type = $type;
@@ -32,6 +32,8 @@ class QueryBuilder
         $this->parameters = collect();
         $this->join = collect();
         $this->where = collect();
+
+        $this->defaultConditionType = ConditionType::WHERE;
     }
 
     /**

@@ -9,6 +9,9 @@ use Tuto\Database\Query\QueryMaker;
 
 trait ConditionWhereTrait
 {
+    /** @var ConditionType $defaultConditionType */
+    private ConditionType $defaultConditionType;
+
     /** @var Collection<string, mixed> $parameters */
     private Collection $parameters;
 
@@ -36,9 +39,9 @@ trait ConditionWhereTrait
      * @param mixed $op
      * @param mixed|null $value
      * @param bool $escape
-     * @return self
+     * @return static
      */
-    public function where(string $column, mixed $op, mixed $value = null, bool $escape = true): self
+    public function where(string $column, mixed $op, mixed $value = null, bool $escape = true): static
     {
         return $this->addWhere(ConditionType::AND, $column, $op, $value, $escape);
     }
@@ -48,9 +51,9 @@ trait ConditionWhereTrait
      * @param mixed $op
      * @param mixed|null $value
      * @param bool $escape
-     * @return self
+     * @return static
      */
-    public function orWhere(string $column, mixed $op, mixed $value = null, bool $escape = true): self
+    public function orWhere(string $column, mixed $op, mixed $value = null, bool $escape = true): static
     {
         return $this->addWhere(ConditionType::OR, $column, $op, $value, $escape);
     }
@@ -59,9 +62,9 @@ trait ConditionWhereTrait
      * @param string $column
      * @param mixed $start
      * @param mixed $end
-     * @return self
+     * @return static
      */
-    public function whereBetween(string $column, mixed $start, mixed $end): self
+    public function whereBetween(string $column, mixed $start, mixed $end): static
     {
         return $this->addWhere(ConditionType::AND, $column, 'BETWEEN', [$start, $end]);
     }
@@ -70,9 +73,9 @@ trait ConditionWhereTrait
      * @param string $column
      * @param mixed $start
      * @param mixed $end
-     * @return self
+     * @return static
      */
-    public function orWhereBetween(string $column, mixed $start, mixed $end): self
+    public function orWhereBetween(string $column, mixed $start, mixed $end): static
     {
         return $this->addWhere(ConditionType::OR, $column, 'BETWEEN', [$start, $end]);
     }
@@ -80,9 +83,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param array|Collection $values
-     * @return self
+     * @return static
      */
-    public function whereIn(string $column, array|Collection $values): self
+    public function whereIn(string $column, array|Collection $values): static
     {
         return $this->addWhere(ConditionType::AND, $column, 'IN', $values);
     }
@@ -90,9 +93,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param array|Collection $values
-     * @return self
+     * @return static
      */
-    public function orWhereIn(string $column, array|Collection $values): self
+    public function orWhereIn(string $column, array|Collection $values): static
     {
         return $this->addWhere(ConditionType::OR, $column, 'IN', $values);
     }
@@ -100,9 +103,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param array|Collection $values
-     * @return self
+     * @return static
      */
-    public function whereNotIn(string $column, array|Collection $values): self
+    public function whereNotIn(string $column, array|Collection $values): static
     {
         return $this->addWhere(ConditionType::AND, $column, 'NOT IN', $values);
     }
@@ -110,9 +113,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param array|Collection $values
-     * @return self
+     * @return static
      */
-    public function orWhereNotIn(string $column, array|Collection $values): self
+    public function orWhereNotIn(string $column, array|Collection $values): static
     {
         return $this->addWhere(ConditionType::OR, $column, 'NOT IN', $values);
     }
@@ -120,9 +123,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param callable(QueryBuilder): void $values
-     * @return self
+     * @return static
      */
-    public function whereExists(string $column, callable $values): self
+    public function whereExists(string $column, callable $values): static
     {
         return $this->addWhere(ConditionType::AND, $column, 'EXISTS', $values);
     }
@@ -130,9 +133,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param callable(QueryBuilder): void $values
-     * @return self
+     * @return static
      */
-    public function orWhereExists(string $column, callable $values): self
+    public function orWhereExists(string $column, callable $values): static
     {
         return $this->addWhere(ConditionType::OR, $column, 'EXISTS', $values);
     }
@@ -140,9 +143,9 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param callable(QueryBuilder): void $values
-     * @return self
+     * @return static
      */
-    public function whereNotExists(string $column, callable $values): self
+    public function whereNotExists(string $column, callable $values): static
     {
         return $this->addWhere(ConditionType::AND, $column, 'NOT EXISTS', $values);
     }
@@ -150,11 +153,29 @@ trait ConditionWhereTrait
     /**
      * @param string $column
      * @param callable(QueryBuilder): void $values
-     * @return self
+     * @return static
      */
-    public function orWhereNotExists(string $column, callable $values): self
+    public function orWhereNotExists(string $column, callable $values): static
     {
         return $this->addWhere(ConditionType::OR, $column, 'NOT EXISTS', $values);
+    }
+
+    /**
+     * @param callable(QueryBuilder): void $callback
+     * @return static
+     */
+    public function whereGroup(callable $callback): static
+    {
+        return $this->addJoin(ConditionType::AND, $callback);
+    }
+
+    /**
+     * @param callable(QueryBuilder): void $callback
+     * @return static
+     */
+    public function orWhereGroup(callable $callback): static
+    {
+        return $this->addJoin(ConditionType::OR, $callback);
     }
 
     /**
@@ -163,7 +184,7 @@ trait ConditionWhereTrait
      * @param string $op
      * @param mixed|null $value
      * @param bool $escape
-     * @return self
+     * @return static
      */
     private function addWhere(
         ConditionType $type,
@@ -171,8 +192,8 @@ trait ConditionWhereTrait
         mixed $op,
         mixed $value = null,
         bool $escape = true,
-    ): self {
-        $conditionType = $this->where->isEmpty() ? ConditionType::WHERE : $type;
+    ): static {
+        $conditionType = $this->getCurrentType($type);
         $operator = ConditionOperator::tryFrom($op);
         if ($operator === null && $value === null) {
             $value = $operator;
@@ -222,6 +243,23 @@ trait ConditionWhereTrait
     }
 
     /**
+     * @param ConditionType $type
+     * @param callable(QueryBuilder): void $callback
+     * @return static
+     */
+    private function addJoin(ConditionType $type, callable $callback): static
+    {
+        $query = QueryMaker::select();
+        $callback($query);
+
+        $groupCondition = new GroupCondition($this->getCurrentType($type), $query->getWhere());
+        $this->where->push($groupCondition);
+        $this->parameters->merge($query->getParameters());
+
+        return $this;
+    }
+
+    /**
      * @param string $column
      * @param mixed $value
      * @return string
@@ -232,5 +270,14 @@ trait ConditionWhereTrait
 
         $this->parameters[$parameterName] = $value;
         return $parameterName;
+    }
+
+    /**
+     * @param ConditionType $type
+     * @return ConditionType
+     */
+    private function getCurrentType(ConditionType $type): ConditionType
+    {
+        return $this->where->isEmpty() ? $this->defaultConditionType : $type;
     }
 }
