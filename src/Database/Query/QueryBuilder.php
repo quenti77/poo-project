@@ -187,6 +187,7 @@ class QueryBuilder
             $value = $this->escapeValue($column, $value);
         }
         $this->values[$column] = $value;
+        return $this;
     }
 
     /**
@@ -259,6 +260,14 @@ class QueryBuilder
         }
 
         return $this;
+    }
+
+    /**
+     * @return QueryRender
+     */
+    public function render(): QueryRender
+    {
+        return new QueryRender($this);
     }
 
     /**
