@@ -12,9 +12,12 @@ class SyslogLogger extends BaseLogger
      * @param string $ident
      * @param LoggerLevel $minLevel
      */
-    public function __construct(private readonly string $ident = 'app', LoggerLevel $minLevel = LoggerLevel::DEBUG)
-    {
-        parent::__construct($minLevel);
+    public function __construct(
+        private readonly string $ident = 'app',
+        LoggerLevel $minLevel = LoggerLevel::DEBUG,
+        string $environment = 'local',
+    ) {
+        parent::__construct($minLevel, $environment);
 
         openlog($this->ident, LOG_PID | LOG_PERROR, LOG_USER);
     }

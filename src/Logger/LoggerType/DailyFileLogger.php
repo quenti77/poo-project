@@ -2,6 +2,7 @@
 
 namespace Tuto\Logger\LoggerType;
 
+use JsonException;
 use RuntimeException;
 use Tuto\Logger\BaseLogger;
 use Tuto\Logger\LoggerLevel;
@@ -17,8 +18,9 @@ class DailyFileLogger extends BaseLogger
         private readonly string $logDirectory,
         private readonly string $filePrefix = 'app',
         LoggerLevel $minLevel = LoggerLevel::DEBUG,
+        string $environment = 'local',
     ) {
-        parent::__construct($minLevel);
+        parent::__construct($minLevel, $environment);
     }
 
     /**
@@ -26,6 +28,7 @@ class DailyFileLogger extends BaseLogger
      * @param string $message
      * @param array $context
      * @return void
+     * @throws JsonException
      */
     protected function write(LoggerLevel $level, string $message, array $context = []): void
     {

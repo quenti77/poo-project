@@ -38,6 +38,13 @@ WORKDIR /var/www/html
 RUN addgroup -g 1000 www && \
     adduser -D -u 1000 -G www www
 
+# Configure PHP-FPM to run as www user
+COPY ./www.conf /usr/local/etc/php-fpm.d/www.conf
+
+# Create storage/logs directory with correct permissions
+RUN mkdir -p /var/www/html/storage/logs && \
+    chown -R www:www /var/www/html/storage
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
