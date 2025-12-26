@@ -11,13 +11,19 @@ class SimpleCondition extends BaseCondition
      * @param string $column
      * @param ConditionOperator $operator
      * @param mixed $value
+     * @param bool $escape
      */
-    public function __construct(ConditionType $type, string $column, ConditionOperator $operator, mixed $value)
-    {
+    public function __construct(
+        ConditionType $type,
+        string $column,
+        ConditionOperator $operator,
+        mixed $value,
+        bool $escape,
+    ) {
         if (!$operator->isSimpleOperator()) {
             throw new InvalidArgumentException("This condition use simple operator");
         }
-        parent::__construct($type, $column, $operator, $value);
+        parent::__construct($type, $column, $operator, $value, $escape);
     }
 
     public function render(): string

@@ -11,6 +11,7 @@ abstract class BaseCondition
         protected readonly string $column,
         protected readonly ConditionOperator $operator,
         protected readonly mixed $value,
+        protected readonly bool $escape,
     ) {
     }
 
@@ -33,6 +34,9 @@ abstract class BaseCondition
      */
     protected function escapeValue(mixed $value): string
     {
+        if ($this->escape === false) {
+            return $value;
+        }
         if (is_numeric($value)) {
             return (string) $value;
         }

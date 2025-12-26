@@ -9,11 +9,19 @@ use Tuto\Database\Query\QueryRender;
 
 class ComplexCondition extends BaseCondition
 {
+    /**
+     * @param ConditionType $type
+     * @param string $column
+     * @param ConditionOperator $operator
+     * @param array|Collection|QueryBuilder $value
+     * @param bool $escape
+     */
     public function __construct(
         ConditionType $type,
         string $column,
         ConditionOperator $operator,
         array|Collection|QueryBuilder $value,
+        bool $escape
     ) {
         if ($value instanceof QueryBuilder && $operator->isInOperator()) {
             throw new InvalidArgumentException("Operator IN, NOT IN needs an array or Collection");
@@ -25,7 +33,7 @@ class ComplexCondition extends BaseCondition
         if (is_array($value) && $operator->isInOperator()) {
             $value = collect($value);
         }
-        parent::__construct($type, $column, $operator, $value);
+        parent::__construct($type, $column, $operator, $value, $escape);
     }
 
     public function render(): string
