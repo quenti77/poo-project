@@ -4,6 +4,7 @@ namespace Tuto\Database\Query;
 
 use Tuto\Collections\Collection;
 use Tuto\Database\Query\Conditions\BaseCondition;
+use Tuto\Database\Query\Join\JoinQuery;
 
 class QueryRender
 {
@@ -48,8 +49,42 @@ class QueryRender
      */
     private function selectRender(Collection $parts): Collection
     {
+        $fields = $this->queryBuilder->getFields();
+        $parts->push($fields->isEmpty() ? '*' : $this->renderTableWithAlias($fields));
+
         $from = $this->queryBuilder->getFrom()->values()[0];
+        $parts->push('FROM');
         $parts->push($from);
+
+        $join = $this->queryBuilder->getJoin();
+        if (!$join->isEmpty()) {
+            $this->renderJoin($parts, $join);
+        }
+
+        /** @var Collection<int, BaseCondition> $where */
+        $where = $this->queryBuilder->getWhere();
+        if (!$where->isEmpty()) {
+            $parts->push('WHERE');
+            $parts->push($this->renderCondition($where));
+        }
+
+        /** @var Collection<int, string> $groupBy */
+        $groupBy = $this->queryBuilder->getGroupBy();
+        if (!$groupBy->isEmpty()) {
+            $parts->push('GROUP BY');
+            $parts->push($groupBy->join(', '));
+        }
+
+        /** @var Collection<string, QueryOrder> $orderBy */
+        $orderBy = $this->queryBuilder->getOrderBy();
+        if (!$orderBy->isEmpty()) {
+            $parts->push('ORDER BY');
+
+            $orderByParts = $orderBy->map(static fn (string $column, QueryOrder $order) => "{$column} {$order->value}");
+            $parts->push($orderByParts->join(', '));
+        }
+
+        $this->renderLimit($parts);
 
         return $parts;
     }
@@ -95,6 +130,7 @@ class QueryRender
         /** @var Collection<int, BaseCondition> $where */
         $where = $this->queryBuilder->getWhere();
         if (!$where->isEmpty()) {
+            $parts->push('WHERE');
             $parts->push($this->renderCondition($where));
         }
 
@@ -109,6 +145,15 @@ class QueryRender
     {
         $from = $this->queryBuilder->getFrom()->values()[0];
         $parts->push($from);
+
+        /** @var Collection<int, BaseCondition> $where */
+        $where = $this->queryBuilder->getWhere();
+        if (!$where->isEmpty()) {
+            $parts->push('WHERE');
+            $parts->push($this->renderCondition($where));
+        }
+
+        $this->renderLimit($parts);
 
         return $parts;
     }
@@ -135,6 +180,27 @@ class QueryRender
     }
 
     /**
+     * @param Collection<int, string> $parts
+     * @param Collection<int, JoinQuery> $joins
+     * @return void
+     */
+    private function renderJoin(Collection $parts, Collection $joins): void
+    {
+        foreach ($joins as $join) {
+            $joinRender = $join->getType()->value;
+            $parts->push($joinRender);
+
+            $table = collect([$join->getAlias() => $join->getTable()]);
+            $tableRender = $this->renderTableWithAlias($table);
+            $parts->push($tableRender);
+
+            $conditionRender = $this->renderCondition($join->getWhere());
+            $this->queryBuilder->getParameters()->merge($join->getParameters());
+            $parts->push($conditionRender);
+        }
+    }
+
+    /**
      * @param int|string $alias
      * @param mixed $value
      * @return string
@@ -153,5 +219,23 @@ class QueryRender
         return $conditions
             ->map(static fn (int $key, BaseCondition $condition) => $condition->render())
             ->join(' ');
+    }
+
+    /**
+     * @param Collection $parts
+     * @return void
+     */
+    private function renderLimit(Collection $parts): void
+    {
+        $limit = $this->queryBuilder->getLimit();
+        $offset = $this->queryBuilder->getOffset();
+
+        if ($limit !== null) {
+            $parts->push("LIMIT {$limit}");
+
+            if ($offset !== null) {
+                $parts->push("OFFSET {$offset}");
+            }
+        }
     }
 }

@@ -205,7 +205,7 @@ trait ConditionWhereTrait
             if ($escape) {
                 $value = $this->escapeValue($column, $value);
             }
-            $this->where->push(new SimpleCondition($conditionType, $column, $operator, $value));
+            $this->where->push(new SimpleCondition($conditionType, $column, $operator, $value, false));
             return $this;
         }
 
@@ -218,7 +218,7 @@ trait ConditionWhereTrait
                 $start = $this->escapeValue($column . '_start', $start);
                 $end = $this->escapeValue($column . '_end', $end);
             }
-            $this->where->push(new BetweenCondition($conditionType, $column, $start, $end));
+            $this->where->push(new BetweenCondition($conditionType, $column, $start, $end, false));
             return $this;
         }
 
@@ -226,7 +226,7 @@ trait ConditionWhereTrait
             if (!is_array($value) && !($value instanceof Collection)) {
                 throw new InvalidQuerySyntaxException("To use IN / NOT IN, we need an array or collection");
             }
-            $this->where->push(new ComplexCondition($conditionType, $column, $operator, $value));
+            $this->where->push(new ComplexCondition($conditionType, $column, $operator, $value, $escape));
         }
 
         if ($operator->isExistOperator()) {
@@ -236,7 +236,7 @@ trait ConditionWhereTrait
             $query = QueryMaker::select();
             $value($query);
 
-            $this->where->push(new ComplexCondition($conditionType, $column, $operator, $query));
+            $this->where->push(new ComplexCondition($conditionType, $column, $operator, $query, $escape));
             return $this;
         }
 

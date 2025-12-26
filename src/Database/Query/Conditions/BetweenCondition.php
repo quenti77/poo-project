@@ -7,15 +7,20 @@ class BetweenCondition extends BaseCondition
     /**
      * @param ConditionType $type
      * @param string $column
-     * @param array $value
+     * @param mixed $start
+     * @param mixed $end
+     * @param bool $escape
      */
-    public function __construct(ConditionType $type, string $column, mixed $start, mixed $end)
+    public function __construct(ConditionType $type, string $column, mixed $start, mixed $end, bool $escape)
     {
-        parent::__construct($type, $column, ConditionOperator::BETWEEN, [$start, $end]);
+        parent::__construct($type, $column, ConditionOperator::BETWEEN, [$start, $end], $escape);
     }
 
     public function render(): string
     {
-        return "{$this->type->value} {$this->column} {$this->operator->value} {$this->value[0]} AND {$this->value[1]}";
+        $start = $this->escapeValue($this->value[0]);
+        $end = $this->escapeValue($this->value[1]);
+
+        return "{$this->type->value} {$this->column} {$this->operator->value} {$start} AND {$end}";
     }
 }

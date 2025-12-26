@@ -12,7 +12,7 @@ class GroupCondition extends BaseCondition
      */
     public function __construct(ConditionType $type, private readonly Collection $conditions)
     {
-        parent::__construct($type, '', ConditionOperator::EQ, '');
+        parent::__construct($type, '', ConditionOperator::EQ, '', false);
     }
 
     public function render(): string

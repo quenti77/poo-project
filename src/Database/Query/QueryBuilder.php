@@ -6,6 +6,7 @@ use Tuto\Collections\Collection;
 use Tuto\Database\Query\Conditions\ConditionType;
 use Tuto\Database\Query\Conditions\ConditionWhereTrait;
 use Tuto\Database\Query\Join\ConditionJoinTrait;
+use Tuto\Database\Query\Join\JoinQuery;
 
 class QueryBuilder
 {
@@ -22,6 +23,9 @@ class QueryBuilder
 
     /** @var Collection<int, mixed> $values */
     private Collection $values;
+
+    /** @var Collection<int, string> */
+    private Collection $groupBy;
 
     /** @var Collection<string, QueryOrder> $orderBy */
     private Collection $orderBy;
@@ -41,6 +45,7 @@ class QueryBuilder
         $this->parameters = collect();
         $this->join = collect();
         $this->where = collect();
+        $this->groupBy = collect();
         $this->orderBy = collect();
 
         $this->defaultConditionType = ConditionType::WHERE;
@@ -79,11 +84,11 @@ class QueryBuilder
     }
 
     /**
-     * @return Collection<string, >
+     * @return Collection<int, string>
      */
-    public function getJoin(): Collection
+    public function getGroupBy(): Collection
     {
-        return $this->join;
+        return $this->groupBy;
     }
 
     /**
@@ -191,6 +196,21 @@ class QueryBuilder
     }
 
     /**
+     * @param string ...$columns
+     * @return $this
+     */
+    public function groupBy(string ...$columns): self
+    {
+        if ($this->type !== QueryType::SELECT) {
+            throw new InvalidQuerySyntaxException("Can not used 'group by' outside SELECT queries");
+        }
+
+        $this->groupBy->push(...$columns);
+
+        return $this;
+    }
+
+    /**
      * @param string $column
      * @param string|QueryOrder $order
      * @return self
@@ -227,16 +247,7 @@ class QueryBuilder
         if (!$this->type->canUseLimit()) {
             throw new InvalidQuerySyntaxException("Can not used 'offset' outside SELECT or DELETE queries");
         }
-
-        if (is_int($offset)) {
-            $fieldName = uniqid(':offsetSql_', true);
-
-            $this->parameters[$fieldName] = $offset;
-            $this->offset = $fieldName;
-        } else {
-            $this->offset = $offset;
-        }
-
+        $this->offset = is_int($offset) ? $this->escapeValue('offset', $offset) : $offset;
         return $this;
     }
 
@@ -249,16 +260,7 @@ class QueryBuilder
         if (!$this->type->canUseLimit()) {
             throw new InvalidQuerySyntaxException("Can not used 'limit' outside SELECT or DELETE queries");
         }
-
-        if (is_int($limit)) {
-            $fieldName = uniqid(':limitSql_', true);
-
-            $this->parameters[$fieldName] = $limit;
-            $this->limit = $fieldName;
-        } else {
-            $this->limit = $limit;
-        }
-
+        $this->limit = is_int($limit) ? $this->escapeValue('limit', $limit) : $limit;
         return $this;
     }
 

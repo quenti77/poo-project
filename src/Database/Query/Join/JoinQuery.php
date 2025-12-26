@@ -2,7 +2,6 @@
 
 namespace Tuto\Database\Query\Join;
 
-use Closure;
 use Tuto\Database\Query\Conditions\ConditionType;
 use Tuto\Database\Query\Conditions\ConditionWhereTrait;
 use Tuto\Database\Query\QueryBuilder;
@@ -13,12 +12,12 @@ class JoinQuery
 
     /**
      * @param JoinType $type
-     * @param string|Closure(QueryBuilder): void $table
+     * @param string|QueryBuilder $table
      * @param string $alias
      */
     public function __construct(
         private readonly JoinType $type,
-        private readonly string|Closure $table,
+        private readonly string|QueryBuilder $table,
         private readonly string $alias,
     ) {
         $this->where = collect();
@@ -35,9 +34,9 @@ class JoinQuery
     }
 
     /**
-     * @return Closure(QueryBuilder): void|string
+     * @return string|QueryBuilder
      */
-    public function getTable(): Closure|string
+    public function getTable(): string|QueryBuilder
     {
         return $this->table;
     }
@@ -61,5 +60,4 @@ class JoinQuery
     {
         return $this->addWhere(ConditionType::AND, $column, $op, $value, $escape);
     }
-
 }

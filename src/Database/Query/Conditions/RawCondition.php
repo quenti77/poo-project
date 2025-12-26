@@ -10,7 +10,7 @@ class RawCondition extends BaseCondition
      */
     public function __construct(ConditionType $type, string $raw)
     {
-        parent::__construct($type, $raw, ConditionOperator::EQ, null);
+        parent::__construct($type, $raw, ConditionOperator::EQ, null, false);
     }
 
     /**

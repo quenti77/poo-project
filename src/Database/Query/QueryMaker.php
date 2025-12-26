@@ -4,9 +4,13 @@ namespace Tuto\Database\Query;
 
 class QueryMaker
 {
-    public static function select(): QueryBuilder
+    /**
+     * @param string|array ...$fields
+     * @return QueryBuilder
+     */
+    public static function select(string|array ...$fields): QueryBuilder
     {
-        return new QueryBuilder(QueryType::SELECT);
+        return new QueryBuilder(QueryType::SELECT)->select(...$fields);
     }
 
     public static function insert(): QueryBuilder
