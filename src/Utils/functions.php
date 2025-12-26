@@ -10,6 +10,8 @@ use Tuto\Http\Responses\HttpCode;
 use Tuto\Http\Responses\JsonResponse;
 use Tuto\Http\Responses\RedirectResponse;
 use Tuto\Http\Responses\ViewResponse;
+use Tuto\Logger\LoggerInterface;
+use Tuto\Logger\LoggerType\NullLogger;
 use Tuto\Routing\Router;
 
 if (!function_exists('collect')) {
@@ -52,6 +54,7 @@ if (!function_exists('container')) {
         try {
             return $item === null ? $container : $container->get($item);
         } catch (ReflectionException) {
+            return $container;
         }
     }
 }
@@ -159,6 +162,15 @@ if (!function_exists('redirect')) {
         string $httpVersion = 'HTTP/2',
     ): RedirectResponse {
         return new RedirectResponse($location, $code, $headers, $httpVersion);
+    }
+}
+
+if (!function_exists('logger')) {
+    /**
+     * @return LoggerInterface
+     */
+    function logger(): LoggerInterface {
+        return container(LoggerInterface::class);
     }
 }
 
