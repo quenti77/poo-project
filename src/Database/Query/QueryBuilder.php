@@ -23,6 +23,15 @@ class QueryBuilder
     /** @var Collection<int, mixed> $values */
     private Collection $values;
 
+    /** @var Collection<string, QueryOrder> $orderBy */
+    private Collection $orderBy;
+
+    /** @var string|null $offset */
+    private string|null $offset = null;
+
+    /** @var string|null $limit */
+    private string|null $limit = null;
+
     public function __construct(QueryType $type)
     {
         $this->type = $type;
@@ -32,6 +41,7 @@ class QueryBuilder
         $this->parameters = collect();
         $this->join = collect();
         $this->where = collect();
+        $this->orderBy = collect();
 
         $this->defaultConditionType = ConditionType::WHERE;
     }
@@ -74,6 +84,30 @@ class QueryBuilder
     public function getJoin(): Collection
     {
         return $this->join;
+    }
+
+    /**
+     * @return Collection<string, QueryOrder>
+     */
+    public function getOrderBy(): Collection
+    {
+        return $this->orderBy;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOffset(): ?string
+    {
+        return $this->offset;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLimit(): ?string
+    {
+        return $this->limit;
     }
 
     /**
@@ -141,9 +175,9 @@ class QueryBuilder
      * @param string $column
      * @param mixed $value
      * @param bool $escape
-     * @return void
+     * @return self
      */
-    public function value(string $column, mixed $value, bool $escape = true): void
+    public function value(string $column, mixed $value, bool $escape = true): self
     {
         if (!$this->type->canUseValues()) {
             throw new InvalidQuerySyntaxException("Can not set values outside INSERT or UPDATE queries");
@@ -153,6 +187,78 @@ class QueryBuilder
             $value = $this->escapeValue($column, $value);
         }
         $this->values[$column] = $value;
+    }
+
+    /**
+     * @param string $column
+     * @param string|QueryOrder $order
+     * @return self
+     */
+    public function orderBy(string $column, string|QueryOrder $order = QueryOrder::ASC): self
+    {
+        if ($this->type !== QueryType::SELECT) {
+            throw new InvalidQuerySyntaxException("Can not used 'order by' outside SELECT queries");
+        }
+
+        if (is_string($order)) {
+            $order = QueryOrder::tryFrom($order) ?? QueryOrder::ASC;
+        }
+
+        $this->orderBy[$column] = $order;
+        return $this;
+    }
+
+    /**
+     * @param string $column
+     * @return $this
+     */
+    public function orderByDesc(string $column): self
+    {
+        return $this->orderBy($column, QueryOrder::DESC);
+    }
+
+    /**
+     * @param int|string $offset
+     * @return self
+     */
+    public function offset(int|string $offset): self
+    {
+        if (!$this->type->canUseLimit()) {
+            throw new InvalidQuerySyntaxException("Can not used 'offset' outside SELECT or DELETE queries");
+        }
+
+        if (is_int($offset)) {
+            $fieldName = uniqid(':offsetSql_', true);
+
+            $this->parameters[$fieldName] = $offset;
+            $this->offset = $fieldName;
+        } else {
+            $this->offset = $offset;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int|string $limit
+     * @return self
+     */
+    public function limit(int|string $limit): self
+    {
+        if (!$this->type->canUseLimit()) {
+            throw new InvalidQuerySyntaxException("Can not used 'limit' outside SELECT or DELETE queries");
+        }
+
+        if (is_int($limit)) {
+            $fieldName = uniqid(':limitSql_', true);
+
+            $this->parameters[$fieldName] = $limit;
+            $this->limit = $fieldName;
+        } else {
+            $this->limit = $limit;
+        }
+
+        return $this;
     }
 
     /**

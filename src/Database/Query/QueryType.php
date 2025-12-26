@@ -24,6 +24,11 @@ enum QueryType: string
         return in_array($this, [self::INSERT, self::UPDATE], true);
     }
 
+    public function canUseLimit(): bool
+    {
+        return in_array($this, [self::SELECT, self::DELETE], true);
+    }
+
     public function canUseSubQuery(): bool
     {
         return $this === self::SELECT;
