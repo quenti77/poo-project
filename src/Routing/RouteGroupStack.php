@@ -3,7 +3,7 @@
 namespace Tuto\Routing;
 
 use Tuto\Collections\Collection;
-use Tuto\Routing\Middleware\MiddlewareInterface;
+use Tuto\Middleware\MiddlewareInterface;
 
 class RouteGroupStack
 {

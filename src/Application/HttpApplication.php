@@ -14,7 +14,7 @@ use Tuto\Http\Exceptions\HttpNotFoundException;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Responses\AbstractResponse;
 use Tuto\Http\Responses\HttpCode;
-use Tuto\Routing\Middleware\MiddlewareStack;
+use Tuto\Middleware\MiddlewareStack;
 
 class HttpApplication extends BaseApplication
 {
@@ -38,21 +38,23 @@ class HttpApplication extends BaseApplication
 
     /**
      * @return void
-     * @throws JsonException
-     * @throws ReflectionException
      */
     public function run(): void
     {
         $route = router()->match($this->request);
-        if ($route === null) {
-            throw new HttpNotFoundException($this->request);
-        }
 
         $stack = new MiddlewareStack();
         $stack->addMany(router()->getMiddlewareStack()->getMiddlewares());
-        $stack->addMany($route->getMiddlewareStack()->getMiddlewares());
+
+        if ($route) {
+            $stack->addMany($route->getMiddlewareStack()->getMiddlewares());
+        }
 
         $finalHandler = function (Request $request) use($route): mixed {
+            if ($route === null) {
+                throw new HttpNotFoundException($this->request);
+            }
+
             $resolver = container()->resolver();
             $context = $route->getMatches()->all();
 

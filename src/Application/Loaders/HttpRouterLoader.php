@@ -7,6 +7,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionException;
 use SplFileInfo;
+use Tuto\Middleware\Global\MaintenanceModeMiddleware;
 
 class HttpRouterLoader implements LoaderInterface
 {
@@ -16,6 +17,8 @@ class HttpRouterLoader implements LoaderInterface
      */
     public function load(): void
     {
+        $this->addGlobalMiddlewares();
+
         $rdi = new RecursiveDirectoryIterator(container('path.router'), FilesystemIterator::SKIP_DOTS);
         $rii = new RecursiveIteratorIterator($rdi);
 
@@ -25,5 +28,15 @@ class HttpRouterLoader implements LoaderInterface
                 require $file->getRealPath();
             }
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function addGlobalMiddlewares(): void
+    {
+        router()->middlewares([
+            MaintenanceModeMiddleware::class,
+        ]);
     }
 }

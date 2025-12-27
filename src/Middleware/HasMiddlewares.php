@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Routing\Middleware;
+namespace Tuto\Middleware;
 
 use Tuto\Collections\Collection;
 
