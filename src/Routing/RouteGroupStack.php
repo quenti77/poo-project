@@ -3,6 +3,7 @@
 namespace Tuto\Routing;
 
 use Tuto\Collections\Collection;
+use Tuto\Routing\Middleware\MiddlewareInterface;
 
 class RouteGroupStack
 {
@@ -55,5 +56,17 @@ class RouteGroupStack
             $parameters = $parameters->merge($group->getWhere());
         }
         return $parameters;
+    }
+
+    /**
+     * @return Collection<int, MiddlewareInterface|class-string<MiddlewareInterface>>
+     */
+    public function getMiddlewares(): Collection
+    {
+        $middlewares = collect();
+        foreach ($this->stack as $group) {
+            $middlewares = $middlewares->merge($group->getMiddlewares());
+        }
+        return $middlewares;
     }
 }

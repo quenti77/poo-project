@@ -14,6 +14,7 @@ use Tuto\Http\Exceptions\HttpNotFoundException;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Responses\AbstractResponse;
 use Tuto\Http\Responses\HttpCode;
+use Tuto\Routing\Middleware\MiddlewareStack;
 
 class HttpApplication extends BaseApplication
 {
@@ -47,17 +48,26 @@ class HttpApplication extends BaseApplication
             throw new HttpNotFoundException($this->request);
         }
 
-        $resolver = container()->resolver();
-        $context = $route->getMatches()->all();
+        $stack = new MiddlewareStack();
+        $stack->addMany(router()->getMiddlewareStack()->getMiddlewares());
+        $stack->addMany($route->getMiddlewareStack()->getMiddlewares());
 
-        $response = is_array($route->getHandler())
-            ? $resolver->resolveArray($route->getHandler(), $context)
-            : $resolver->resolveCallable($route->getHandler(), $context);
+        $finalHandler = function (Request $request) use($route): mixed {
+            $resolver = container()->resolver();
+            $context = $route->getMatches()->all();
 
-        if (!($response instanceof AbstractResponse)) {
-            $response = $this->createJsonResponse($response);
-        }
+            $response = is_array($route->getHandler())
+                ? $resolver->resolveArray($route->getHandler(), $context)
+                : $resolver->resolveCallable($route->getHandler(), $context);
 
+            if (!($response instanceof AbstractResponse)) {
+                $response = $this->createJsonResponse($response);
+            }
+
+            return $response;
+        };
+
+        $response = $stack->handle($this->request, $finalHandler);
         $this->render($response);
     }
 

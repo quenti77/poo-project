@@ -7,9 +7,15 @@ use Tuto\Collections\Collection;
 use Tuto\Http\Requests\HttpMethod;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Requests\Uri;
+use Tuto\Routing\Middleware\HasMiddlewares;
 
 class Router
 {
+    use HasMiddlewares {
+        middleware as public addGlobalMiddleware;
+        middlewares as public addGlobalMiddlewares;
+    }
+
     /** @var Collection<HttpMethod, Collection<int, Route>> $routes */
     private Collection $routes;
 
@@ -24,6 +30,8 @@ class Router
         $this->routes = collect();
         $this->namedRoutes = collect();
         $this->groups = new RouteGroupStack();
+
+        $this->initializeMiddlewares();
     }
 
     /**
@@ -142,6 +150,11 @@ class Router
 
         $route = new Route($method, $path, $handler, $name);
         $route->setPathParameters($this->groups->getParameters());
+
+        $groupMiddlewares = $this->groups->getMiddlewares();
+        if (!$groupMiddlewares->isEmpty()) {
+            $route->middlewares($groupMiddlewares);
+        }
 
         $this->routes[$method->value] ??= collect();
         $this->routes[$method->value]->push($route);
