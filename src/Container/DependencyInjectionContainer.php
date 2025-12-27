@@ -100,6 +100,21 @@ class DependencyInjectionContainer
         throw new InvalidArgumentException("Can not be resolve the dependency item '{$dep}'");
     }
 
+    /**
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getWithoutError(string $name, mixed $default): mixed
+    {
+        try {
+            return $this->get($name);
+        } catch (InvalidArgumentException|ReflectionException) {
+            logger()->warning("Unknown configuration", ['name' => $name]);
+            return $default;
+        }
+    }
+
     private function callFactory(callable $factory): mixed
     {
         return $factory($this);

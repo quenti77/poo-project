@@ -33,9 +33,8 @@ class ViewResponse extends AbstractResponse
     {
         extract($data);
 
-        $auth = $_SESSION['auth'] ?? null;
-        // TODO: un-comment this line
-        // $router = router();
+        $auth = request()->session['auth'] ?? null;
+        $router = router();
 
         ob_start();
         require ROOT . "/views/{$viewPath}.php";

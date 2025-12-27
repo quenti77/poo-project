@@ -109,7 +109,7 @@ if (!function_exists('view')) {
     /**
      * @param string $view
      * @param array $data
-     * @param string $layout
+     * @param string|null $layout
      * @param HttpCode $code
      * @param array $headers
      * @param string $httpVersion
@@ -119,7 +119,7 @@ if (!function_exists('view')) {
     function view(
         string $view,
         array $data = [],
-        string $layout = 'base',
+        string|null $layout = 'base',
         HttpCode $code = HttpCode::OK,
         array $headers = [],
         string $httpVersion = 'HTTP/2',
