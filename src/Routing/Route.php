@@ -7,9 +7,12 @@ use Tuto\Collections\Collection;
 use Tuto\Http\Requests\HttpMethod;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Requests\Uri;
+use Tuto\Routing\Middleware\HasMiddlewares;
 
 class Route
 {
+    use HasMiddlewares;
+
     private const string PATH_PARAM_REGEX = '/\{([a-zA-Z0-9_\-]+)}/';
 
     /** @var callable|array{class-string, string} $handler */
@@ -30,6 +33,8 @@ class Route
         $this->handler = $handler;
         $this->pathParameters = collect();
         $this->matches = collect();
+
+        $this->initializeMiddlewares();
     }
 
     /**
@@ -92,7 +97,7 @@ class Route
 
         $pathRegex = preg_replace_callback(
             self::PATH_PARAM_REGEX,
-            fn (array $matches) => $this->transformPathMatcher($matches),
+            fn(array $matches) => $this->transformPathMatcher($matches),
             $this->path,
         );
 
