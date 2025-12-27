@@ -10,6 +10,7 @@ use Tuto\Logger\LoggerLevel;
 class HttpUnauthorizedException extends HttpException
 {
     /**
+     * @param Request $request
      * @param string $message
      * @param int $code
      * @param Throwable|null $previous

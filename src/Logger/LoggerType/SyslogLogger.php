@@ -11,6 +11,7 @@ class SyslogLogger extends BaseLogger
     /**
      * @param string $ident
      * @param LoggerLevel $minLevel
+     * @param string $environment
      */
     public function __construct(
         private readonly string $ident = 'app',

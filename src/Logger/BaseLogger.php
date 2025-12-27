@@ -8,6 +8,7 @@ abstract class BaseLogger implements LoggerInterface
 {
     /**
      * @param LoggerLevel $minLevel
+     * @param string $environment
      */
     public function __construct(
         protected LoggerLevel $minLevel = LoggerLevel::DEBUG,

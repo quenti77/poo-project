@@ -44,6 +44,7 @@ class Resolver
      * @param class-string<TInstance> $class
      * @return TInstance
      * @throws ReflectionException
+     * @noinspection PhpMixedReturnTypeCanBeReducedInspection
      */
     public function instantiate(string $class): mixed
     {
