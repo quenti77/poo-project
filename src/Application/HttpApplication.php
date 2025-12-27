@@ -6,13 +6,14 @@ use JsonException;
 use ReflectionException;
 use Tuto\Application\Loaders\ConfigurationLoader;
 use Tuto\Application\Loaders\EnvironmentLoader;
+use Tuto\Application\Loaders\ErrorHandlerLoader;
 use Tuto\Application\Loaders\HttpRouterLoader;
 use Tuto\Application\Loaders\LoaderInterface;
 use Tuto\Collections\Collection;
+use Tuto\Http\Exceptions\HttpNotFoundException;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Responses\AbstractResponse;
 use Tuto\Http\Responses\HttpCode;
-use Tuto\Http\Responses\JsonResponse;
 
 class HttpApplication extends BaseApplication
 {
@@ -29,6 +30,7 @@ class HttpApplication extends BaseApplication
         return collect([
             new EnvironmentLoader(),
             new ConfigurationLoader(ROOT . '/config'),
+            new ErrorHandlerLoader(),
             new HttpRouterLoader(),
         ]);
     }
@@ -42,7 +44,7 @@ class HttpApplication extends BaseApplication
     {
         $route = router()->match($this->request);
         if ($route === null) {
-            $this->render(json(['error' => true, 'message' => 'Not Found'], HttpCode::NOT_FOUND));
+            throw new HttpNotFoundException($this->request);
         }
 
         $resolver = container()->resolver();

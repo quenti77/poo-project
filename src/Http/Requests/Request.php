@@ -70,4 +70,18 @@ class Request
             session: Session::fromGlobals(),
         );
     }
+
+    /**
+     * @return bool
+     */
+    public function isJson(): bool
+    {
+        $accept = $this->headers['Accept'] ?? $this->headers['accept'] ?? '';
+        $contentType = $this->headers['Content-Type'] ?? $this->headers['content-type'] ?? '';
+
+        return str_contains($accept, 'application/json')
+            || str_contains($contentType, 'application/json')
+            || (isset($this->headers['X-Requested-With']) && $this->headers['X-Requested-With'] === 'XMLHttpRequest')
+            || (isset($this->headers['x-requested-with']) && $this->headers['x-requested-with'] === 'XMLHttpRequest');
+    }
 }

@@ -3,6 +3,7 @@
 namespace Tuto\Http\Requests;
 
 use InvalidArgumentException;
+use SensitiveParameter;
 
 class Uri
 {
@@ -11,6 +12,7 @@ class Uri
         public readonly string|null $host,
         public readonly int|null $port,
         public readonly string|null $user,
+        #[SensitiveParameter]
         public readonly string|null $password,
         public readonly string $path,
         public readonly string|null $query,
@@ -40,5 +42,35 @@ class Uri
     public static function trimPath(string $path): string
     {
         return trim(trim($path, '/'));
+    }
+
+    public function __toString(): string
+    {
+        $schema = $this->schema ?? '';
+
+        $account = '';
+        if ($this->user) {
+            $account = "{$this->user}:{$this->password}@";
+        }
+
+        $host = $this->host ?? '';
+        if ($this->port) {
+            $host .= ":{$this->port}";
+        }
+
+        $path = "/{$this->path}";
+        if ($this->query) {
+            $path .= "?{$this->query}";
+        }
+        if ($this->fragment) {
+            $path .= "#{$this->fragment}";
+        }
+
+        if (empty($schema) && empty($account) && empty($host)) {
+            return $path;
+        }
+
+        $schema = empty($schema) ? '//' : "{$schema}://";
+        return "{$schema}{$account}{$host}{$path}";
     }
 }
