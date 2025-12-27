@@ -7,7 +7,7 @@ use Tuto\Collections\Collection;
 use Tuto\Http\Requests\HttpMethod;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Requests\Uri;
-use Tuto\Routing\Middleware\HasMiddlewares;
+use Tuto\Middleware\HasMiddlewares;
 
 class Route
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Routing\Middleware;
+namespace Tuto\Middleware;
 
 use Tuto\Collections\Collection;
 use Tuto\Http\Requests\Request;
@@ -52,7 +52,7 @@ class MiddlewareStack implements MiddlewareInterface
 
     /**
      * @param Request $request
-     * @param callable(Request, callable): mixed $next
+     * @param callable(Request): mixed $next
      * @return mixed
      */
     public function handle(Request $request, callable $next): mixed
@@ -69,7 +69,7 @@ class MiddlewareStack implements MiddlewareInterface
 
     /**
      * @param MiddlewareInterface|class-string<MiddlewareInterface> $middleware
-     * @param callable(Request, callable): mixed $next
+     * @param callable(Request): mixed $next
      * @return callable
      */
     private function wrap(MiddlewareInterface|string $middleware, callable $next): callable

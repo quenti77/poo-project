@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Routing\Middleware;
+namespace Tuto\Middleware;
 
 use Tuto\Http\Requests\Request;
 
@@ -8,7 +8,7 @@ interface MiddlewareInterface
 {
     /**
      * @param Request $request
-     * @param callable(Request, callable): mixed $next
+     * @param callable(Request): mixed $next
      * @return mixed
      */
     public function handle(Request $request, callable $next): mixed;

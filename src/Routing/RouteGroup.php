@@ -4,7 +4,7 @@ namespace Tuto\Routing;
 
 use Tuto\Collections\Collection;
 use Tuto\Http\Requests\Uri;
-use Tuto\Routing\Middleware\MiddlewareInterface;
+use Tuto\Middleware\MiddlewareInterface;
 
 class RouteGroup
 {
