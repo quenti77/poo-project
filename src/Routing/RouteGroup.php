@@ -10,6 +10,7 @@ class RouteGroup
     /**
      * @param string $prefix
      * @param string $name
+     * @param Collection $parameters
      */
     public function __construct(
         private string $prefix,

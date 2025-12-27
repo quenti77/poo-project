@@ -13,6 +13,7 @@ class DailyFileLogger extends BaseLogger
      * @param string $logDirectory
      * @param string $filePrefix
      * @param LoggerLevel $minLevel
+     * @param string $environment
      */
     public function __construct(
         private readonly string $logDirectory,

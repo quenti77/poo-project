@@ -138,6 +138,6 @@ class ErrorHandler
      */
     protected static function shouldReport(ErrorDetails $errorDetails): bool
     {
-        return !array_any(static::$dontReport, fn($type) => $errorDetails->type === $type);
+        return !array_any(static::$dontReport, static fn($type) => $errorDetails->type === $type);
     }
 }

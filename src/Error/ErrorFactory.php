@@ -30,6 +30,7 @@ class ErrorFactory
     /**
      * @param Throwable $throwable
      * @param LoggerLevel $loggerLevel
+     * @param HttpCode $httpCode
      * @return ErrorDetails
      */
     public static function fromThrowable(
@@ -57,6 +58,7 @@ class ErrorFactory
     }
 
     /**
+     * @param LoggerLevel $loggerLevel
      * @param string $message
      * @param int $code
      * @param string $file

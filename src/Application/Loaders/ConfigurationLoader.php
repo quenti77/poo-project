@@ -42,7 +42,6 @@ class ConfigurationLoader implements LoaderInterface
     /**
      * @param array $config
      * @return void
-     * @throws ReflectionException
      */
     private function readConfigArray(array $config): void
     {

@@ -49,6 +49,14 @@ class Route
     }
 
     /**
+     * @return string|null
+     */
+    public function getName(): string|null
+    {
+        return $this->name;
+    }
+
+    /**
      * @param string $parameter
      * @param string $regex
      * @return $this

@@ -2,6 +2,7 @@
 
 namespace Tuto\Logger;
 
+use InvalidArgumentException;
 use Tuto\Utils\EasyEnum;
 
 enum LoggerLevel: int
@@ -28,7 +29,7 @@ enum LoggerLevel: int
             'critical' => self::CRITICAL,
             'alert' => self::ALERT,
             'emergency' => self::EMERGENCY,
-            default => throw new \InvalidArgumentException("Unknown log level: {$label}"),
+            default => throw new InvalidArgumentException("Unknown log level: {$label}"),
         };
     }
 
