@@ -22,7 +22,7 @@ class ErrorHandler
 
     public static function register(): void
     {
-        if (self::$registered) {
+        if (static::$registered) {
             return;
         }
 
@@ -30,7 +30,7 @@ class ErrorHandler
         set_exception_handler([static::class, 'handleException']);
         register_shutdown_function([static::class, 'handleShutdown']);
 
-        self::$registered = true;
+        static::$registered = true;
     }
 
     /**
@@ -98,10 +98,10 @@ class ErrorHandler
             request()->cookies->export();
             $response->renderHeaders();
             echo $response->getBody();
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             // Call fallback
-            static::logError(ErrorFactory::fromThrowable($e, LoggerLevel::EMERGENCY));
-            self::renderFallbackError($errorDetails, $e);
+            static::logError(ErrorFactory::fromThrowable($exception, LoggerLevel::EMERGENCY));
+            static::renderFallbackError($errorDetails, $exception);
         }
     }
 

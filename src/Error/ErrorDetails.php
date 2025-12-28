@@ -44,7 +44,7 @@ class ErrorDetails
     /**
      * @return array
      */
-    private function formatTrace(): array
+    public function formatTrace(): array
     {
         return array_map(
             static fn ($trace) => [
