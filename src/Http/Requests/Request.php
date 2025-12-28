@@ -8,10 +8,14 @@ use Tuto\Http\Components\FileParameters;
 use Tuto\Http\Components\Headers;
 use Tuto\Http\Components\QueryParameters;
 use Tuto\Http\Components\Session;
+use Tuto\Routing\Route;
 
 class Request
 {
     private const string OVERRIDE_METHOD = '__method';
+
+    /** @var Route|null $currentRoute */
+    private Route|null $currentRoute = null;
 
     public function __construct(
         public readonly HttpMethod $method,
@@ -83,5 +87,22 @@ class Request
             || str_contains($contentType, 'application/json')
             || (isset($this->headers['X-Requested-With']) && $this->headers['X-Requested-With'] === 'XMLHttpRequest')
             || (isset($this->headers['x-requested-with']) && $this->headers['x-requested-with'] === 'XMLHttpRequest');
+    }
+
+    /**
+     * @return Route|null
+     */
+    public function getCurrentRoute(): Route|null
+    {
+        return $this->currentRoute;
+    }
+
+    /**
+     * @param Route $route
+     * @return void
+     */
+    public function updateCurrentRoute(Route $route): void
+    {
+        $this->currentRoute = $route;
     }
 }

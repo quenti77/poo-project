@@ -6,14 +6,14 @@
 function formatRetryTime(int $seconds): string
 {
     if ($seconds < 60) {
-        return $seconds . ' seconde' . ($seconds > 1 ? 's' : '');
+        return trans('framework.maintenance.time.seconds', $seconds, ['time' => $seconds]);
     }
     if ($seconds < 3600) {
         $minutes = round($seconds / 60);
-        return $minutes . ' minute' . ($minutes > 1 ? 's' : '');
+        return trans('framework.maintenance.time.minutes', $minutes, ['time' => $minutes]);
     }
     $hours = round($seconds / 3600, 1);
-    return $hours . ' heure' . ($hours > 1 ? 's' : '');
+    return trans('framework.maintenance.time.hours', $hours, ['time' => $hours]);
 }
 ?>
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ function formatRetryTime(int $seconds): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance en cours</title>
+    <title><?= trans('framework.maintenance.title') ?></title>
     <style>
         * {
             margin: 0;
@@ -201,43 +201,42 @@ function formatRetryTime(int $seconds): string
     <div class="maintenance-container">
         <div class="maintenance-header">
             <div class="maintenance-icon">🔧</div>
-            <h1>Maintenance en cours</h1>
+            <h1><?= trans('framework.maintenance.title') ?></h1>
         </div>
 
         <div class="maintenance-body">
             <div class="maintenance-message">
                 <p>
-                    Nous effectuons une maintenance programmée pour améliorer nos services.
-                    Nous serons de retour très bientôt !
+                    <?= trans('framework.maintenance.message') ?>
                 </p>
             </div>
 
             <div class="info-grid">
                 <div class="info-box">
-                    <div class="info-box-label">Durée estimée</div>
+                    <div class="info-box-label"><?= trans('framework.maintenance.boxes.estimate') ?></div>
                     <div class="info-box-value"><?= formatRetryTime($retry ?? 3600) ?></div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-box-label">Mise à jour</div>
+                    <div class="info-box-label"><?= trans('framework.maintenance.boxes.update') ?></div>
                     <div class="info-box-value" id="current-time">--:--</div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-box-label">Retour en ligne</div>
+                    <div class="info-box-label"><?= trans('framework.maintenance.boxes.back') ?></div>
                     <div class="info-box-value" id="return-time">--:--</div>
                 </div>
             </div>
 
             <div class="progress-container">
-                <div class="progress-label">La page se rechargera automatiquement...</div>
+                <div class="progress-label"><?= trans('framework.maintenance.progress') ?></div>
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
             </div>
 
             <div class="footer-note">
-                Merci de votre patience et de votre compréhension
+                <?= trans('framework.maintenance.footer') ?>
             </div>
         </div>
     </div>

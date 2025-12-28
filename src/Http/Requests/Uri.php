@@ -58,6 +58,21 @@ class Uri
             $host .= ":{$this->port}";
         }
 
+        $path = $this->getCompletePath();
+
+        if (empty($schema) && empty($account) && empty($host)) {
+            return $path;
+        }
+
+        $schema = empty($schema) ? '//' : "{$schema}://";
+        return "{$schema}{$account}{$host}{$path}";
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompletePath(): string
+    {
         $path = "/{$this->path}";
         if ($this->query) {
             $path .= "?{$this->query}";
@@ -66,11 +81,6 @@ class Uri
             $path .= "#{$this->fragment}";
         }
 
-        if (empty($schema) && empty($account) && empty($host)) {
-            return $path;
-        }
-
-        $schema = empty($schema) ? '//' : "{$schema}://";
-        return "{$schema}{$account}{$host}{$path}";
+        return $path;
     }
 }

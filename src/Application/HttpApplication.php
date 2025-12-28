@@ -46,6 +46,7 @@ class HttpApplication extends BaseApplication
         $stack->addMany(router()->getMiddlewareStack()->getMiddlewares());
 
         if ($route) {
+            $this->request->updateCurrentRoute($route);
             $stack->addMany($route->getMiddlewareStack()->getMiddlewares());
         }
 

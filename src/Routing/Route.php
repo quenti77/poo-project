@@ -13,7 +13,7 @@ class Route
 {
     use HasMiddlewares;
 
-    private const string PATH_PARAM_REGEX = '/\{([a-zA-Z0-9_\-]+)}/';
+    private const string PATH_PARAM_REGEX = '/\{([a-zA-Z0-9_\-]+)(\?)?}/';
 
     /** @var callable|array{class-string, string} $handler */
     private $handler;
@@ -35,6 +35,14 @@ class Route
         $this->matches = collect();
 
         $this->initializeMiddlewares();
+    }
+
+    /**
+     * @return HttpMethod
+     */
+    public function getMethod(): HttpMethod
+    {
+        return $this->method;
     }
 
     /**
@@ -90,7 +98,6 @@ class Route
      */
     public function match(Request $request): bool
     {
-
         if ($request->method !== $this->method) {
             return false;
         }
@@ -99,6 +106,12 @@ class Route
             self::PATH_PARAM_REGEX,
             fn(array $matches) => $this->transformPathMatcher($matches),
             $this->path,
+        );
+
+        $pathRegex = preg_replace(
+            '/\(\?P<([^>]+)>([^)]+)\)\?\\//',
+            '(?:(?P<$1>$2)/)?',
+            $pathRegex
         );
 
         $matches = [];
@@ -132,10 +145,20 @@ class Route
         }
 
         $replaceParameters = array_combine($matches[0], $matches[1]);
+
         foreach ($replaceParameters as $search => $key) {
-            $value = $parameters[$key] ?? throw new InvalidArgumentException("Parameter '{$key}' must be defined");
-            $generatedPath = str_replace($search, urlencode($value), $generatedPath);
-            unset($parameters[$key]);
+            $isOptional = str_contains($search, '?');
+
+            if (!isset($parameters[$key]) || $parameters[$key] === null || $parameters[$key] === '') {
+                if (!$isOptional) {
+                    throw new InvalidArgumentException("Parameter '{$key}' must be defined");
+                }
+                $generatedPath = preg_replace('#' . preg_quote($search, '#') . '/?#', '', $generatedPath);
+            } else {
+                $value = $parameters[$key];
+                $generatedPath = str_replace($search, urlencode($value), $generatedPath);
+                unset($parameters[$key]);
+            }
         }
 
         return $this->getUriWithQueryParams($generatedPath, $parameters);
@@ -149,11 +172,12 @@ class Route
     {
         array_shift($matches);
         $parameter = $matches[0] ?? null;
+        $isNullable = isset($matches[1]);
 
         $pathParam = $this->pathParameters[$parameter] ?? null;
         $pathRegex = $pathParam ?? PathParameter::DEFAULT_PATH_REGEX;
 
-        return "(?P<{$parameter}>{$pathRegex})";
+        return "(?P<{$parameter}>{$pathRegex})" . ($isNullable ? '?' : '');
     }
 
     /**

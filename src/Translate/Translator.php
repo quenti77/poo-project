@@ -31,6 +31,22 @@ class Translator
     }
 
     /**
+     * @return Collection<int, Locale>
+     */
+    public function getLocales(): Collection
+    {
+        return $this->locales;
+    }
+
+    /**
+     * @return Locale
+     */
+    public function getFallback(): Locale
+    {
+        return $this->fallback;
+    }
+
+    /**
      * @param Locale $locale
      * @return void
      */
@@ -40,7 +56,7 @@ class Translator
             static fn (int $key, Locale $current) => $current->toBCP() === $locale->toBCP(),
         );
         if ($localeFound === null) {
-            throw new InvalidArgumentException("Locale '{$locale->toBCP()}' can not be choice");
+            throw new InvalidArgumentException("Locale '{$locale}' can not be choice");
         }
 
         $this->current = $localeFound;
@@ -104,7 +120,7 @@ class Translator
     {
         $data = collect();
 
-        $folderPath = "{$this->folder}/{$locale->toBCP()}";
+        $folderPath = "{$this->folder}/{$locale}";
         $folder = realpath($folderPath);
         if ($folder === false || !is_dir($folder)) {
             throw new InvalidArgumentException("Folder '{$folderPath}' does not exist or is not a directory");

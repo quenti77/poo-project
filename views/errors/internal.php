@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erreur - <?= htmlspecialchars($error->type ?? 'unknown') ?></title>
+    <title><?= trans('framework.errors.title', context: ['type' => htmlspecialchars($error->type ?? 'unknown')]) ?></title>
     <style>
         * {
             margin: 0;
@@ -291,8 +291,13 @@
     <div class="error-container">
         <div class="error-header">
             <div class="error-icon">⚠️</div>
-            <h1>Une erreur s'est produite.</h1>
-            <div class="http-code">Code HTTP : <?= $error->httpCode->value ?? '' ?> - <?= $error->httpCode->label() ?? '' ?></div>
+            <h1><?= trans('framework.errors.main_title') ?></h1>
+            <div class="http-code">
+                <?= trans('framework.errors.http_code', context: [
+                    'code' => $error->httpCode->value ?? '500',
+                    'label' => $error->httpCode->label() ?? ''
+                ]) ?>
+            </div>
         </div>
 
         <div class="error-body">
@@ -305,22 +310,22 @@
 
                 <div class="debug-section">
                     <button class="toggle-details" onclick="toggleDetails()">
-                        🔍 Afficher les détails techniques
+                        <?= trans('framework.errors.show_details') ?>
                     </button>
 
                     <div class="error-details" id="errorDetails">
                         <div class="detail-section">
-                            <h3>📍 Localisation</h3>
+                            <h3><?= trans('framework.errors.details.location') ?></h3>
                             <div class="detail-content">
-                                <strong>Fichier:</strong> <?= htmlspecialchars($error->file ?? '') ?><br>
-                                <strong>Ligne:</strong> <span class="trace-line"><?= $error->line ?? 0 ?></span><br>
-                                <strong>Code erreur:</strong> <?= $error->code ?? 0 ?>
+                                <strong><?= trans('framework.errors.details.file') ?></strong> <?= htmlspecialchars($error->file ?? '') ?><br>
+                                <strong><?= trans('framework.errors.details.line') ?></strong> <span class="trace-line"><?= $error->line ?? 0 ?></span><br>
+                                <strong><?= trans('framework.errors.details.code_number') ?></strong> <?= $error->code ?? 0 ?>
                             </div>
                         </div>
 
                         <?php if (!empty($error->trace)): ?>
                             <div class="detail-section">
-                                <h3>📚 Trace d'exécution</h3>
+                                <h3><?= trans('framework.errors.details.trace') ?></h3>
                                 <div class="detail-content">
                                     <?php foreach ($error->trace as $index => $trace): ?>
                                         <div class="trace-item">
@@ -346,11 +351,11 @@
                 <!-- Version simplifiée pour la production -->
                 <div class="production-message">
                     <div class="production-icon">😔</div>
-                    <h2>Oups ! Quelque chose s'est mal passé</h2>
-                    <p>Une erreur inattendue s'est produite lors du traitement de votre requête.</p>
-                    <p>Nos équipes ont été notifiées et travaillent à résoudre le problème.</p>
+                    <h2><?= trans('framework.errors.production.title') ?></h2>
+                    <p><?= trans('framework.errors.production.lines.0') ?></p>
+                    <p><?= trans('framework.errors.production.lines.1') ?></p>
                     <p style="margin-top: 20px; color: #718096;">
-                        Veuillez réessayer dans quelques instants.
+                        <?= trans('framework.errors.production.lines.2') ?>
                     </p>
                 </div>
             <?php endif; ?>
@@ -358,9 +363,9 @@
 
         <div class="error-footer">
             <?php if ($isDebug ?? false): ?>
-                <strong>Mode développement</strong> - Détails complets affichés
+                <?= trans('framework.errors.development') ?>
             <?php else: ?>
-                Si le problème persiste, veuillez contacter le support technique
+                <?= trans('framework.errors.production.lines.3') ?>
             <?php endif; ?>
         </div>
     </div>
@@ -372,10 +377,10 @@
 
             if (details.classList.contains('show')) {
                 details.classList.remove('show');
-                button.textContent = '🔍 Afficher les détails techniques';
+                button.textContent = '<?= trans('framework.errors.show_details') ?>';
             } else {
                 details.classList.add('show');
-                button.textContent = '🔼 Masquer les détails techniques';
+                button.textContent = '<?= trans('framework.errors.hide_details') ?>';
             }
         }
     </script>
