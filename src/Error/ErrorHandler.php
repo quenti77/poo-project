@@ -2,8 +2,6 @@
 
 namespace Tuto\Error;
 
-use JsonException;
-use ReflectionException;
 use Throwable;
 use Tuto\Http\Exceptions\HttpNotFoundException;
 use Tuto\Http\Responses\ErrorResponse;
@@ -97,11 +95,10 @@ class ErrorHandler
 
         try {
             $response = new ErrorResponse($errorDetails);
-
             request()->cookies->export();
             $response->renderHeaders();
             echo $response->getBody();
-        } catch (JsonException | ReflectionException $e) {
+        } catch (Throwable $e) {
             // Call fallback
             static::logError(ErrorFactory::fromThrowable($e, LoggerLevel::EMERGENCY));
             self::renderFallbackError($errorDetails, $e);

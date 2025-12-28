@@ -49,6 +49,14 @@ class Locale
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->toBCP();
+    }
+
+    /**
      * @return string return "local_COUNTRY" version
      */
     public function toPOSIX(): string

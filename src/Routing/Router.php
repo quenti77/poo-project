@@ -8,6 +8,7 @@ use Tuto\Http\Requests\HttpMethod;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Requests\Uri;
 use Tuto\Middleware\HasMiddlewares;
+use Tuto\Middleware\MiddlewareInterface;
 
 class Router
 {
@@ -109,7 +110,12 @@ class Router
     }
 
     /**
-     * @param array{prefix?: string, name?: string, where?: array<string, string>}|RouteGroup $group
+     * @param array{
+     *      prefix?: string,
+     *      name?: string,
+     *      where?: array<string, string>,
+     *      middleware?: array<int, MiddlewareInterface|class-string<MiddlewareInterface>>
+     *  }|RouteGroup $group
      * @param callable $callback
      * @return RouteGroup
      */
@@ -174,7 +180,7 @@ class Router
             return null;
         }
 
-        return $this->routes[$method]->find(static fn ($key, Route $route) => $route->match($request));
+        return $this->routes[$method]->find(static fn($key, Route $route) => $route->match($request));
     }
 
     /**

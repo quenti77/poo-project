@@ -158,7 +158,11 @@ class Resolver
         foreach ($types as $type) {
             try {
                 return $this->container()->get($type->getName());
-            } catch (InvalidArgumentException) {
+            } catch (InvalidArgumentException|ReflectionException) {
+                $defaultValue = $parameter->getDefaultValue();
+                if ($defaultValue) {
+                    return $defaultValue;
+                }
                 if ($type->allowsNull()) {
                     $allowNull = true;
                 }

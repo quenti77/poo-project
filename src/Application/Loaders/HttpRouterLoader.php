@@ -7,6 +7,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionException;
 use SplFileInfo;
+use Tuto\Middleware\Global\LocaleMiddleware;
 use Tuto\Middleware\Global\MaintenanceModeMiddleware;
 
 class HttpRouterLoader implements LoaderInterface
@@ -36,6 +37,7 @@ class HttpRouterLoader implements LoaderInterface
     private function addGlobalMiddlewares(): void
     {
         router()->middlewares([
+            LocaleMiddleware::class,
             MaintenanceModeMiddleware::class,
         ]);
     }
