@@ -10,6 +10,7 @@ use Tuto\Http\Components\Cookie;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Responses\HttpCode;
 use Tuto\Middleware\MiddlewareInterface;
+use Tuto\Utils\File;
 
 class MaintenanceModeMiddleware implements MiddlewareInterface
 {
@@ -22,7 +23,7 @@ class MaintenanceModeMiddleware implements MiddlewareInterface
     public function handle(Request $request, callable $next): mixed
     {
         $maintenanceFile = container()->getWithoutError('maintenance.file', 'storage/framework/down.json');
-        $maintenanceFile = str_starts_with($maintenanceFile, '/') ? $maintenanceFile : ROOT . "/{$maintenanceFile}";
+        $maintenanceFile = File::absolute($maintenanceFile);
         if (!file_exists($maintenanceFile)) {
             return $next($request);
         }

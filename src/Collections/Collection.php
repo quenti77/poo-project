@@ -44,6 +44,19 @@ class Collection implements ArrayAccess, Countable, Iterator
     /**
      * @return TValue|null
      */
+    public function shift(): mixed
+    {
+        $value = array_shift($this->items);
+
+        $this->counter = min(count($this->items), $this->counter);
+        $this->keys = array_keys($this->items);
+
+        return $value;
+    }
+
+    /**
+     * @return TValue|null
+     */
     public function pop(): mixed
     {
         $value = array_pop($this->items);
@@ -168,7 +181,14 @@ class Collection implements ArrayAccess, Countable, Iterator
      */
     public function all(): array
     {
-        return $this->items;
+        $result = [];
+        foreach ($this as $key => $value) {
+            if ($value instanceof Collection) {
+                $value = $value->all();
+            }
+            $result[$key] = $value;
+        }
+        return $result;
     }
 
     /**
