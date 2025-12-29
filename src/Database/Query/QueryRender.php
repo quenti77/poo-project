@@ -3,8 +3,10 @@
 namespace Tuto\Database\Query;
 
 use Tuto\Collections\Collection;
+use Tuto\Database\ConnectionInterface;
 use Tuto\Database\Query\Conditions\BaseCondition;
 use Tuto\Database\Query\Join\JoinQuery;
+use Tuto\Database\StatementInterface;
 
 class QueryRender
 {
@@ -44,6 +46,15 @@ class QueryRender
     }
 
     /**
+     * @param ConnectionInterface $connection
+     * @return StatementInterface
+     */
+    public function makeRequest(ConnectionInterface $connection): StatementInterface
+    {
+        return $connection->request($this->toSql(), $this->getParameters()->all());
+    }
+
+    /**
      * @param Collection<int, string> $parts
      * @return Collection<int, string>
      */
@@ -64,7 +75,6 @@ class QueryRender
         /** @var Collection<int, BaseCondition> $where */
         $where = $this->queryBuilder->getWhere();
         if (!$where->isEmpty()) {
-            $parts->push('WHERE');
             $parts->push($this->renderCondition($where));
         }
 
@@ -130,7 +140,6 @@ class QueryRender
         /** @var Collection<int, BaseCondition> $where */
         $where = $this->queryBuilder->getWhere();
         if (!$where->isEmpty()) {
-            $parts->push('WHERE');
             $parts->push($this->renderCondition($where));
         }
 
@@ -149,7 +158,6 @@ class QueryRender
         /** @var Collection<int, BaseCondition> $where */
         $where = $this->queryBuilder->getWhere();
         if (!$where->isEmpty()) {
-            $parts->push('WHERE');
             $parts->push($this->renderCondition($where));
         }
 
@@ -238,4 +246,5 @@ class QueryRender
             }
         }
     }
+
 }

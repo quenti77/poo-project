@@ -3,10 +3,12 @@
 namespace Tuto\Database\Pdo;
 
 use PDO;
+use PDOException;
 use RuntimeException;
 use SensitiveParameter;
 use Throwable;
 use Tuto\Database\ConnectionInterface;
+use Tuto\Database\Exceptions\SqlStatementException;
 use Tuto\Database\StatementInterface;
 
 class PdoConnection extends PDO implements ConnectionInterface
@@ -37,7 +39,11 @@ class PdoConnection extends PDO implements ConnectionInterface
     public function request(string|StatementInterface $statement, array $parameters = []): StatementInterface
     {
         if (is_string($statement)) {
-            $statement = new PdoStatement($this->prepare($statement));
+            try {
+                $statement = new PdoStatement($this->prepare($statement));
+            } catch (PDOException $exception) {
+                throw new SqlStatementException($statement, $exception);
+            }
         }
         if (!($statement instanceof PdoStatement)) {
             throw new RuntimeException("Statement must be of type string or PdoStatement");
@@ -57,7 +63,7 @@ class PdoConnection extends PDO implements ConnectionInterface
     public function startTransaction(): bool
     {
         try {
-            $this->setAttribute(true, 0);
+            $this->setTransaction(true, 0);
             return $this->beginTransaction();
         } catch (RuntimeException) {
             return false;
@@ -70,8 +76,8 @@ class PdoConnection extends PDO implements ConnectionInterface
     public function commit(): bool
     {
         try {
-            $this->setAttribute(false, 1);
-            return $this->commit();
+            $this->setTransaction(false, 1);
+            return parent::commit();
         } catch (RuntimeException) {
             return false;
         }
@@ -83,8 +89,8 @@ class PdoConnection extends PDO implements ConnectionInterface
     public function rollback(): bool
     {
         try {
-            $this->setAttribute(false, 1);
-            return $this->rollback();
+            $this->setTransaction(false, 1);
+            return parent::rollback();
         } catch (RuntimeException) {
             return false;
         }
@@ -101,12 +107,6 @@ class PdoConnection extends PDO implements ConnectionInterface
             throw new RuntimeException('Target already set');
         }
         $this->isTransaction = $target;
-
-        try {
-            $this->setAttribute(parent::ATTR_AUTOCOMMIT, $autoCommit);
-        } catch (Throwable) {
-            // TODO: Adding logs
-            throw new RuntimeException('AutoCommit can not be defined');
-        }
+        $this->setAttribute(parent::ATTR_AUTOCOMMIT, $autoCommit);
     }
 }

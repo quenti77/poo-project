@@ -132,7 +132,7 @@ class QueryBuilder
         }
 
         if (!$this->type->canUseSubQuery()) {
-            throw new InvalidQuerySyntaxException("The UPDATE can not access sub query into FROM");
+            throw new InvalidQuerySyntaxException("Only SELECT can access sub query into FROM");
         }
 
         $subQuery = QueryMaker::select();
