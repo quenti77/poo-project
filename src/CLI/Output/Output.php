@@ -2,6 +2,13 @@
 
 namespace Tuto\CLI\Output;
 
+use Tuto\CLI\Input\Choice;
+use Tuto\CLI\Input\Confirm;
+use Tuto\CLI\Input\MultiSelect;
+use Tuto\CLI\Input\Password;
+use Tuto\CLI\Input\Question;
+use Tuto\CLI\Input\Select;
+use Tuto\CLI\Input\Suggest;
 use Tuto\CLI\Terminal;
 
 class Output
@@ -152,5 +159,77 @@ class Output
             }
             $this->writeln($line);
         }
+    }
+
+    /**
+     * Create a Question input component
+     */
+    public function ask(string $question, string|null $default = null): Question
+    {
+        return new Question($this, $question, $default);
+    }
+
+    /**
+     * Create a Confirm input component
+     */
+    public function confirm(string $question, bool $default = false): Confirm
+    {
+        return new Confirm($this, $question, $default);
+    }
+
+    /**
+     * Create a Choice input component
+     */
+    public function choice(string $question, array $choices, string|int|null $default = null): Choice
+    {
+        return new Choice($this, $question, $choices, $default);
+    }
+
+    /**
+     * Create a Select input component
+     */
+    public function select(string $question, array $options, string|int|null $default = null, bool $searchable = false): Select
+    {
+        return new Select($this, $question, $options, $default, $searchable);
+    }
+
+    /**
+     * Create a MultiSelect input component
+     */
+    public function multiSelect(string $question, array $options, array $defaults = [], bool $required = false): MultiSelect
+    {
+        return new MultiSelect($this, $question, $options, $defaults, $required);
+    }
+
+    /**
+     * Create a Suggest input component
+     */
+    public function suggest(string $question, array $options, string|null $default = null, int $maxSuggestions = 5): Suggest
+    {
+        return new Suggest($this, $question, $options, $default, $maxSuggestions);
+    }
+
+    /**
+     * Create a Password input component
+     */
+    public function password(string $question, bool $requireConfirmation = false, int|null $minLength = null): Password
+    {
+        return new Password($this, $question, $requireConfirmation, $minLength);
+    }
+
+    /**
+     * Create a ListComponent
+     */
+    public function list(string $bullet = ListComponent::BULLET_DOT, string $color = Ansi::FG_CYAN, int $indent = 2): ListComponent
+    {
+        return new ListComponent($this, $bullet, $color, $indent);
+    }
+
+    /**
+     * Create a ProgressBar
+     */
+    public function progressBar(int $max): ProgressBar
+    {
+        return new ProgressBar($this, $max);
     }
 }

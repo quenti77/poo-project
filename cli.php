@@ -3,6 +3,7 @@
 use App\Commands\MaintenanceCommand;
 use App\Commands\Migrate\MigrationDownCommand;
 use App\Commands\Migrate\MigrationUpCommand;
+use App\Commands\Migrate\MigrationMakeCommand;
 use Tuto\Application\CliApplication;
 use Tuto\CLI\Input\Input;
 use Tuto\CLI\Output\Output;
@@ -23,6 +24,7 @@ $cliApplication->load();
 $cliApplication->addCommand(MaintenanceCommand::class);
 
 // Migrate commands
+$cliApplication->addCommand(MigrationMakeCommand::class);
 $cliApplication->addCommand(MigrationUpCommand::class);
 $cliApplication->addCommand(MigrationDownCommand::class);
 

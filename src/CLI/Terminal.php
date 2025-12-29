@@ -2,8 +2,21 @@
 
 namespace Tuto\CLI;
 
+use Tuto\CLI\Output\Cursor;
+
 class Terminal
 {
+    // Key constants
+    public const string KEY_UP = "\e[A";
+    public const string KEY_DOWN = "\e[B";
+    public const string KEY_RIGHT = "\e[C";
+    public const string KEY_LEFT = "\e[D";
+    public const string KEY_ENTER = "\n";
+    public const string KEY_SPACE = " ";
+    public const string KEY_TAB = "\t";
+    public const string KEY_BACKSPACE = "\x7f";
+    public const string KEY_ESC = "\e";
+
     public bool $ansiEnabled = false;
     public bool $colorSupport = false;
     public bool $rawMode = false;
@@ -25,7 +38,16 @@ class Terminal
 
         $this->colorSupport = $this->supportsColor();
         $this->updateTerminalSize();
-        $this->enableRawMode();
+        // Ne pas activer le mode raw au démarrage - seulement quand nécessaire
+    }
+
+    /**
+     * Destructor - ensure terminal is restored to normal mode
+     */
+    public function __destruct()
+    {
+        $this->disableRawMode();
+        $this->showCursor();
     }
 
     /**
@@ -195,5 +217,93 @@ class Terminal
         // Check TERM
         $term = getenv('TERM');
         return $term && $term !== 'dumb';
+    }
+
+    /**
+     * Check if terminal supports interactive mode
+     */
+    public function supportsInteractive(): bool
+    {
+        return $this->ansiEnabled && !$this->isWindows() && function_exists('posix_isatty') && posix_isatty(STDIN);
+    }
+
+    /**
+     * Hide cursor
+     */
+    public function hideCursor(): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::HIDE;
+        }
+    }
+
+    /**
+     * Show cursor
+     */
+    public function showCursor(): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::SHOW;
+        }
+    }
+
+    /**
+     * Move cursor up by N lines
+     */
+    public function cursorUp(int $n = 1): void
+    {
+        if ($this->ansiEnabled && $n > 0) {
+            echo Cursor::moveUp($n);
+        }
+    }
+
+    /**
+     * Move cursor down by N lines
+     */
+    public function cursorDown(int $n = 1): void
+    {
+        if ($this->ansiEnabled && $n > 0) {
+            echo Cursor::moveDown($n);
+        }
+    }
+
+    /**
+     * Move cursor to column N
+     */
+    public function cursorToColumn(int $column): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::toColumn($column);
+        }
+    }
+
+    /**
+     * Clear current line
+     */
+    public function clearLine(): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::CLEAR_LINE;
+        }
+    }
+
+    /**
+     * Save cursor position
+     */
+    public function saveCursor(): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::SAVE;
+        }
+    }
+
+    /**
+     * Restore cursor position
+     */
+    public function restoreCursor(): void
+    {
+        if ($this->ansiEnabled) {
+            echo Cursor::RESTORE;
+        }
     }
 }
