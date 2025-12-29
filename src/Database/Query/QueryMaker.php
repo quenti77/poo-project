@@ -13,18 +13,34 @@ class QueryMaker
         return new QueryBuilder(QueryType::SELECT)->select(...$fields);
     }
 
-    public static function insert(): QueryBuilder
+    /**
+     * @param string $table
+     * @return QueryBuilder
+     */
+    public static function insert(string $table): QueryBuilder
     {
-        return new QueryBuilder(QueryType::INSERT);
+        return new QueryBuilder(QueryType::INSERT)->from($table);
     }
 
-    public static function update(): QueryBuilder
+    /**
+     * @param string ...$tables
+     * @return QueryBuilder
+     */
+    public static function update(string ...$tables): QueryBuilder
     {
-        return new QueryBuilder(QueryType::UPDATE);
+        $query = new QueryBuilder(QueryType::UPDATE);
+        foreach ($tables as $table) {
+            $query->from($table);
+        }
+        return $query;
     }
 
-    public static function delete(): QueryBuilder
+    /**
+     * @param string $table
+     * @return QueryBuilder
+     */
+    public static function delete(string $table): QueryBuilder
     {
-        return new QueryBuilder(QueryType::DELETE);
+        return new QueryBuilder(QueryType::DELETE)->from($table);
     }
 }

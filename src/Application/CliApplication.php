@@ -26,6 +26,24 @@ class CliApplication extends BaseApplication
         $this->commands = collect();
     }
 
+    /**
+     * @return void
+     */
+    public function load(): void
+    {
+        foreach ($this->loaders() as $loader) {
+            $loader->load();
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function boot(): void
+    {
+        $this->run();
+    }
+
     public function addCommand(string $command): self
     {
         return $this->addCommandInstance(container($command));

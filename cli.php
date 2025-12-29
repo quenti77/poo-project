@@ -1,6 +1,8 @@
 <?php
 
 use App\Commands\MaintenanceCommand;
+use App\Commands\Migrate\MigrationDownCommand;
+use App\Commands\Migrate\MigrationUpCommand;
 use Tuto\Application\CliApplication;
 use Tuto\CLI\Input\Input;
 use Tuto\CLI\Output\Output;
@@ -15,6 +17,13 @@ $input = Input::fromArgv($argv ?? $_SERVER['argv'] ?? []);
 $output = new Output(new Terminal());
 
 $cliApplication = new CliApplication($input, $output);
+$cliApplication->load();
+
+// Base commands
 $cliApplication->addCommand(MaintenanceCommand::class);
+
+// Migrate commands
+$cliApplication->addCommand(MigrationUpCommand::class);
+$cliApplication->addCommand(MigrationDownCommand::class);
 
 $cliApplication->boot();

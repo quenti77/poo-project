@@ -1,5 +1,6 @@
 <?php
 
+use Random\RandomException;
 use Tuto\Application\HttpApplication;
 use Tuto\Base\Environment;
 use Tuto\Collections\Collection;
@@ -193,7 +194,9 @@ if (!function_exists('trans')) {
  *
  * @param int|null $ms Timestamp en millisecondes depuis l'époque Unix. Si null, on utilise le temps courant.
  * @return string ULID (26 caractères)
- * @throws Exception si l'entropie aléatoire ne peut être obtenue
+ * @throws InvalidArgumentException
+ * @throws RandomException
+ * @throws RuntimeException
  */
 function ulid(?int $ms = null): string
 {
