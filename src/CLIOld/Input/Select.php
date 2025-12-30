@@ -1,10 +1,10 @@
 <?php
 
-namespace Tuto\CLI\Input;
+namespace Tuto\CLIOld\Input;
 
-use Tuto\CLI\Output\Ansi;
-use Tuto\CLI\Output\Cursor;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Output\Ansi;
+use Tuto\CLIOld\Output\Cursor;
+use Tuto\CLIOld\Output\Output;
 
 class Select extends AbstractInput
 {

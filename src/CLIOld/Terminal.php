@@ -1,8 +1,8 @@
 <?php
 
-namespace Tuto\CLI;
+namespace Tuto\CLIOld;
 
-use Tuto\CLI\Output\Cursor;
+use Tuto\CLIOld\Output\Cursor;
 
 class Terminal
 {

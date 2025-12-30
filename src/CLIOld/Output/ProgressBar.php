@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\CLI\Output;
+namespace Tuto\CLIOld\Output;
 
 class ProgressBar
 {

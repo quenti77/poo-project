@@ -1,15 +1,15 @@
 <?php
 
-namespace Tuto\CLI\Output;
+namespace Tuto\CLIOld\Output;
 
-use Tuto\CLI\Input\Choice;
-use Tuto\CLI\Input\Confirm;
-use Tuto\CLI\Input\MultiSelect;
-use Tuto\CLI\Input\Password;
-use Tuto\CLI\Input\Question;
-use Tuto\CLI\Input\Select;
-use Tuto\CLI\Input\Suggest;
-use Tuto\CLI\Terminal;
+use Tuto\CLIOld\Input\Choice;
+use Tuto\CLIOld\Input\Confirm;
+use Tuto\CLIOld\Input\MultiSelect;
+use Tuto\CLIOld\Input\Password;
+use Tuto\CLIOld\Input\Question;
+use Tuto\CLIOld\Input\Select;
+use Tuto\CLIOld\Input\Suggest;
+use Tuto\CLIOld\Terminal;
 
 class Output
 {

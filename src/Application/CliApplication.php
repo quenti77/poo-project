@@ -6,10 +6,10 @@ use Tuto\Application\Loaders\ConfigurationLoader;
 use Tuto\Application\Loaders\EnvironmentLoader;
 use Tuto\Application\Loaders\ErrorHandlerLoader;
 use Tuto\Application\Loaders\LoaderInterface;
-use Tuto\CLI\Command;
-use Tuto\CLI\Input\Input;
-use Tuto\CLI\Output\Ansi;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Command;
+use Tuto\CLIOld\Input\Input;
+use Tuto\CLIOld\Output\Ansi;
+use Tuto\CLIOld\Output\Output;
 use Tuto\Collections\Collection;
 
 class CliApplication extends BaseApplication

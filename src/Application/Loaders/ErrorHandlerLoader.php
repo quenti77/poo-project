@@ -2,7 +2,7 @@
 
 namespace Tuto\Application\Loaders;
 
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Output\Output;
 use Tuto\Error\ErrorCliHandler;
 use Tuto\Error\ErrorHandler;
 

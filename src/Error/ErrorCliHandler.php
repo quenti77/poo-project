@@ -4,8 +4,8 @@ namespace Tuto\Error;
 
 use RuntimeException;
 use Throwable;
-use Tuto\CLI\Output\Ansi;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Output\Ansi;
+use Tuto\CLIOld\Output\Output;
 use Tuto\Logger\LoggerLevel;
 
 class ErrorCliHandler extends ErrorHandler
