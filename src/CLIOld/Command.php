@@ -1,9 +1,9 @@
 <?php
 
-namespace Tuto\CLI;
+namespace Tuto\CLIOld;
 
-use Tuto\CLI\Input\Input;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Input\Input;
+use Tuto\CLIOld\Output\Output;
 
 abstract class Command
 {

@@ -2,9 +2,9 @@
 
 namespace App\Commands;
 
-use Tuto\CLI\Command;
-use Tuto\CLI\Input\Input;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Command;
+use Tuto\CLIOld\Input\Input;
+use Tuto\CLIOld\Output\Output;
 use Tuto\Utils\File;
 
 class MaintenanceCommand extends Command

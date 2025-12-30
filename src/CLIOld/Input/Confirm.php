@@ -1,9 +1,9 @@
 <?php
 
-namespace Tuto\CLI\Input;
+namespace Tuto\CLIOld\Input;
 
-use Tuto\CLI\Output\Ansi;
-use Tuto\CLI\Output\Output;
+use Tuto\CLIOld\Output\Ansi;
+use Tuto\CLIOld\Output\Output;
 
 class Confirm
 {

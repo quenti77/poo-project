@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\CLI\Input;
+namespace Tuto\CLIOld\Input;
 
 use Tuto\Collections\Collection;
 

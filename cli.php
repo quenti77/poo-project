@@ -5,9 +5,9 @@ use App\Commands\Migrate\MigrationDownCommand;
 use App\Commands\Migrate\MigrationUpCommand;
 use App\Commands\Migrate\MigrationMakeCommand;
 use Tuto\Application\CliApplication;
-use Tuto\CLI\Input\Input;
-use Tuto\CLI\Output\Output;
-use Tuto\CLI\Terminal;
+use Tuto\CLIOld\Input\Input;
+use Tuto\CLIOld\Output\Output;
+use Tuto\CLIOld\Terminal;
 
 define('ROOT', realpath(__DIR__));
 
