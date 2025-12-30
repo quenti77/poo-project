@@ -192,6 +192,17 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * @return TValue
+     */
+    public function first(): mixed
+    {
+        if ($this->isEmpty()) {
+            return null;
+        }
+        return $this[$this->keys[0]];
+    }
+
+    /**
      * @param string $delimiter
      * @return string
      */

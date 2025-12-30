@@ -45,6 +45,9 @@ class Autoloader
             $path = str_replace('\\', '/', $path);
 
             // require "/path/to/project/src/Base/Autoloader.php"
+            if (!is_file(ROOT . "/{$path}.php")) {
+                throw new ClassNotFoundException($className);
+            }
             require ROOT . "/{$path}.php";
         }
     }

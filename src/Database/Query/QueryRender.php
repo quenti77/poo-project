@@ -63,7 +63,7 @@ class QueryRender
         $fields = $this->queryBuilder->getFields();
         $parts->push($fields->isEmpty() ? '*' : $this->renderTableWithAlias($fields));
 
-        $from = $this->queryBuilder->getFrom()->values()[0];
+        $from = $this->queryBuilder->getFrom()->values()->first();
         $parts->push('FROM');
         $parts->push($from);
 
@@ -105,7 +105,7 @@ class QueryRender
      */
     private function insertRender(Collection $parts): Collection
     {
-        $from = $this->queryBuilder->getFrom()->values()[0];
+        $from = $this->queryBuilder->getFrom()->values()->first();
         $parts->push($from);
 
         $values = $this->queryBuilder->getValues();
@@ -152,7 +152,7 @@ class QueryRender
      */
     private function deleteRender(Collection $parts): Collection
     {
-        $from = $this->queryBuilder->getFrom()->values()[0];
+        $from = $this->queryBuilder->getFrom()->values()->first();
         $parts->push($from);
 
         /** @var Collection<int, BaseCondition> $where */

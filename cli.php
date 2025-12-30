@@ -1,6 +1,7 @@
 <?php
 
 use Tuto\Application\CliApplication;
+use Tuto\Console\Commands\Database\DbSeedCommand;
 use Tuto\Console\Commands\MaintenanceCommand;
 use Tuto\Console\Commands\Migrate\MigrationDownCommand;
 use Tuto\Console\Commands\Migrate\MigrationMakeCommand;
@@ -27,5 +28,8 @@ $cliApplication->addCommand(MaintenanceCommand::class);
 $cliApplication->addCommand(MigrationMakeCommand::class);
 $cliApplication->addCommand(MigrationUpCommand::class);
 $cliApplication->addCommand(MigrationDownCommand::class);
+
+// Database seeder
+$cliApplication->addCommand(DbSeedCommand::class);
 
 $cliApplication->boot();
