@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Commands\Migrate;
+namespace Tuto\Console\Commands\Migrate;
 
 use DateTimeImmutable;
+use Tuto\Collections\Collection;
 use Tuto\Console\Commands\AbstractCommand;
 use Tuto\Console\Commands\CommandStatus;
 use Tuto\Console\Components\Ansi;
@@ -19,6 +20,27 @@ class MigrationMakeCommand extends AbstractCommand
     public function getDescription(): string
     {
         return "Create new migration";
+    }
+
+    /**
+     * @return Collection<string, string|null>
+     */
+    public function getArguments(): Collection
+    {
+        return parent::getArguments()->merge([
+            'migration_name' => '<asked if not defined>',
+        ]);
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function getExamples(): Collection
+    {
+        return collect([
+            "migrate:make",
+            "migrate:make create_comments_table",
+        ]);
     }
 
     /**

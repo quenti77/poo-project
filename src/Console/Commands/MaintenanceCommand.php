@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Commands;
+namespace Tuto\Console\Commands;
 
 use JsonException;
-use Tuto\Console\Commands\AbstractCommand;
-use Tuto\Console\Commands\CommandStatus;
+use Tuto\Collections\Collection;
 use Tuto\Console\Components\Input;
 use Tuto\Console\Components\Output;
 use Tuto\Utils\File;
@@ -25,6 +24,40 @@ class MaintenanceCommand extends AbstractCommand
     public function getDescription(): string
     {
         return "Close or open the project";
+    }
+
+    /**
+     * @return Collection<string, string|null>
+     */
+    public function getArguments(): Collection
+    {
+        return parent::getArguments()->merge([
+            'mode' => 'down',
+        ]);
+    }
+
+    /**
+     * @return Collection<string, string|bool>
+     */
+    public function getOptions(): Collection
+    {
+        return parent::getOptions()->merge([
+            'secret' => '',
+            'retry' => ''
+        ]);
+    }
+
+    /**
+     * @return Collection<int, string>
+     */
+    public function getExamples(): Collection
+    {
+        return collect([
+            "maintenance",
+            "maintenance down",
+            "maintenance down --secret=secure --retry=1800",
+            "maintenance up",
+        ]);
     }
 
     /**

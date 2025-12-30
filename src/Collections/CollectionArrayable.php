@@ -32,7 +32,9 @@ trait CollectionArrayable
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->items[$offset] ?? throw new InvalidArgumentException("'{$offset}' not in current collection");
+        return array_key_exists($offset, $this->items)
+            ? $this->items[$offset]
+            : throw new InvalidArgumentException("'{$offset}' not in current collection");
     }
 
     /**

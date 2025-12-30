@@ -1,10 +1,10 @@
 <?php
 
-use App\Commands\MaintenanceCommand;
-use App\Commands\Migrate\MigrationDownCommand;
-use App\Commands\Migrate\MigrationMakeCommand;
-use App\Commands\Migrate\MigrationUpCommand;
 use Tuto\Application\CliApplication;
+use Tuto\Console\Commands\MaintenanceCommand;
+use Tuto\Console\Commands\Migrate\MigrationDownCommand;
+use Tuto\Console\Commands\Migrate\MigrationMakeCommand;
+use Tuto\Console\Commands\Migrate\MigrationUpCommand;
 use Tuto\Console\Components\Input;
 use Tuto\Console\Components\Output;
 use Tuto\Console\Terminal\Terminal;

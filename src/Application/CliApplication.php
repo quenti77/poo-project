@@ -85,6 +85,11 @@ class CliApplication extends BaseApplication
             exit(CommandStatus::GENERIC_FAILURE->value);
         }
 
+        if ($this->input->hasOption('h') || $this->input->hasOption('help')) {
+            $command->runHelp($this->output);
+            exit(CommandStatus::SUCCESS->value);
+        }
+
         exit($command->execute($this->input, $this->output)->value);
     }
 

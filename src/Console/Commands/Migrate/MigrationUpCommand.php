@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands\Migrate;
+namespace Tuto\Console\Commands\Migrate;
 
 use DateMalformedStringException;
 use ReflectionException;
