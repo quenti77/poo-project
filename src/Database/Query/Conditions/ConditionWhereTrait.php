@@ -202,6 +202,7 @@ trait ConditionWhereTrait
         }
 
         if ($operator->isSimpleOperator()) {
+            $operator = $operator->nullableOperator($value);
             if ($escape) {
                 $value = $this->escapeValue($column, $value);
             }
