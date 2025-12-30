@@ -2,12 +2,12 @@
 
 use App\Commands\MaintenanceCommand;
 use App\Commands\Migrate\MigrationDownCommand;
-use App\Commands\Migrate\MigrationUpCommand;
 use App\Commands\Migrate\MigrationMakeCommand;
+use App\Commands\Migrate\MigrationUpCommand;
 use Tuto\Application\CliApplication;
-use Tuto\CLIOld\Input\Input;
-use Tuto\CLIOld\Output\Output;
-use Tuto\CLIOld\Terminal;
+use Tuto\Console\Components\Input;
+use Tuto\Console\Components\Output;
+use Tuto\Console\Terminal\Terminal;
 
 define('ROOT', realpath(__DIR__));
 

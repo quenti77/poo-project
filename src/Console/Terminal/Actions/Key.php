@@ -2,8 +2,12 @@
 
 namespace Tuto\Console\Terminal\Actions;
 
+use Tuto\Utils\EasyEnum;
+
 enum Key: string
 {
+    use EasyEnum;
+
     case KEY_UP = "\e[{n}A";
     case KEY_DOWN = "\e[{n}B";
     case KEY_LEFT = "\e[{n}D";

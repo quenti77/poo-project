@@ -3,12 +3,13 @@
 namespace App\Commands\Migrate;
 
 use DateTimeImmutable;
-use Tuto\CLIOld\Command;
-use Tuto\CLIOld\Input\Input;
-use Tuto\CLIOld\Output\Ansi;
-use Tuto\CLIOld\Output\Output;
+use Tuto\Console\Commands\AbstractCommand;
+use Tuto\Console\Commands\CommandStatus;
+use Tuto\Console\Components\Ansi;
+use Tuto\Console\Components\Input;
+use Tuto\Console\Components\Output;
 
-class MigrationMakeCommand extends Command
+class MigrationMakeCommand extends AbstractCommand
 {
     public function getName(): string
     {
@@ -23,20 +24,20 @@ class MigrationMakeCommand extends Command
     /**
      * @param Input $input
      * @param Output $output
-     * @return int
+     * @return CommandStatus
      */
-    public function execute(Input $input, Output $output): int
+    public function execute(Input $input, Output $output): CommandStatus
     {
         $migrationName = $input->getArgument(0);
         if ($migrationName === null) {
-            $migrationName = $output->ask('Nom de la migration')
-                ->setValidator(function (string $value): bool|string {
+            $migrationName = $output->question('Nom de la migration')
+                ->withValidator(function (string $value): bool|string {
                     if (!preg_match('/^[a-z0-9_]+$/', $value)) {
                         return "Le nom doit être en snake_case (lettres minuscules, chiffres et underscores uniquement).";
                     }
                     return true;
                 })
-                ->ask();
+                ->run();
         }
 
         $currentDate = new DateTimeImmutable()->format("Y_m_d_H_i_s");
@@ -45,7 +46,7 @@ class MigrationMakeCommand extends Command
 
         if (file_exists($migrationPath)) {
             $output->error("File '{$migrationPath}' already exist");
-            return self::EXIT_FAILURE;
+            return CommandStatus::GENERIC_FAILURE;
         }
 
         $output->write("Creating file '{$filename}' ");
@@ -85,6 +86,6 @@ EOF;
         $output->badge("DONE", Ansi::FG_GREEN);
         $output->writeln();
 
-        return self::EXIT_SUCCESS;
+        return CommandStatus::SUCCESS;
     }
 }

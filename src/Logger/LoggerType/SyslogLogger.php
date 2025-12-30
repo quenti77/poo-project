@@ -38,7 +38,6 @@ class SyslogLogger extends BaseLogger
     {
         $priority = $this->levelToPriority($level);
 
-        $data = '';
         try {
             $data = !empty($context) ? json_encode($context, JSON_THROW_ON_ERROR) : '';
         } catch (JsonException) {

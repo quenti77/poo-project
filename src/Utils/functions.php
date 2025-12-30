@@ -12,7 +12,6 @@ use Tuto\Http\Responses\JsonResponse;
 use Tuto\Http\Responses\RedirectResponse;
 use Tuto\Http\Responses\ViewResponse;
 use Tuto\Logger\LoggerInterface;
-use Tuto\Logger\LoggerType\NullLogger;
 use Tuto\Routing\Router;
 use Tuto\Translate\Translator;
 
@@ -171,7 +170,8 @@ if (!function_exists('logger')) {
     /**
      * @return LoggerInterface
      */
-    function logger(): LoggerInterface {
+    function logger(): LoggerInterface
+    {
         return container(LoggerInterface::class);
     }
 }
@@ -183,7 +183,8 @@ if (!function_exists('trans')) {
      * @param array $context
      * @return string|array
      */
-    function trans(string $key, int|float $count = 1, array $context = []): string|array {
+    function trans(string $key, int|float $count = 1, array $context = []): string|array
+    {
         static $translator = container(Translator::class);
         return $translator->translate($key, $count, $context);
     }

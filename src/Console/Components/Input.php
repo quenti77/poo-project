@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\CLIOld\Input;
+namespace Tuto\Console\Components;
 
 use Tuto\Collections\Collection;
 

@@ -6,7 +6,6 @@ use Tuto\Collections\Collection;
 use Tuto\Database\Query\Conditions\ConditionType;
 use Tuto\Database\Query\Conditions\ConditionWhereTrait;
 use Tuto\Database\Query\Join\ConditionJoinTrait;
-use Tuto\Database\Query\Join\JoinQuery;
 
 class QueryBuilder
 {

@@ -6,7 +6,6 @@ use PDO;
 use PDOException;
 use RuntimeException;
 use SensitiveParameter;
-use Throwable;
 use Tuto\Database\ConnectionInterface;
 use Tuto\Database\Exceptions\SqlStatementException;
 use Tuto\Database\StatementInterface;
