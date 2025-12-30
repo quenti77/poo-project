@@ -2,8 +2,6 @@
 
 namespace Tuto\Routing;
 
-use Tuto\Collections\Collection;
-
 class PathParameter
 {
     /** @var string default regex accept all content without "/" */

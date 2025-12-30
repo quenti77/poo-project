@@ -9,8 +9,8 @@ use IteratorIterator;
 use ReflectionException;
 use SplFileInfo;
 use Throwable;
-use Tuto\CLIOld\Output\Ansi;
-use Tuto\CLIOld\Output\Output;
+use Tuto\Console\Components\Ansi;
+use Tuto\Console\Components\Output;
 
 class MigrationsService
 {

@@ -4,7 +4,6 @@ namespace Tuto\Database\Migrations;
 
 use DateMalformedStringException;
 use Random\RandomException;
-use ReflectionException;
 use SplFileInfo;
 use Tuto\Collections\Collection;
 use Tuto\Database\ConnectionInterface;
@@ -97,7 +96,7 @@ class MigrationsRepository implements DatabaseRepositoryInterface
      */
     public function getMaxStep(): int
     {
-        return (int) $this->connection
+        return (int)$this->connection
             ->request('select max(step) as max_step from migrations')
             ->fetch()['max_step'];
     }
@@ -129,7 +128,7 @@ class MigrationsRepository implements DatabaseRepositoryInterface
     public function delete(MigrationEntity $migration): void
     {
         QueryMaker::delete('migrations')
-            ->where('id', (string) $migration->getId())
+            ->where('id', (string)$migration->getId())
             ->render()
             ->makeRequest($this->connection);
     }
@@ -152,7 +151,7 @@ class MigrationsRepository implements DatabaseRepositoryInterface
         return new MigrationEntity(
             id: new Ulid($data['id']),
             file: new SplFileInfo(container('path.database') . "/migrations/{$data['name']}.php"),
-            step: (int) $data['step'],
+            step: (int)$data['step'],
             createAt: $this->transformToDateTime($data['created_at']),
         );
     }

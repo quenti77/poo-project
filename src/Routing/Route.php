@@ -149,7 +149,7 @@ class Route
         foreach ($replaceParameters as $search => $key) {
             $isOptional = str_contains($search, '?');
 
-            if (!isset($parameters[$key]) || $parameters[$key] === null || $parameters[$key] === '') {
+            if (!isset($parameters[$key]) || $parameters[$key] === '') {
                 if (!$isOptional) {
                     throw new InvalidArgumentException("Parameter '{$key}' must be defined");
                 }

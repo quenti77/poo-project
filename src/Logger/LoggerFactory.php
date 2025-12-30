@@ -3,7 +3,6 @@
 namespace Tuto\Logger;
 
 use ReflectionException;
-use Throwable;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Logger\LoggerType\DailyFileLogger;
 use Tuto\Logger\LoggerType\SyslogLogger;

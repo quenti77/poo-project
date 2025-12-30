@@ -3,13 +3,17 @@
 namespace App\Commands\Migrate;
 
 use DateMalformedStringException;
-use Tuto\CLIOld\Command;
-use Tuto\CLIOld\Input\Input;
-use Tuto\CLIOld\Output\Output;
+use Tuto\Console\Commands\AbstractCommand;
+use Tuto\Console\Commands\CommandStatus;
+use Tuto\Console\Components\Input;
+use Tuto\Console\Components\Output;
 use Tuto\Database\Migrations\MigrationsService;
 
-class MigrationDownCommand extends Command
+class MigrationDownCommand extends AbstractCommand
 {
+    /**
+     * @param MigrationsService $migrationsService
+     */
     public function __construct(private readonly MigrationsService $migrationsService)
     {
     }
@@ -27,12 +31,12 @@ class MigrationDownCommand extends Command
     /**
      * @param Input $input
      * @param Output $output
-     * @return int
+     * @return CommandStatus
      * @throws DateMalformedStringException
      */
-    public function execute(Input $input, Output $output): int
+    public function execute(Input $input, Output $output): CommandStatus
     {
         $this->migrationsService->down($output);
-        return self::EXIT_SUCCESS;
+        return CommandStatus::SUCCESS;
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Commands;
 
-use Tuto\CLIOld\Command;
-use Tuto\CLIOld\Input\Input;
-use Tuto\CLIOld\Output\Output;
+use JsonException;
+use Tuto\Console\Commands\AbstractCommand;
+use Tuto\Console\Commands\CommandStatus;
+use Tuto\Console\Components\Input;
+use Tuto\Console\Components\Output;
 use Tuto\Utils\File;
 
-class MaintenanceCommand extends Command
+class MaintenanceCommand extends AbstractCommand
 {
     /**
      * @return string
@@ -28,32 +30,28 @@ class MaintenanceCommand extends Command
     /**
      * @param Input $input
      * @param Output $output
-     * @return int
-     * @throws \JsonException
+     * @return CommandStatus
+     * @throws JsonException
      */
-    public function execute(Input $input, Output $output): int
+    public function execute(Input $input, Output $output): CommandStatus
     {
-        /**
-         *      cookie_name: string,
-         *      cookie_duration: int,
-         *      secret: string,
-         *      retry: int,
-         *      allowed_ips: string[]
-         */
         $mode = $input->getArgument(0, 'down');
         if (!in_array($mode, ['down', 'up'])) {
             $output->error("Mode '{$mode}' not found");
-            return self::EXIT_FAILURE;
+            $output->writeln();
+            return CommandStatus::GENERIC_FAILURE;
         }
 
         $file = File::absolute(container()->getWithoutError('maintenance.file', 'storage/framework/down.json'));
         if ($mode === 'up') {
             $output->info("Removing file '{$file}'");
+            $output->writeln();
             if (is_file($file)) {
                 unlink($file);
             }
             $output->success("File '{$file}' removed");
-            return self::EXIT_SUCCESS;
+            $output->writeln();
+            return CommandStatus::SUCCESS;
         }
 
         $data = [];
@@ -68,9 +66,11 @@ class MaintenanceCommand extends Command
         }
 
         $output->info("Adding file '{$file}'");
+        $output->writeln();
         file_put_contents($file, json_encode($data, JSON_THROW_ON_ERROR));
         $output->success("File '{$file}' added");
+        $output->writeln();
 
-        return self::EXIT_SUCCESS;
+        return CommandStatus::SUCCESS;
     }
 }
