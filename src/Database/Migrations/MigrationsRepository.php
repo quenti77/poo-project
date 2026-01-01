@@ -7,17 +7,17 @@ use Random\RandomException;
 use SplFileInfo;
 use Tuto\Collections\Collection;
 use Tuto\Database\ConnectionInterface;
-use Tuto\Database\DatabaseRepositoryInterface;
 use Tuto\Database\Query\QueryBuilder;
 use Tuto\Database\Query\QueryMaker;
 use Tuto\Utils\DataTransformer;
 use Tuto\Utils\Ulid;
 
-class MigrationsRepository implements DatabaseRepositoryInterface
+class MigrationsRepository
 {
     use DataTransformer;
 
-    public const array FIELDS = ['id', 'name', 'step', 'created_at'];
+    /** @var string[] all fields for migrations table */
+    private const array MIGRATIONS_FIELDS = ['id', 'name', 'step', 'created_at'];
 
     /**
      * @param ConnectionInterface $connection
@@ -138,7 +138,7 @@ class MigrationsRepository implements DatabaseRepositoryInterface
      */
     private function createRequest(): QueryBuilder
     {
-        return QueryMaker::select(static::FIELDS)->from('migrations');
+        return QueryMaker::select(static::MIGRATIONS_FIELDS)->from('migrations');
     }
 
     /**

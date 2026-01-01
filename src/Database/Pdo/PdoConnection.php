@@ -2,6 +2,7 @@
 
 namespace Tuto\Database\Pdo;
 
+use JsonException;
 use PDO;
 use PDOException;
 use RuntimeException;
@@ -34,6 +35,7 @@ class PdoConnection extends PDO implements ConnectionInterface
      * @param string|StatementInterface $statement
      * @param array<string, mixed> $parameters
      * @return StatementInterface
+     * @throws JsonException
      */
     public function request(string|StatementInterface $statement, array $parameters = []): StatementInterface
     {

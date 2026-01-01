@@ -34,6 +34,9 @@ abstract class BaseCondition
      */
     protected function escapeValue(mixed $value): string
     {
+        if ($value === null) {
+            return 'null';
+        }
         if ($this->escape === false) {
             return $value;
         }

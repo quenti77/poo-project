@@ -162,7 +162,7 @@ class QueryBuilder
     }
 
     /**
-     * @param array<string, string> $values
+     * @param array<string, mixed> $values
      * @param bool $escape
      * @return $this
      */

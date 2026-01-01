@@ -2,10 +2,11 @@
 
 namespace Tuto\Error;
 
+use JsonSerializable;
 use Tuto\Http\Responses\HttpCode;
 use Tuto\Logger\LoggerLevel;
 
-class ErrorDetails
+class ErrorDetails implements JsonSerializable
 {
     /**
      * @param LoggerLevel $loggerLevel
@@ -39,6 +40,14 @@ class ErrorDetails
             'type' => $this->type,
             'trace' => $this->formatTrace(),
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     /**

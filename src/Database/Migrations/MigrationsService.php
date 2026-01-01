@@ -111,9 +111,10 @@ class MigrationsService
     {
         $migrationExist = $this->migrationsRepository->assertExist();
         if (!$migrationExist) {
-            $output->warning("Migration table does not exist. Creating ...");
+            $output->warning("Migration table does not exist. Creating ...\n");
             $this->migrationsRepository->createMigrationTable();
-            $output->success("Migration table created");
+            $output->success("Migration table created\n");
+            $output->writeln();
         }
     }
 

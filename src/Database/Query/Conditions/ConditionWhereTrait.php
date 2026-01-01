@@ -195,7 +195,7 @@ trait ConditionWhereTrait
         bool $escape = true,
     ): static {
         $conditionType = $this->getCurrentType($type);
-        $operator = ConditionOperator::tryFrom($op);
+        $operator = is_string($op) ? ConditionOperator::tryFrom($op) : null;
         if ($operator === null && $value === null) {
             $value = $op;
             $operator = ConditionOperator::EQ;
@@ -268,6 +268,10 @@ trait ConditionWhereTrait
      */
     private function escapeValue(string $column, mixed $value): string
     {
+        if ($value === null) {
+            return 'null';
+        }
+
         try {
             $identifier = bin2hex(random_bytes(2));
         } catch (RandomException) {

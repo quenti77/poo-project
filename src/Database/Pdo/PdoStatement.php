@@ -3,8 +3,10 @@
 namespace Tuto\Database\Pdo;
 
 use DateTimeInterface;
+use JsonException;
 use PDO;
 use Tuto\Database\StatementInterface;
+use Tuto\Utils\Ulid;
 
 class PdoStatement implements StatementInterface
 {
@@ -21,6 +23,7 @@ class PdoStatement implements StatementInterface
      * @param string $name
      * @param mixed $value
      * @return bool
+     * @throws JsonException
      */
     public function bind(string $name, mixed $value): bool
     {
@@ -29,6 +32,10 @@ class PdoStatement implements StatementInterface
 
         if ($value instanceof DateTimeInterface) {
             $value = $value->format('Y-m-d H:i:s');
+        } elseif ($value instanceof Ulid) {
+            $value = (string) $value;
+        } elseif (is_array($value)) {
+            $value = json_encode($value, JSON_THROW_ON_ERROR);
         } elseif (array_key_exists($parameterType, self::TYPE)) {
             $bindType = self::TYPE[$parameterType];
         } elseif ($value === null) {

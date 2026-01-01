@@ -6,6 +6,7 @@ use Tuto\Console\Commands\MaintenanceCommand;
 use Tuto\Console\Commands\Migrate\MigrationDownCommand;
 use Tuto\Console\Commands\Migrate\MigrationMakeCommand;
 use Tuto\Console\Commands\Migrate\MigrationUpCommand;
+use Tuto\Console\Commands\Queue\QueueWorkCommand;
 use Tuto\Console\Components\Input;
 use Tuto\Console\Components\Output;
 use Tuto\Console\Terminal\Terminal;
@@ -31,5 +32,8 @@ $cliApplication->addCommand(MigrationDownCommand::class);
 
 // Database seeder
 $cliApplication->addCommand(DbSeedCommand::class);
+
+// Queue worker
+$cliApplication->addCommand(QueueWorkCommand::class);
 
 $cliApplication->boot();
