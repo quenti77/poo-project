@@ -8,6 +8,7 @@ use JsonException;
 use Random\RandomException;
 use RuntimeException;
 use Throwable;
+use Tuto\Base\ClassNotFoundException;
 use Tuto\Console\Components\Ansi;
 use Tuto\Console\Components\Output;
 use Tuto\Error\ErrorFactory;
@@ -102,7 +103,7 @@ class WorkerService
             $this->jobsRepository->delete($jobEntity);
             $this->output?->write($outputInfo . ' ');
             $this->output?->badge("done", Ansi::FG_GREEN);
-        } catch (Throwable $exception) {
+        } catch (Throwable|ClassNotFoundException $exception) {
             $this->output?->write($outputInfo . ' ');
             $this->output?->badge("error", Ansi::FG_RED);
 
@@ -122,6 +123,11 @@ class WorkerService
      */
     private function handleFailedJob(JobEntity $jobEntity, Throwable $exception): void
     {
+        if ($exception instanceof ClassNotFoundException) {
+            $this->markJobAsFailed($jobEntity, null, $exception);
+            return;
+        }
+
         $job = $this->getJob($jobEntity);
         $jobEntity->fail($this->currentTime->now());
 
@@ -140,15 +146,35 @@ class WorkerService
             return;
         }
 
-        $log = "Jobs #{$jobEntity->getId()} failed after retries {$job->getMaxAttempts()} attempts";
+        $this->markJobAsFailed($jobEntity, $job, $exception);
+    }
+
+    /**
+     * @param JobEntity $jobEntity
+     * @param JobInterface|null $job
+     * @param Throwable $exception
+     * @return void
+     * @throws JsonException
+     * @throws RandomException
+     */
+    private function markJobAsFailed(JobEntity $jobEntity, JobInterface|null $job, Throwable $exception): void
+    {
+        $log = $job === null
+            ? "Jobs #{$jobEntity->getId()} failed because '{$exception->getMessage()}'"
+            : "Jobs #{$jobEntity->getId()} failed after retries {$job->getMaxAttempts()} attempts";
+
         $this->output?->error($log);
         $this->output?->writeln();
-        logger()->error($log, [
+
+        $context = [
             'job_id' => $jobEntity->getId(),
             'job_class' => $jobEntity->getJobClass(),
             'attempts' => $jobEntity->getAttempts(),
-            'max_attempts' => $job->getMaxAttempts(),
-        ]);
+        ];
+        if ($job) {
+            $context['max_attempts'] = $job->getMaxAttempts();
+        }
+        logger()->error($log, $context);
 
         $errorDetails = ErrorFactory::fromThrowable($exception);
         $failedJob = FailedJobEntity::fromJobError($jobEntity, $errorDetails, $this->currentTime->now());

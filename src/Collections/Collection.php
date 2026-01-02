@@ -55,6 +55,18 @@ class Collection implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * @param TValue $item
+     * @return self
+     */
+    public function unshift(mixed $item): self
+    {
+        array_unshift($this->items, $item);
+
+        $this->keys = array_keys($this->items);
+        return $this;
+    }
+
+    /**
      * @return TValue|null
      */
     public function pop(): mixed

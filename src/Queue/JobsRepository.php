@@ -6,8 +6,11 @@ use DateMalformedStringException;
 use DateTimeImmutable;
 use JsonException;
 use Random\RandomException;
+use Tuto\Collections\Collection;
 use Tuto\Database\ConnectionInterface;
+use Tuto\Database\Query\QueryBuilder;
 use Tuto\Database\Query\QueryMaker;
+use Tuto\Queue\Jobs\FailedJobEntity;
 use Tuto\Queue\Jobs\JobEntity;
 use Tuto\Queue\Jobs\JobInterface;
 use Tuto\Utils\CurrentTime;
@@ -31,6 +34,40 @@ class JobsRepository
         private readonly ConnectionInterface $connection,
         private readonly CurrentTime $currentTime,
     ) {
+    }
+
+    /**
+     * @param string $queue
+     * @return QueueStats
+     */
+    public function getStats(string $queue): QueueStats
+    {
+        $currentAt = $this->currentTime->now();
+
+        $totalQuery = $this->makeCountQuery($queue);
+        $total = $this->renderCountQuery($totalQuery);
+
+        $pendingQuery = $this->makeCountQuery($queue)
+            ->where('reserved_at', null)
+            ->where('available_at', '<=', $currentAt);
+        $pending = $this->renderCountQuery($pendingQuery);
+
+        $reservedQuery = $this->makeCountQuery($queue)->where('reserved_at', 'IS NOT', null);
+        $reserved = $this->renderCountQuery($reservedQuery);
+
+        $delayedQuery = $this->makeCountQuery($queue)
+            ->where('reserved_at', null)
+            ->where('available_at', '>', $currentAt);
+        $delayed = $this->renderCountQuery($delayedQuery);
+
+        return new QueueStats(
+            queue: $queue,
+            total: $total,
+            pending: $pending,
+            reserved: $reserved,
+            delayed: $delayed,
+            failed: 0,
+        );
     }
 
     /**
@@ -103,6 +140,21 @@ class JobsRepository
     }
 
     /**
+     * @param Collection<int, FailedJobEntity> $failedJobs
+     * @return void
+     * @throws DateMalformedStringException
+     * @throws JsonException
+     * @throws RandomException
+     */
+    public function retryJobs(Collection $failedJobs): void
+    {
+        foreach ($failedJobs as $failedJob) {
+            $job = unserialize($failedJob->getPayload()['data'], ['allowed_classes' => true]);
+            $this->push($job, $failedJob->getQueue());
+        }
+    }
+
+    /**
      * @param JobEntity $jobEntity
      * @return void
      */
@@ -159,5 +211,23 @@ class JobsRepository
             createdAt: $this->transformToDateTime($jobData['created_at']),
             updatedAt: $this->transformToDateTime($jobData['updated_at']),
         );
+    }
+
+    /**
+     * @param string $queue
+     * @return QueryBuilder
+     */
+    private function makeCountQuery(string $queue): QueryBuilder
+    {
+        return QueryMaker::select('count(*) as nb')->from('jobs')->where('queue', $queue);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @return int
+     */
+    private function renderCountQuery(QueryBuilder $query): int
+    {
+        return $query->render()->makeRequest($this->connection)->fetch()['nb'] ?? 0;
     }
 }

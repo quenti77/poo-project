@@ -2,6 +2,7 @@
 
 namespace Tuto\Database\Query\Conditions;
 
+use InvalidArgumentException;
 use Random\RandomException;
 use Tuto\Collections\Collection;
 use Tuto\Database\Query\InvalidQuerySyntaxException;
@@ -227,7 +228,11 @@ trait ConditionWhereTrait
             if (!is_array($value) && !($value instanceof Collection)) {
                 throw new InvalidQuerySyntaxException("To use IN / NOT IN, we need an array or collection");
             }
+            if (count($value) === 0) {
+                throw new InvalidArgumentException("To use IN / NOT IN, we need a non empty array or collection");
+            }
             $this->where->push(new ComplexCondition($conditionType, $column, $operator, $value, $escape));
+            return $this;
         }
 
         if ($operator->isExistOperator()) {
