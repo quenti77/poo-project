@@ -6,6 +6,8 @@ use Tuto\Base\Environment;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
+use Tuto\Event\Contract\EventDispatcherInterface;
+use Tuto\Event\Contract\EventInterface;
 use Tuto\Http\Requests\Request;
 use Tuto\Http\Responses\HttpCode;
 use Tuto\Http\Responses\JsonResponse;
@@ -187,6 +189,24 @@ if (!function_exists('trans')) {
     {
         static $translator = container(Translator::class);
         return $translator->translate($key, $count, $context);
+    }
+}
+
+if (!function_exists('event')) {
+    /**
+     * @param EventInterface|string $event
+     * @param mixed ...$payload
+     * @return EventInterface
+     */
+    function event(EventInterface|string $event, mixed ...$payload): EventInterface
+    {
+        /** @var EventDispatcherInterface $dispatcher */
+        static $dispatcher = container(EventDispatcherInterface::class);
+        if (is_string($event)) {
+            $event = new $event(...$payload);
+        }
+
+        return $dispatcher->dispatch($event);
     }
 }
 
