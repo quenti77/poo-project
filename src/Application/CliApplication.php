@@ -6,6 +6,7 @@ use Tuto\Application\Loaders\ConfigurationLoader;
 use Tuto\Application\Loaders\EnvironmentLoader;
 use Tuto\Application\Loaders\ErrorHandlerLoader;
 use Tuto\Application\Loaders\LoaderInterface;
+use Tuto\Application\Loaders\ServiceProviderLoader;
 use Tuto\Collections\Collection;
 use Tuto\Console\Commands\AbstractCommand;
 use Tuto\Console\Commands\CommandStatus;
@@ -64,6 +65,7 @@ class CliApplication extends BaseApplication
             new EnvironmentLoader(),
             new ConfigurationLoader(ROOT . '/config'),
             new ErrorHandlerLoader($this->output),
+            new ServiceProviderLoader(),
         ]);
     }
 

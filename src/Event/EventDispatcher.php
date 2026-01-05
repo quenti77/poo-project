@@ -7,10 +7,11 @@ use JsonException;
 use Random\RandomException;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionNamedType;
+use ReflectionUnionType;
 use RuntimeException;
 use Tuto\Base\ClassNotFoundException;
 use Tuto\Collections\Collection;
-use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Event\Contract\EventDispatcherInterface;
 use Tuto\Event\Contract\EventInterface;
 use Tuto\Event\Contract\EventSubscriberInterface;
@@ -26,9 +27,8 @@ class EventDispatcher implements EventDispatcherInterface
     /**
      * @param JobsRepository $jobsRepository
      */
-    public function __construct(
-        private JobsRepository $jobsRepository,
-    ) {
+    public function __construct(private readonly JobsRepository $jobsRepository)
+    {
         $this->listeners = collect();
     }
 
@@ -77,6 +77,10 @@ class EventDispatcher implements EventDispatcherInterface
                 break;
             }
 
+            if (is_string($listener) && !$this->listenerAcceptsEvent($listener, $event)) {
+                continue;
+            }
+
             $callable = $this->resolveListener($listener);
             if (is_string($listener) && $this->shouldQueue($listener)) {
                 $this->queueListener($listener, $event);
@@ -116,9 +120,61 @@ class EventDispatcher implements EventDispatcherInterface
 
         $sorted = collect();
         foreach ($priorities as $priority) {
-            $sorted->merge($eventListeners[$priority]);
+            $sorted = $sorted->merge($eventListeners[$priority]);
         }
         return $sorted;
+    }
+
+    /**
+     * @param string $listenerClass
+     * @param EventInterface $event
+     * @return bool
+     */
+    private function listenerAcceptsEvent(string $listenerClass, EventInterface $event): bool
+    {
+        try {
+            $reflectionClass = new ReflectionClass($listenerClass);
+            if (!($reflectionClass->hasMethod('handle'))) {
+                throw new RuntimeException("Listener '{$listenerClass}' must have a 'handle()' method");
+            }
+
+            $method = $reflectionClass->getMethod('handle');
+            $parameters = $method->getParameters();
+            if (count($parameters) !== 1) {
+                throw new RuntimeException("Listener '{$listenerClass}::handle()' must have least one parameter");
+            }
+
+            $parameter = $parameters[0];
+            $parameterType = $parameter->getType();
+            if ($parameterType === null) {
+                throw new RuntimeException("Listener '{$listenerClass}::handle()' for the parameter must have a type hint");
+            }
+
+            $types = [];
+            if ($parameterType instanceof ReflectionNamedType) {
+                $types = [$parameterType];
+            } elseif ($parameterType instanceof ReflectionUnionType) {
+                $types = $parameterType->getTypes();
+            }
+
+            return array_any($types, fn($currentType) => $this->typeMatches($currentType, $event));
+        } catch (ReflectionException $exception) {
+            throw new RuntimeException("Failed to reflect listener '{$listenerClass}': '{$exception->getMessage()}'", 0, $exception);
+        }
+    }
+
+    /**
+     * @param ReflectionNamedType $type
+     * @param EventInterface $event
+     * @return bool
+     */
+    private function typeMatches(ReflectionNamedType $type, EventInterface $event): bool
+    {
+        $typeName = $type->getName();
+        if (in_array($typeName, ['object', 'mixed', EventInterface::class], true)) {
+            return true;
+        }
+        return $event instanceof $typeName;
     }
 
     /**

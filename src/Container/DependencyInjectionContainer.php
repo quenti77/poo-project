@@ -85,7 +85,7 @@ class DependencyInjectionContainer
         }
 
         if ($dependency instanceof DependencyInterfaceItem) {
-            $this->instances[$name] = $this->get($dependency->getConcrete());
+            return $this->instances[$name] = $this->get($dependency->getConcrete());
         }
 
         if ($dependency instanceof DependencyFactoryItem) {

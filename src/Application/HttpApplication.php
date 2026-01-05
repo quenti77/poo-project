@@ -8,6 +8,7 @@ use Tuto\Application\Loaders\EnvironmentLoader;
 use Tuto\Application\Loaders\ErrorHandlerLoader;
 use Tuto\Application\Loaders\HttpRouterLoader;
 use Tuto\Application\Loaders\LoaderInterface;
+use Tuto\Application\Loaders\ServiceProviderLoader;
 use Tuto\Collections\Collection;
 use Tuto\Http\Exceptions\HttpNotFoundException;
 use Tuto\Http\Requests\Request;
@@ -31,6 +32,7 @@ class HttpApplication extends BaseApplication
             new EnvironmentLoader(),
             new ConfigurationLoader(ROOT . '/config'),
             new ErrorHandlerLoader(),
+            new ServiceProviderLoader(),
             new HttpRouterLoader(),
         ]);
     }

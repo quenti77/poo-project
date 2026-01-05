@@ -1,5 +1,9 @@
 <?php
 
+use Tuto\Container\Items\DependencyItem;
+use Tuto\Event\Contract\EventDispatcherInterface;
+use Tuto\Event\EventDispatcher;
+
 return [
     'app.name' => env('APP_NAME', 'tuto-poo'),
     'app.env' => env('APP_ENV', 'local'),
@@ -8,4 +12,7 @@ return [
 
     'path.router' => ROOT . '/routes',
     'path.database' => ROOT . '/database',
+
+    // All interfaces implementation
+    DependencyItem::concrete(EventDispatcherInterface::class, EventDispatcher::class),
 ];
