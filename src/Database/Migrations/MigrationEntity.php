@@ -4,7 +4,7 @@ namespace Tuto\Database\Migrations;
 
 use DateTimeImmutable;
 use SplFileInfo;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class MigrationEntity
 {

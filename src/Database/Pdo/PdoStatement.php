@@ -6,7 +6,7 @@ use DateTimeInterface;
 use JsonException;
 use PDO;
 use Tuto\Database\StatementInterface;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class PdoStatement implements StatementInterface
 {

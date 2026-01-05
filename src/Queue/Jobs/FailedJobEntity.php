@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use JsonException;
 use Random\RandomException;
 use Tuto\Error\ErrorDetails;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class FailedJobEntity
 {

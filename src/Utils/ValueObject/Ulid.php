@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Utils;
+namespace Tuto\Utils\ValueObject;
 
 use InvalidArgumentException;
 use Random\RandomException;

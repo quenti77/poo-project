@@ -5,6 +5,7 @@ namespace Tuto\Utils;
 use DateMalformedStringException;
 use DateTimeImmutable;
 use JsonException;
+use Tuto\Utils\ValueObject\Ulid;
 
 trait DataTransformer
 {

@@ -10,7 +10,7 @@ use Tuto\Database\ConnectionInterface;
 use Tuto\Database\Query\QueryBuilder;
 use Tuto\Database\Query\QueryMaker;
 use Tuto\Utils\DataTransformer;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class MigrationsRepository
 {

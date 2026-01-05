@@ -15,7 +15,7 @@ use Tuto\Queue\Jobs\JobEntity;
 use Tuto\Queue\Jobs\JobInterface;
 use Tuto\Utils\CurrentTime;
 use Tuto\Utils\DataTransformer;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class JobsRepository
 {

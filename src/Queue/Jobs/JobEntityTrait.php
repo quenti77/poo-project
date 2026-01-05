@@ -3,7 +3,7 @@
 namespace Tuto\Queue\Jobs;
 
 use RuntimeException;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 trait JobEntityTrait
 {

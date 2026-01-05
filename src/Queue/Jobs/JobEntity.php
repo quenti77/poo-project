@@ -5,7 +5,7 @@ namespace Tuto\Queue\Jobs;
 use DateTimeImmutable;
 use JsonException;
 use Random\RandomException;
-use Tuto\Utils\Ulid;
+use Tuto\Utils\ValueObject\Ulid;
 
 class JobEntity
 {
