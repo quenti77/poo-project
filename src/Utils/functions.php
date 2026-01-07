@@ -3,6 +3,7 @@
 use Random\RandomException;
 use Tuto\Application\HttpApplication;
 use Tuto\Base\Environment;
+use Tuto\Cache\CacheInterface;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
@@ -207,6 +208,23 @@ if (!function_exists('event')) {
         }
 
         return $dispatcher->dispatch($event);
+    }
+}
+
+if (!function_exists('cache')) {
+    /**
+     * @param string|null $key
+     * @param mixed $default
+     * @return (
+     *     $key is null ? CacheInterface : mixed
+     * )
+     */
+    function cache(string|null $key = null, mixed $default = null): mixed
+    {
+        /** @var CacheInterface $cache */
+        static $cache = container(CacheInterface::class);
+
+        return $key === null ? $cache : $cache->get($key, $default);
     }
 }
 

@@ -83,6 +83,7 @@ class CliApplication extends BaseApplication
         $command = $this->commands->hasKeys($commandName) ? $this->commands[$commandName] : null;
         if ($command === null) {
             $this->output->error("Command not found '{$commandName}'");
+            $this->output->writeln();
             $this->runHelp();
             exit(CommandStatus::GENERIC_FAILURE->value);
         }
