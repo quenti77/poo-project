@@ -15,6 +15,7 @@ Le but est de reproduire le plus possible ce qui fait la force des frameworks. E
 - **CLI** : Permet la création de commandes dans le terminal.
 - **Queue** : Permet d'effectuer les tâches dans d'autres processus séparés.
 - **Event** : Permet de prévenir les différents contextes de ce qui s'est passé.
+- **Cache** : Gestion du cache dans le projet
 
 ## Stack technique du projet
 
