@@ -20,6 +20,9 @@ class ErrorHandler
         HttpNotFoundException::class,
     ];
 
+    /**
+     * @return void
+     */
     public static function register(): void
     {
         if (static::$registered) {
@@ -63,6 +66,9 @@ class ErrorHandler
         static::renderError($error);
     }
 
+    /**
+     * @return void
+     */
     public static function handleShutdown(): void
     {
         $error = error_get_last();
@@ -84,6 +90,10 @@ class ErrorHandler
         static::renderError($errorDetails);
     }
 
+    /**
+     * @param ErrorDetails $errorDetails
+     * @return void
+     */
     protected static function renderError(ErrorDetails $errorDetails): void
     {
         static::logError($errorDetails);
@@ -105,6 +115,11 @@ class ErrorHandler
         }
     }
 
+    /**
+     * @param ErrorDetails $errorDetails
+     * @param Throwable $throwable
+     * @return void
+     */
     protected static function renderFallbackError(ErrorDetails $errorDetails, Throwable $throwable): void
     {
         http_response_code(HttpCode::INTERNAL_SERVER_ERROR->value);
@@ -116,6 +131,10 @@ class ErrorHandler
         echo "Rendering Error: {$throwable->getMessage()}";
     }
 
+    /**
+     * @param ErrorDetails $errorDetails
+     * @return void
+     */
     protected static function logError(ErrorDetails $errorDetails): void
     {
         if (!static::shouldReport($errorDetails)) {
