@@ -121,7 +121,7 @@ class Translator
         $data = collect();
 
         $folderPath = "{$this->folder}/{$locale}";
-        $folder = realpath($folderPath);
+        $folder = str_replace(DIRECTORY_SEPARATOR, '/', realpath($folderPath));
         if ($folder === false || !is_dir($folder)) {
             throw new InvalidArgumentException("Folder '{$folderPath}' does not exist or is not a directory");
         }
@@ -157,6 +157,7 @@ class Translator
             throw new InvalidArgumentException("This file '{$realPath}' does not return an array");
         }
 
+        $realPath = str_replace(DIRECTORY_SEPARATOR, '/', $realPath);
         $base = $realPath
             |> (static fn(string $v) => str_replace($folder, '', $v))
             |> Uri::trimPath(...)
