@@ -261,7 +261,7 @@ trait ConditionWhereTrait
 
         $groupCondition = new GroupCondition($this->getCurrentType($type), $query->getWhere());
         $this->where->push($groupCondition);
-        $this->parameters->merge($query->getParameters());
+        $this->parameters = $this->parameters->merge($query->getParameters());
 
         return $this;
     }

@@ -81,12 +81,14 @@ trait ConditionJoinTrait
             $query = QueryMaker::select();
             $table($query);
             $finalTable = $query;
+            $this->parameters = $this->parameters->merge($query->getParameters());
         }
 
         $join = new JoinQuery($type, $finalTable, $alias);
         $on($join);
 
         $this->join->push($join);
+        $this->parameters = $this->parameters->merge($join->getParameters());
         return $this;
     }
 }

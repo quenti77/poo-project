@@ -115,11 +115,11 @@ class QueryBuilder
     }
 
     /**
-     * @param string|callable(QueryBuilder): void $from
+     * @param string|callable(QueryBuilder): void|self $from
      * @param string|null $alias
      * @return self
      */
-    public function from(string|callable $from, string|null $alias = null): self
+    public function from(string|callable|self $from, string|null $alias = null): self
     {
         if (!$this->from->isEmpty() && !$this->type->canUseMultipleFrom()) {
             throw new InvalidQuerySyntaxException("Multiple FROM only can be used in SELECT or UPDATE request");
@@ -134,10 +134,15 @@ class QueryBuilder
             throw new InvalidQuerySyntaxException("Only SELECT can access sub query into FROM");
         }
 
-        $subQuery = QueryMaker::select();
-        $from($subQuery);
+        $subQuery = $from;
+        if (is_callable($from)) {
+            $subQuery = QueryMaker::select();
+            $from($subQuery);
+        }
+
         $alias === null ? $this->from->push($subQuery) : $this->from[$alias] = $subQuery;
 
+        $this->parameters = $this->parameters->merge($subQuery->getParameters());
         return $this;
     }
 

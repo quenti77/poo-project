@@ -65,7 +65,7 @@ class QueryRender
 
         $from = $this->queryBuilder->getFrom()->values()->first();
         $parts->push('FROM');
-        $parts->push($from);
+        $parts->push($this->renderTableWithAlias($this->queryBuilder->getFrom()));
 
         $join = $this->queryBuilder->getJoin();
         if (!$join->isEmpty()) {
@@ -167,7 +167,7 @@ class QueryRender
     }
 
     /**
-     * @param Collection $tables
+     * @param Collection<int|string, string|QueryBuilder> $tables
      * @return string
      */
     private function renderTableWithAlias(Collection $tables): string
@@ -178,7 +178,6 @@ class QueryRender
             if ($table instanceof QueryBuilder) {
                 $currentRender = $table->render();
                 $render->push($this->renderAlias($alias, "({$currentRender->toSql()})"));
-                $this->queryBuilder->getParameters()->merge($currentRender->getParameters());
             } else {
                 $render->push($this->renderAlias($alias, $table));
             }
@@ -203,7 +202,6 @@ class QueryRender
             $parts->push($tableRender);
 
             $conditionRender = $this->renderCondition($join->getWhere());
-            $this->queryBuilder->getParameters()->merge($join->getParameters());
             $parts->push($conditionRender);
         }
     }
