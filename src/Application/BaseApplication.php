@@ -13,10 +13,14 @@ abstract class BaseApplication
 
     public function boot(): void
     {
+        ob_start();
+
         foreach ($this->loaders() as $loader) {
             $loader->load();
         }
         $this->run();
+
+        echo ob_get_clean();
     }
 
     /**

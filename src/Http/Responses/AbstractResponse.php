@@ -17,6 +17,9 @@ class AbstractResponse
 
     public function renderHeaders(): void
     {
+        if (headers_sent()) {
+            return;
+        }
         header("{$this->httpVersion} {$this->code->value} {$this->code->label()}", true, $this->code->value);
         foreach ($this->headers as $key => $value) {
             header("{$key}: {$value}");

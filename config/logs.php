@@ -20,6 +20,6 @@ return [
 
     DependencyItem::single(
         LoggerInterface::class,
-        static fn (DependencyInjectionContainer $container) => LoggerFactory::make($container)
+        LoggerFactory::make(...),
     ),
 ];

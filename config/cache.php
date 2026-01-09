@@ -19,6 +19,6 @@ return [
 
     DependencyItem::single(
         CacheInterface::class,
-        static fn (DependencyInjectionContainer $container) => CacheFactory::make($container),
+        CacheFactory::make(...),
     ),
 ];

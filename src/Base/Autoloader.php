@@ -9,7 +9,7 @@ class Autoloader
 
     public function __construct()
     {
-        spl_autoload_register(fn (string $className) => $this->resolve($className));
+        spl_autoload_register($this->resolve(...));
     }
 
     /**

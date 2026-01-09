@@ -29,9 +29,9 @@ class ErrorHandler
             return;
         }
 
-        set_error_handler([static::class, 'handleError']);
-        set_exception_handler([static::class, 'handleException']);
-        register_shutdown_function([static::class, 'handleShutdown']);
+        set_error_handler(static::handleError(...));
+        set_exception_handler(static::handleException(...));
+        register_shutdown_function(static::handleShutdown(...));
 
         static::$registered = true;
     }

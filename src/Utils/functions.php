@@ -7,6 +7,7 @@ use Tuto\Cache\CacheInterface;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
+use Tuto\Error\ErrorFactory;
 use Tuto\Event\Contract\EventDispatcherInterface;
 use Tuto\Event\Contract\EventInterface;
 use Tuto\Http\Requests\Request;
@@ -17,6 +18,8 @@ use Tuto\Http\Responses\ViewResponse;
 use Tuto\Logger\LoggerInterface;
 use Tuto\Routing\Router;
 use Tuto\Translate\Translator;
+use Tuto\Utils\VarDump;
+use Tuto\Utils\VarDumpRender;
 
 if (!function_exists('collect')) {
     /**
@@ -225,6 +228,31 @@ if (!function_exists('cache')) {
         static $cache = container(CacheInterface::class);
 
         return $key === null ? $cache : $cache->get($key, $default);
+    }
+}
+
+if (!function_exists('dump')) {
+    /**
+     * @param mixed ...$vars
+     * @return void
+     */
+    function dump(mixed ...$vars): void
+    {
+        $varDumpRender = new VarDumpRender();
+        $varDumpRender->render(...$vars);
+    }
+}
+
+if (!function_exists('dd')) {
+    /**
+     * @param mixed ...$vars
+     * @return never
+     */
+    function dd(mixed ...$vars): never
+    {
+        $varDumpRender = new VarDumpRender();
+        $varDumpRender->render(...$vars);
+        exit(0);
     }
 }
 
