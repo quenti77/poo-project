@@ -14,6 +14,9 @@ class QuestionComponent extends AbstractComponent
 
     /**
      * @param Output $output
+     * @param string $question
+     * @param string|null $defaultValue
+     * @param string $append
      */
     public function __construct(
         Output $output,

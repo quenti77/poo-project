@@ -82,5 +82,4 @@ class ErrorFactory
             trace: debug_backtrace(),
         );
     }
-
 }

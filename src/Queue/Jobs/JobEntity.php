@@ -2,6 +2,7 @@
 
 namespace Tuto\Queue\Jobs;
 
+use DateMalformedStringException;
 use DateTimeImmutable;
 use JsonException;
 use Random\RandomException;
@@ -43,7 +44,7 @@ class JobEntity
      * @return self
      * @throws JsonException
      * @throws RandomException
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public static function fromJob(JobInterface $job, string $queue, DateTimeImmutable $currentAt): self
     {

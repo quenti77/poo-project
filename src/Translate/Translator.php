@@ -70,6 +70,7 @@ class Translator
      * @param string $key
      * @param int|float $count
      * @param array $context
+     * @param Locale|null $locale
      * @return string|array
      */
     public function translate(string $key, int|float $count = 1, array $context = [], Locale|null $locale = null): string|array

@@ -20,6 +20,7 @@ class QueueStatsCommand extends AbstractCommand
 {
     /**
      * @param JobsRepository $jobsRepository
+     * @param FailedJobsRepository $failedJobsRepository
      */
     public function __construct(
         private readonly JobsRepository $jobsRepository,

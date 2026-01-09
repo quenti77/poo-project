@@ -9,6 +9,8 @@ class TranslatorFactory
 {
     /**
      * @param string $folder
+     * @param array $locales
+     * @param string $fallback
      * @return Translator
      */
     public static function make(string $folder, array $locales, string $fallback): Translator
