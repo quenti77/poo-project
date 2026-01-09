@@ -181,6 +181,45 @@ trait ConditionWhereTrait
     }
 
     /**
+     * @param string $column
+     * @param mixed|null $op
+     * @param mixed|null $value
+     * @param ConditionType|null $type
+     * @return $this
+     */
+    public function whereRaw(
+        string $column,
+        mixed $op = null,
+        mixed $value = null,
+        ConditionType|null $type = null,
+    ): static {
+        $type ??= ConditionType::AND;
+        $type = $this->getCurrentType($type);
+
+        $rawCondition = collect([$column]);
+        if ($op !== null) {
+            $rawCondition->push($op);
+        }
+        if ($value !== null) {
+            $rawCondition->push($value);
+        }
+
+        $this->where->push(new RawCondition($type, $rawCondition->join(' ')));
+        return $this;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed|null $op
+     * @param mixed|null $value
+     * @return $this
+     */
+    public function orWhereRaw(string $column, mixed $op = null, mixed $value = null): static
+    {
+        return $this->whereRaw($column, $op, $value, ConditionType::OR);
+    }
+
+    /**
      * @param ConditionType $type
      * @param string $column
      * @param string $op
