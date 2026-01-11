@@ -51,7 +51,10 @@ class Environment
             }
 
             [$key, $value] = explode('=', $line, 2);
-            putenv("{$key}={$value}");
+
+            if (getenv($key) === false) {
+                putenv("{$key}={$value}");
+            }
 
             if (
                 (str_starts_with($value, '"') && str_ends_with($value, '"')) ||
@@ -60,8 +63,10 @@ class Environment
                 $value = substr($value, 1, -1);
             }
 
-            $this->fields[$key] = $this->processValue($value);
-            $_ENV[$key] = $value;
+            if (getenv($key) === false) {
+                $this->fields[$key] = $this->processValue($value);
+                $_ENV[$key] = $value;
+            }
         }
     }
 
@@ -74,14 +79,19 @@ class Environment
      */
     public function get(string $key, bool|float|int|string|null $defaultValue = null): bool|float|int|string|null
     {
+        // Priority 1: Check system environment variables (CLI variables have highest priority)
+        $env = getenv($key);
+        if ($env !== false) {
+            return $this->processValue($env);
+        }
+
+        // Priority 2: Check loaded .env files
         if ($this->fields->offsetExists($key)) {
             return $this->fields[$key];
         }
 
-        $env = getenv($key);
-        $env = $env === false ? $defaultValue : $this->processValue($env);
-
-        return $this->fields[$key] = $env;
+        // Priority 3: Return default value
+        return $defaultValue;
     }
 
     /**
