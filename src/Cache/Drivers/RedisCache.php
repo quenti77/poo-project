@@ -3,47 +3,23 @@
 namespace Tuto\Cache\Drivers;
 
 use DateTimeInterface;
-use Redis;
 use RedisException;
-use Tuto\Cache\CacheConnectionException;
 use Tuto\Cache\CacheException;
+use Tuto\Database\Redis\RedisConnection;
 use Tuto\Utils\CurrentTime;
 
 class RedisCache extends AbstractCache
 {
-    /** @var Redis|null $redis */
-    private Redis|null $redis = null;
-
     /**
+     * @param RedisConnection $redis
      * @param CurrentTime $currentTime
-     * @param string $host
-     * @param int $port
-     * @param string|null $password
-     * @param int $database
      * @param string $prefix
-     * @param int $timeout
      */
     public function __construct(
+        private readonly RedisConnection $redis,
         private readonly CurrentTime $currentTime,
-        private readonly string $host,
-        private readonly int $port = 6379,
-        private readonly string|null $password = null,
-        private readonly int $database = 0,
         private readonly string $prefix = 'cache',
-        private readonly int $timeout = 2,
     ) {
-        $this->connect();
-    }
-
-    public function __destruct()
-    {
-        if ($this->redis !== null) {
-            try {
-                $this->redis->close();
-            } catch (RedisException $exception) {
-                logger()->warning("Error during closing redis connection : {$exception->getMessage()}");
-            }
-        }
     }
 
     /**
@@ -149,29 +125,6 @@ class RedisCache extends AbstractCache
             return $this->redis->decrBy($this->prefixKey($key), $value);
         } catch (RedisException $exception) {
             throw new CacheException("Failed to decrement cache key '{$key}': {$exception->getMessage()}", 0, $exception);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function connect(): void
-    {
-        try {
-            $this->redis = new Redis();
-            if (!$this->redis->connect($this->host, $this->port, $this->timeout)) {
-                throw new CacheConnectionException("Failed to connect to Redis at {$this->host}:{$this->port}");
-            }
-
-            if ($this->password !== null && !$this->redis->auth($this->password)) {
-                throw new CacheConnectionException("Failed to authenticate to Redis");
-            }
-
-            if (!$this->redis->select($this->database)) {
-                throw new CacheConnectionException("Failed to select Redis database '{$this->database}'");
-            }
-        } catch (RedisException $exception) {
-            throw new CacheConnectionException("Redis connection error: {$exception->getMessage()}", 0, $exception);
         }
     }
 
