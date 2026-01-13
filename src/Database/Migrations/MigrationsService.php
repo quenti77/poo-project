@@ -9,8 +9,9 @@ use IteratorIterator;
 use ReflectionException;
 use SplFileInfo;
 use Throwable;
-use Tuto\Console\Components\Ansi;
-use Tuto\Console\Components\Output;
+use Tuto\Database\Migrations\Events\MigrationFailed;
+use Tuto\Database\Migrations\Events\MigrationFinished;
+use Tuto\Database\Migrations\Events\MigrationStarted;
 
 class MigrationsService
 {
@@ -22,14 +23,13 @@ class MigrationsService
     }
 
     /**
-     * @param Output $output
      * @return void
      * @throws DateMalformedStringException
      * @throws ReflectionException
      */
-    public function up(Output $output): void
+    public function up(): void
     {
-        $this->assertTableExist($output);
+        $this->assertTableExist();
 
         $migrated = $this->migrationsRepository->all();
         $migrationFiles = collect();
@@ -52,34 +52,24 @@ class MigrationsService
         $newStep = $this->migrationsRepository->getMaxStep() + 1;
         foreach ($migrationFiles as $migration) {
             $baseName = $migration->getBasename('.php');
-            $output->write("Process migration '{$baseName}' ");
-            $output->badge("DOING", Ansi::FG_YELLOW);
+            event(new MigrationStarted($baseName));
 
             try {
                 $this->processMigration($migration, $newStep);
-
-                $output->write("Process migration '{$baseName}' ");
-                $output->badge("DONE", Ansi::FG_GREEN);
+                event(new MigrationFinished($baseName));
             } catch (Throwable $exception) {
-                $output->write("Process migration '{$baseName}' ");
-                $output->badge("ERROR", Ansi::FG_RED);
-                $output->writeln();
-
-                $output->error($exception->getMessage());
+                event(new MigrationFailed($baseName, $exception));
             }
-
-            $output->writeln();
         }
     }
 
     /**
-     * @param Output $output
      * @return void
      * @throws DateMalformedStringException
      */
-    public function down(Output $output): void
+    public function down(): void
     {
-        $this->assertTableExist($output);
+        $this->assertTableExist();
 
         $currentStep = $this->migrationsRepository->getMaxStep();
         $migrated = $this->migrationsRepository->latestMigrations($currentStep);
@@ -87,34 +77,30 @@ class MigrationsService
         /** @var MigrationEntity $migration */
         foreach ($migrated as $migration) {
             $baseName = $migration->getName();
-            $output->write("Process migration '{$baseName}' ");
-            $output->badge("DOING", Ansi::FG_YELLOW);
+            event(new MigrationStarted($baseName));
 
             try {
                 $this->rollbackMigration($migration);
-
-                $output->write("Process migration '{$baseName}' ");
-                $output->badge("DONE", Ansi::FG_GREEN);
+                event(new MigrationFinished($baseName));
             } catch (Throwable $exception) {
-                $output->write("Process migration '{$baseName}' ");
-                $output->badge("ERROR", Ansi::FG_RED);
-                $output->writeln();
-
-                $output->error($exception->getMessage());
+                event(new MigrationFailed($baseName, $exception));
             }
-
-            $output->writeln();
         }
     }
 
-    private function assertTableExist(Output $output): void
+    private function assertTableExist(): void
     {
         $migrationExist = $this->migrationsRepository->assertExist();
         if (!$migrationExist) {
-            $output->warning("Migration table does not exist. Creating ...\n");
-            $this->migrationsRepository->createMigrationTable();
-            $output->success("Migration table created\n");
-            $output->writeln();
+            $baseName = 'create_migrations_table';
+            event(new MigrationStarted($baseName));
+
+            try {
+                $this->migrationsRepository->createMigrationTable();
+                event(new MigrationFinished($baseName));
+            } catch (Throwable $exception) {
+                event(new MigrationFailed($baseName, $exception));
+            }
         }
     }
 

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Providers;
+namespace Tuto\Event;
 
 use Tuto\Application\ServiceProvider\EventServiceProviderTrait;
 use Tuto\Application\ServiceProvider\ServiceProviderInterface;
+use Tuto\Console\Listeners\ConsoleMigrationSubscriber;
 use Tuto\Event\Contract\EventSubscriberInterface;
 
-class EventServiceProvider implements ServiceProviderInterface
+class FrameworkEventServiceProvider implements ServiceProviderInterface
 {
     use EventServiceProviderTrait;
 
@@ -23,6 +24,8 @@ class EventServiceProvider implements ServiceProviderInterface
      */
     public function getSubscribers(): array
     {
-        return [];
+        return [
+            ConsoleMigrationSubscriber::class,
+        ];
     }
 }

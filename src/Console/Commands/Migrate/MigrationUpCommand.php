@@ -38,7 +38,7 @@ class MigrationUpCommand extends AbstractCommand
      */
     public function execute(Input $input, Output $output): CommandStatus
     {
-        $this->migrationsService->up($output);
+        $this->migrationsService->up();
         return CommandStatus::SUCCESS;
     }
 }
