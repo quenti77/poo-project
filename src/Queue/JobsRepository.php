@@ -37,6 +37,24 @@ class JobsRepository
     }
 
     /**
+     * @param Ulid $id
+     * @return JobEntity|null
+     * @throws DateMalformedStringException
+     * @throws JsonException
+     */
+    public function findById(Ulid $id): JobEntity|null
+    {
+        $jobEntityData = QueryMaker::select(self::JOBS_FIELDS)
+            ->from('jobs')
+            ->where('id', $id)
+            ->render()
+            ->makeRequest($this->connection)
+            ->fetch();
+
+        return $jobEntityData === false ? null : $this->transformToEntity($jobEntityData);
+    }
+
+    /**
      * @param string $queue
      * @return QueueStats
      */

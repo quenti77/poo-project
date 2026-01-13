@@ -77,8 +77,6 @@ class QueueWorkCommand extends AbstractCommand
      */
     public function execute(Input $input, Output $output): CommandStatus
     {
-        $this->workerService->withOutput($output);
-
         $queue = $input->getArgument(0, 'default');
         $maxJobs = (int) $input->getOption('max-jobs', 0);
         $sleep = (int) $input->getOption('sleep', 3);

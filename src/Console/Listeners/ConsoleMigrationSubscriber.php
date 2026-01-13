@@ -12,6 +12,9 @@ use Tuto\Event\Contract\EventSubscriberInterface;
 
 class ConsoleMigrationSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param Output $output
+     */
     public function __construct(private readonly Output $output)
     {
     }

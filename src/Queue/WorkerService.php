@@ -9,9 +9,16 @@ use Random\RandomException;
 use RuntimeException;
 use Throwable;
 use Tuto\Base\ClassNotFoundException;
-use Tuto\Console\Components\Ansi;
-use Tuto\Console\Components\Output;
 use Tuto\Error\ErrorFactory;
+use Tuto\Queue\Events\JobCrashed;
+use Tuto\Queue\Events\JobFailed;
+use Tuto\Queue\Events\JobFinished;
+use Tuto\Queue\Events\JobMarkedAsFailed;
+use Tuto\Queue\Events\JobRetriesExhausted;
+use Tuto\Queue\Events\JobRetryScheduled;
+use Tuto\Queue\Events\JobStarted;
+use Tuto\Queue\Events\WorkerAfterMaxJobsStopped;
+use Tuto\Queue\Events\WorkerProcessStarted;
 use Tuto\Queue\Jobs\FailedJobEntity;
 use Tuto\Queue\Jobs\JobEntity;
 use Tuto\Queue\Jobs\JobInterface;
@@ -19,8 +26,6 @@ use Tuto\Utils\CurrentTime;
 
 class WorkerService
 {
-    private Output|null $output = null;
-
     /**
      * @param JobsRepository $jobsRepository
      * @param FailedJobsRepository $failedJobsRepository
@@ -31,15 +36,6 @@ class WorkerService
         private readonly FailedJobsRepository $failedJobsRepository,
         private readonly CurrentTime $currentTime,
     ) {
-    }
-
-    /**
-     * @param Output $output
-     * @return void
-     */
-    public function withOutput(Output $output): void
-    {
-        $this->output = $output;
     }
 
     /**
@@ -59,9 +55,7 @@ class WorkerService
 
         $processed = 0;
 
-        $this->output?->success("Worker started on queue: '{$queue}'");
-        $this->output?->writeln();
-
+        event(new WorkerProcessStarted($queue));
         while (true) {
             $jobEntity = $this->jobsRepository->pop($queue);
 
@@ -74,8 +68,7 @@ class WorkerService
             $processed += 1;
 
             if ($maxJobs > 0 && $processed >= $maxJobs) {
-                $this->output?->info("Max jobs reached. Stopping worker...");
-                $this->output?->writeln();
+                event(new WorkerAfterMaxJobsStopped($queue, $maxJobs));
                 break;
             }
         }
@@ -90,27 +83,18 @@ class WorkerService
      */
     private function processJob(JobEntity $jobEntity): void
     {
-        $outputInfo = "Jobs #{$jobEntity->getId()} '{$jobEntity->getJobClass()}'";
-
         try {
             $job = $this->getJob($jobEntity);
-
-            $this->output?->write($outputInfo . ' ');
-            $this->output?->badge("doing", Ansi::FG_YELLOW);
+            event(new JobStarted($jobEntity->getId(), $jobEntity->getJobClass()));
 
             $job->handle();
 
             $this->jobsRepository->delete($jobEntity);
-            $this->output?->write($outputInfo . ' ');
-            $this->output?->badge("done", Ansi::FG_GREEN);
+            event(new JobFinished($jobEntity->getId(), $jobEntity->getJobClass()));
         } catch (Throwable|ClassNotFoundException $exception) {
-            $this->output?->write($outputInfo . ' ');
-            $this->output?->badge("error", Ansi::FG_RED);
-
+            event(new JobFailed($jobEntity->getId(), $jobEntity->getJobClass(), $exception));
             $this->handleFailedJob($jobEntity, $exception);
         }
-
-        $this->output?->writeln();
     }
 
     /**
@@ -132,16 +116,17 @@ class WorkerService
         $jobEntity->fail($this->currentTime->now());
 
         if ($jobEntity->canRetry($job->getMaxAttempts())) {
-            $log = "Releasing job #{$jobEntity->getId()} (attempts {$jobEntity->getAttempts()} / {$job->getMaxAttempts()})";
-            $this->jobsRepository->release($jobEntity, $this->currentTime->now()->modify('+1 minute'));
-            $this->output?->warning($log . ' ');
-            $this->output?->writeln();
+            $retryAt = $this->currentTime->now()->modify('+1 minute');
+            $this->jobsRepository->release($jobEntity, $retryAt);
+            event(new JobRetryScheduled($jobEntity->getId(), $retryAt));
 
+            $log = "Releasing job #{$jobEntity->getId()} (attempts {$jobEntity->getAttempts()} / {$job->getMaxAttempts()})";
             logger()->warning($log, [
                 'job_id' => $jobEntity->getId(),
                 'job_class' => $jobEntity->getJobClass(),
                 'attempts' => $jobEntity->getAttempts(),
                 'max_attempts' => $job->getMaxAttempts(),
+                'retry_at' => $retryAt->format('Y-m-d H:i:s'),
             ]);
             return;
         }
@@ -163,8 +148,10 @@ class WorkerService
             ? "Jobs #{$jobEntity->getId()} failed because '{$exception->getMessage()}'"
             : "Jobs #{$jobEntity->getId()} failed after retries {$job->getMaxAttempts()} attempts";
 
-        $this->output?->error($log);
-        $this->output?->writeln();
+        $event = $job === null
+            ? new JobCrashed($jobEntity->getId(), $exception)
+            : new JobRetriesExhausted($jobEntity->getId(), $job->getMaxAttempts());
+        event($event);
 
         $context = [
             'job_id' => $jobEntity->getId(),
@@ -181,8 +168,9 @@ class WorkerService
         $this->failedJobsRepository->store($failedJob);
 
         $this->jobsRepository->delete($jobEntity);
-        $this->output?->warning("Jobs moved to failed jobs");
-        $this->output?->writeln();
+        event(new JobMarkedAsFailed($jobEntity->getId()));
+//        $this->output?->warning("Jobs moved to failed jobs");
+//        $this->output?->writeln();
     }
 
     /**
