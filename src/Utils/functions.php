@@ -7,7 +7,6 @@ use Tuto\Cache\CacheInterface;
 use Tuto\Collections\Collection;
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Container\Resolver;
-use Tuto\Error\ErrorFactory;
 use Tuto\Event\Contract\EventDispatcherInterface;
 use Tuto\Event\Contract\EventInterface;
 use Tuto\Http\Requests\Request;
@@ -18,7 +17,6 @@ use Tuto\Http\Responses\ViewResponse;
 use Tuto\Logger\LoggerInterface;
 use Tuto\Routing\Router;
 use Tuto\Translate\Translator;
-use Tuto\Utils\VarDump;
 use Tuto\Utils\VarDumpRender;
 
 if (!function_exists('collect')) {

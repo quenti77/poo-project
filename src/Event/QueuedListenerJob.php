@@ -28,7 +28,9 @@ class QueuedListenerJob extends AbstractJob
         if ($listener === null) {
             return;
         }
-
+        if (!method_exists($listener, 'handle')) {
+            return;
+        }
         $listener->handle($this->event);
     }
 

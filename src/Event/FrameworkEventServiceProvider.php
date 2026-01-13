@@ -5,6 +5,7 @@ namespace Tuto\Event;
 use Tuto\Application\ServiceProvider\EventServiceProviderTrait;
 use Tuto\Application\ServiceProvider\ServiceProviderInterface;
 use Tuto\Console\Listeners\ConsoleMigrationSubscriber;
+use Tuto\Console\Listeners\ConsoleQueueSubscriber;
 use Tuto\Event\Contract\EventSubscriberInterface;
 
 class FrameworkEventServiceProvider implements ServiceProviderInterface
@@ -26,6 +27,7 @@ class FrameworkEventServiceProvider implements ServiceProviderInterface
     {
         return [
             ConsoleMigrationSubscriber::class,
+            ConsoleQueueSubscriber::class,
         ];
     }
 }
