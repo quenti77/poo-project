@@ -169,8 +169,6 @@ class WorkerService
 
         $this->jobsRepository->delete($jobEntity);
         event(new JobMarkedAsFailed($jobEntity->getId()));
-//        $this->output?->warning("Jobs moved to failed jobs");
-//        $this->output?->writeln();
     }
 
     /**
