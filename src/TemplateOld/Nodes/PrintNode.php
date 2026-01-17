@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template\Nodes;
+namespace Tuto\TemplateOld\Nodes;
 
 class PrintNode implements NodeInterface
 {

@@ -168,15 +168,14 @@ if ($withScript) {
     function renderEnum(array $item): string
     {
         $name = $item['name'] ?? '';
+        $key = $item['key'] ?? '';
         $value = $item['value'] ?? '';
 
-        $html = '<span class="sf-dump-type sf-dump-type-enum">enum</span>';
-        $html .= '<span class="sf-dump-class">' . htmlspecialchars($name) . '</span>';
-
-        if ($value !== '') {
-            $html .= '<span class="sf-dump-arrow">:</span>';
-            $html .= '<span class="sf-dump-value">' . htmlspecialchars($value) . '</span>';
+        $html = '<span class="sf-dump-type sf-dump-type-enum">enum (' . htmlspecialchars($name) . ')</span>';
+        if ($key !== '') {
+            $html .= '<span class="sf-dump-type sf-dump-boolean">' . htmlspecialchars($key) . '</span>';
         }
+        $html .= '<span class="sf-dump-value">' . htmlspecialchars($value) . '</span>';
 
         return $html;
     }

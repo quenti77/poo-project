@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template\Tokens;
+namespace Tuto\TemplateOld\Tokens;
 
 class TextToken extends BaseToken
 {

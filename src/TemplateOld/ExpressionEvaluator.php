@@ -1,12 +1,12 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use InvalidArgumentException;
 use ReflectionMethod;
 use ReflectionProperty;
 use Tuto\Collections\Collection;
-use Tuto\Template\Exceptions\InstantiateClassNotAllowedException;
+use Tuto\TemplateOld\Exceptions\InstantiateClassNotAllowedException;
 
 class ExpressionEvaluator
 {

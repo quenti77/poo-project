@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template\Tokens;
+namespace Tuto\TemplateOld\Tokens;
 
 class BlockStartToken extends BaseToken
 {

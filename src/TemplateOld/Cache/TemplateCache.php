@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template\Cache;
+namespace Tuto\TemplateOld\Cache;
 
 class TemplateCache
 {
