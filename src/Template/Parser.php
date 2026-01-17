@@ -141,7 +141,7 @@ class Parser
     {
         $node = new IfNode();
         $body = $this->parseNodes(['elseif', 'else', 'endif']);
-        $node->addBranch(trim($condition), $body->toArray());
+        $node->addBranch(trim($condition), $body->all());
 
         while (!$this->isAtEnd()) {
             $this->advance(); // Skip {%
@@ -152,10 +152,10 @@ class Parser
             if (str_starts_with($content, 'elseif ')) {
                 $elseifCondition = substr($content, 7);
                 $elseifBody = $this->parseNodes(['elseif', 'else', 'endif']);
-                $node->addBranch(trim($elseifCondition), $elseifBody->toArray());
+                $node->addBranch(trim($elseifCondition), $elseifBody->all());
             } elseif ($content === 'else') {
                 $elseBody = $this->parseNodes(['endif']);
-                $node->setElseBranch($elseBody->toArray());
+                $node->setElseBranch($elseBody->all());
             } elseif ($content === 'endif') {
                 break;
             }
@@ -175,7 +175,7 @@ class Parser
         }
 
         $body = $this->parseNodes(['else', 'endfor']);
-        $node->setBody($body->toArray());
+        $node->setBody($body->all());
 
         if (!$this->isAtEnd()) {
             $this->advance(); // Skip {%
@@ -185,7 +185,7 @@ class Parser
 
             if ($content === 'else') {
                 $elseBody = $this->parseNodes(['endfor']);
-                $node->setElseBody($elseBody->toArray());
+                $node->setElseBody($elseBody->all());
 
                 // Skip endfor
                 $this->advance(); // {%
@@ -201,7 +201,7 @@ class Parser
     {
         $node = new BlockNode(trim($name));
         $body = $this->parseNodes(['endblock']);
-        $node->setBody($body->toArray());
+        $node->setBody($body->all());
 
         // Skip endblock
         $this->advance(); // {%

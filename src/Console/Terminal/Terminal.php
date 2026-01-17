@@ -23,6 +23,10 @@ class Terminal
      */
     private function getAnsiEnabled(): bool
     {
+        if (PHP_SAPI !== 'cli') {
+            return false;
+        }
+
         if (!$this->isWindows()) {
             return true;
         }

@@ -32,7 +32,7 @@ class ViewResponse extends AbstractResponse
      */
     private function renderView(string $viewPath, array $data, string|null $layoutPath): string
     {
-        if (str_ends_with($viewPath, '.tpl')) {
+        if (str_ends_with($viewPath, '.twig')) {
             return $this->renderTemplate($viewPath, $data);
         }
 

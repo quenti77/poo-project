@@ -32,6 +32,8 @@ class ForNode implements NodeInterface
         $iterableExpr = '$this->evaluate(' . var_export($this->iterable, true) . ')';
 
         $output = "<?php \$__iterable = {$iterableExpr}; ?>";
+        $output .= '<?php $__length = is_countable($__iterable) ? count($__iterable) : 0; ?>';
+        $output .= '<?php $__index = 0; ?>';
         $output .= '<?php if (!empty($__iterable)): ?>';
 
         if ($this->keyVar) {
@@ -40,8 +42,11 @@ class ForNode implements NodeInterface
             $output .= "<?php foreach (\$__iterable as \${$this->valueVar}): ?>";
         }
 
+        $output .= '<?php $__index++; ?>';
+        $output .= '<?php $loop = [\'index\' => $__index, \'index0\' => $__index - 1, \'length\' => $__length, \'first\' => $__index === 1, \'last\' => $__index === $__length]; ?>';
+
         $output .= '<?php $this->pushContext([';
-        $output .= "'{$this->valueVar}' => \${$this->valueVar}";
+        $output .= "'{$this->valueVar}' => \${$this->valueVar}, 'loop' => \$loop";
         if ($this->keyVar) {
             $output .= ", '{$this->keyVar}' => \${$this->keyVar}";
         }
