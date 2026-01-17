@@ -131,7 +131,8 @@ class ExpressionEvaluator
             return $this->instantiate($expression, $context);
         }
 
-        if (str_starts_with($expression, '[') && str_ends_with($expression, ']')) {
+        if ((str_starts_with($expression, '[') && str_ends_with($expression, ']'))
+            || (str_starts_with($expression, '{') && str_ends_with($expression, '}'))) {
             return $this->parseArrayLiteral($expression, $context);
         }
 
@@ -153,17 +154,16 @@ class ExpressionEvaluator
 
     private function applyFilter(string $filterExpr, mixed $value, array $context): mixed
     {
-        /** @noinspection RegExpUnnecessaryNonCapturingGroup */
-        if (preg_match('/^(\w+)(?:\((.*)\))$/', $filterExpr, $matches) === false) {
-            throw new InvalidArgumentException("Invalid filter syntax: {$filterExpr}");
+        if (preg_match('/^(\w+)(?:\((.*)\))?$/', $filterExpr, $matches)) {
+            $filterName = $matches[1];
+            $args = isset($matches[2]) && $matches[2] !== ''
+                ? $this->parseArguments($matches[2], $context)
+                : [];
+
+            return $this->filters->apply($filterName, $value, $args);
         }
 
-        $filterName = $matches[1];
-        $args = isset($matches[2]) && $matches[2] !== ''
-            ? $this->parseArguments($matches[2], $context)
-            : [];
-
-        return $this->filters->apply($filterName, $value, $args);
+        throw new InvalidArgumentException("Invalid filter syntax: {$filterExpr}");
     }
 
 
@@ -209,7 +209,8 @@ class ExpressionEvaluator
         foreach ($elements as $element) {
             $element = trim($element);
 
-            if (preg_match('/^([\'"]?)(\w+)\\1\s*=>\s(.+)$/', $element, $matches)) {
+            // Support both => (PHP) and : (Twig) syntax for key-value pairs
+            if (preg_match('/^([\'"]?)(\w+)\\1\s*(?:=>|:)\s*(.+)$/', $element, $matches)) {
                 $key = $matches[2];
                 $value = $this->evaluateExpression(trim($matches[3]), $context);
                 $result[$key] = $value;
@@ -247,10 +248,10 @@ class ExpressionEvaluator
                 $stringChar = '';
                 $current .= $char;
             } elseif (!$inString) {
-                if ($char === '[' || $char === '(') {
+                if ($char === '[' || $char === '(' || $char === '{') {
                     $depth += 1;
                     $current .= $char;
-                } elseif ($char === ']' || $char === ')') {
+                } elseif ($char === ']' || $char === ')' || $char === '}') {
                     $depth -= 1;
                     $current .= $char;
                 } elseif ($char === ',' && $depth === 0) {
