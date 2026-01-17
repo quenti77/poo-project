@@ -22,7 +22,7 @@ trait CollectionArrayable
      */
     public function offsetExists(mixed $offset): bool
     {
-        return isset($this->items[$offset]);
+        return array_key_exists($offset, $this->items);
     }
 
     /**
@@ -32,9 +32,19 @@ trait CollectionArrayable
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return array_key_exists($offset, $this->items)
+        return $this->offsetExists($offset)
             ? $this->items[$offset]
             : throw new InvalidArgumentException("'{$offset}' not in current collection");
+    }
+
+    /**
+     * @param TKey $offset
+     * @param TValue|null $defaultValue
+     * @return TValue|null
+     */
+    public function get(mixed $offset, mixed $defaultValue = null): mixed
+    {
+        return $this->offsetExists($offset) ? $this->offsetGet($offset) : $defaultValue;
     }
 
     /**

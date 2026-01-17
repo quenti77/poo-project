@@ -1,10 +1,10 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use Closure;
 use RuntimeException;
-use Tuto\Template\Cache\TemplateCache;
+use Tuto\TemplateOld\Cache\TemplateCache;
 
 class Engine
 {

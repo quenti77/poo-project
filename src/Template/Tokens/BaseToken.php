@@ -2,14 +2,14 @@
 
 namespace Tuto\Template\Tokens;
 
-abstract class BaseToken
+class BaseToken
 {
     /**
-     * @param Token $type
+     * @param TokenType $type
      * @param string $value
      */
     public function __construct(
-        public readonly Token $type,
+        public readonly TokenType $type,
         public readonly string $value,
     ) {
     }

@@ -1,19 +1,19 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use RuntimeException;
 use Tuto\Collections\Collection;
-use Tuto\Template\Nodes\BlockNode;
-use Tuto\Template\Nodes\ExtendsNode;
-use Tuto\Template\Nodes\ForNode;
-use Tuto\Template\Nodes\IfNode;
-use Tuto\Template\Nodes\IncludeNode;
-use Tuto\Template\Nodes\NodeInterface;
-use Tuto\Template\Nodes\PrintNode;
-use Tuto\Template\Nodes\TextNode;
-use Tuto\Template\Tokens\BaseToken;
-use Tuto\Template\Tokens\Token;
+use Tuto\TemplateOld\Nodes\BlockNode;
+use Tuto\TemplateOld\Nodes\ExtendsNode;
+use Tuto\TemplateOld\Nodes\ForNode;
+use Tuto\TemplateOld\Nodes\IfNode;
+use Tuto\TemplateOld\Nodes\IncludeNode;
+use Tuto\TemplateOld\Nodes\NodeInterface;
+use Tuto\TemplateOld\Nodes\PrintNode;
+use Tuto\TemplateOld\Nodes\TextNode;
+use Tuto\TemplateOld\Tokens\BaseToken;
+use Tuto\TemplateOld\Tokens\Token;
 
 class Parser
 {

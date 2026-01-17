@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use DateTime;
 use DateTimeInterface;

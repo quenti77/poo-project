@@ -3,7 +3,7 @@
 namespace Tuto\Http\Responses;
 
 use ReflectionException;
-use Tuto\Template\Engine;
+use Tuto\TemplateOld\Engine;
 
 class ViewResponse extends AbstractResponse
 {

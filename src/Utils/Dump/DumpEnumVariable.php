@@ -21,13 +21,18 @@ class DumpEnumVariable implements DumpInterface
     public function render(int $depthSize = 0): array
     {
         $result = [
-            'name' => $this->var->name,
+            'type' => 'enum',
+            'name' => $this->var::class,
+            'key' => '',
             'value' => '',
             'possibilities' => []
         ];
 
         if ($this->var instanceof BackedEnum) {
+            $result['key'] = $this->var->name;
             $result['value'] = $this->var->value;
+        } else {
+            $result['value'] = $this->var->name;
         }
 
         foreach ($this->var::cases() as $case) {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use Tuto\Collections\Collection;
-use Tuto\Template\Nodes\NodeInterface;
+use Tuto\TemplateOld\Nodes\NodeInterface;
 
 class Compiler
 {
@@ -26,7 +26,7 @@ class Compiler
         return <<<PHP
 <?php
 
-use Tuto\Template\CompiledTemplate;
+use Tuto\TemplateOld\CompiledTemplate;
 
 class {$this->className} extends CompiledTemplate
 {

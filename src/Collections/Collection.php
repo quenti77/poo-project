@@ -165,7 +165,7 @@ class Collection implements ArrayAccess, Countable, Iterator
     /**
      * @return Collection<int, TValue>
      */
-    public function values(): Collection
+    public function values(): self
     {
         return collect(array_values($this->items));
     }
@@ -173,7 +173,7 @@ class Collection implements ArrayAccess, Countable, Iterator
     /**
      * @return Collection<array{0: TKey, 1: TValue}>
      */
-    public function entries(): Collection
+    public function entries(): self
     {
         return $this->map(static fn (int|string $key, mixed $value) => [$key, $value], false);
     }
@@ -195,7 +195,7 @@ class Collection implements ArrayAccess, Countable, Iterator
     {
         $result = [];
         foreach ($this as $key => $value) {
-            if ($value instanceof Collection) {
+            if ($value instanceof self) {
                 $value = $value->all();
             }
             $result[$key] = $value;

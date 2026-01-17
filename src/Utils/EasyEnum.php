@@ -10,7 +10,7 @@ trait EasyEnum
     /**
      * @return Collection<int|string, int|string>
      */
-    public function entries(): Collection
+    public static function entries(): Collection
     {
         $entries = collect();
 
@@ -24,9 +24,9 @@ trait EasyEnum
     /**
      * @return Collection<int, int|string>
      */
-    public function keys(): Collection
+    public static function keys(): Collection
     {
-        return $this->entries()->keys();
+        return self::entries()->keys();
     }
 
     public function hasKeys(int|string ...$keys): bool
@@ -37,9 +37,9 @@ trait EasyEnum
     /**
      * @return Collection<int, int|string>
      */
-    public function values(): Collection
+    public static function values(): Collection
     {
-        return $this->entries()->values();
+        return self::entries()->values();
     }
 
     /**

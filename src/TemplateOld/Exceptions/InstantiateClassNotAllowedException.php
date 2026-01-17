@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template\Exceptions;
+namespace Tuto\TemplateOld\Exceptions;
 
 use InvalidArgumentException;
 

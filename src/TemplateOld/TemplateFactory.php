@@ -1,6 +1,6 @@
 <?php
 
-namespace Tuto\Template;
+namespace Tuto\TemplateOld;
 
 use Tuto\Container\DependencyInjectionContainer;
 use Tuto\Utils\File;
