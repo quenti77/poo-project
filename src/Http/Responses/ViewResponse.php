@@ -3,6 +3,7 @@
 namespace Tuto\Http\Responses;
 
 use ReflectionException;
+use Tuto\Template\Engine;
 
 class ViewResponse extends AbstractResponse
 {
@@ -30,6 +31,38 @@ class ViewResponse extends AbstractResponse
      * @throws ReflectionException
      */
     private function renderView(string $viewPath, array $data, string|null $layoutPath): string
+    {
+        if (str_ends_with($viewPath, '.tpl')) {
+            return $this->renderTemplate($viewPath, $data);
+        }
+
+        return $this->renderPhp($viewPath, $data, $layoutPath);
+    }
+
+    /**
+     * @param string $viewPath
+     * @param array $data
+     * @return string
+     * @throws ReflectionException
+     */
+    private function renderTemplate(string $viewPath, array $data): string
+    {
+        $data['auth'] = request()->session['auth'] ?? null;
+        $data['router'] = router();
+
+        /** @var Engine $engine */
+        $engine = container(Engine::class);
+
+        return $engine->render($viewPath, $data);
+    }
+
+    /**
+     * @param string $viewPath
+     * @param array $data
+     * @param string|null $layoutPath
+     * @return string
+     */
+    private function renderPhp(string $viewPath, array $data, string|null $layoutPath): string
     {
         extract($data);
 
