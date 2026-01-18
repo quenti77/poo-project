@@ -131,6 +131,12 @@ class Lexer
                 $this->pushBaseToken(TokenType::CLOSE_BRACES, $current);
             } elseif ($current === ',') {
                 $this->pushBaseToken(TokenType::COMMA, $current);
+            } elseif ($current === '|') {
+                $this->pushBaseToken(TokenType::PIPE, $current);
+            } elseif ($current === ':') {
+                $this->pushBaseToken(TokenType::COLON, $current);
+            } elseif ($current === '?') {
+                $this->pushBaseToken(TokenType::QUESTION_MARK, $current);
             } elseif ($this->isStartLogicalOperator($current)) {
                 $op = $current;
                 if ($chars->get(0, '') === '=') {

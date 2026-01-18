@@ -44,8 +44,18 @@ enum TokenType: string
     case IN = 'in';
     case END_FOR = 'end_for';
 
+    case EXTENDS = 'extends';
+    case BLOCK = 'block';
+    case END_BLOCK = 'end_block';
+    case INCLUDE = 'include';
+    case WITH = 'with';
+    case ONLY = 'only';
+
     case COMMA = 'comma';
     case DOT = 'dot';
+    case PIPE = 'pipe';
+    case COLON = 'colon';
+    case QUESTION_MARK = 'question_mark';
 
     /**
      * @param Collection<int, TokenType>|array<int, TokenType> $searches

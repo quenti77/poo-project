@@ -1,8 +1,8 @@
 <?php
 
 use Tuto\Container\Items\DependencyItem;
-use Tuto\TemplateOld\Engine;
-use Tuto\TemplateOld\TemplateFactory;
+use Tuto\Template\Engine;
+use Tuto\Template\TemplateFactory;
 
 return [
     'template.path' => env('TEMPLATE_PATH', 'views'),
