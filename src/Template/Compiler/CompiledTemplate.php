@@ -139,10 +139,6 @@ abstract class CompiledTemplate
         }
 
         if (is_object($value)) {
-            if (property_exists($value, (string) $key)) {
-                return $value->{$key};
-            }
-
             $getter = 'get' . ucfirst((string) $key);
             if (method_exists($value, $getter)) {
                 return $value->{$getter}();
@@ -157,6 +153,12 @@ abstract class CompiledTemplate
             }
             if ($value instanceof ArrayAccess) {
                 return $value->offsetExists($key) ? $value->offsetGet($key) : null;
+            }
+
+            try {
+                return $value->{$key} ?? null;
+            } catch (\Error) {
+                return null;
             }
         }
 

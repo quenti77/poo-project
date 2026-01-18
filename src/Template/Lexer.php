@@ -260,6 +260,7 @@ class Lexer
             throw new InvalidArgumentException("String not terminated. Current string {$value}");
         }
 
+        $value .= $chars->shift();
         $this->pushBaseToken(TokenType::STRING, $value);
     }
 

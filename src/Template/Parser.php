@@ -227,7 +227,7 @@ class Parser
     {
         $this->expect(TokenType::BLOCK);
         $name = $this->expect(TokenType::IDENTIFIER)->value;
-        $this->expect(TokenType::END_BLOCK);
+        $this->expect(TokenType::BLOCK_END);
 
         $body = $this->parseUntil(TokenType::END_BLOCK);
 
