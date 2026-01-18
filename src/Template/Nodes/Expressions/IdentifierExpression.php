@@ -18,6 +18,6 @@ class IdentifierExpression implements ExpressionInterface
      */
     public function compile(): string
     {
-        return '$' . $this->name;
+        return '($' . $this->name . ' ?? null)';
     }
 }

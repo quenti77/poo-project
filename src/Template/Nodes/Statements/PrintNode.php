@@ -25,7 +25,7 @@ class PrintNode implements NodeInterface
         $compiled = $this->expression->compile();
 
         return $this->escape
-            ? "<?= htmlspecialchars({$compiled}, ENT_QUOTES, 'UTF-8') ?>"
+            ? "<?= htmlspecialchars((string) ({$compiled}), ENT_QUOTES, 'UTF-8') ?>"
             : "<?= {$compiled} ?>";
     }
 }

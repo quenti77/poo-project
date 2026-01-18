@@ -17,6 +17,17 @@ class TemplateFactory
 
         $debug = (bool) $container->getWithoutError('template.debug', false);
 
-        return new Engine($templatePath, $cachePath, $debug);
+        $engine = new Engine($templatePath, $cachePath, $debug);
+        return self::addFilters($engine);
+    }
+
+    private static function addFilters(Engine $engine): Engine
+    {
+        $engine->addFilter('trans', static fn (string $k, int|float $l = 1, array $c = []) => trans($k, $l, $c));
+
+        $engine->addFunction('url', static fn (string $name, array $params = []) => router()->generate($name, $params, true));
+        $engine->addFunction('path', static fn (string $name, array $params = []) => router()->generate($name, $params, false));
+
+        return $engine;
     }
 }

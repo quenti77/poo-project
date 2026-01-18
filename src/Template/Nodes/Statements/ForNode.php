@@ -32,7 +32,7 @@ class ForNode implements NodeInterface
     public function compile(): string
     {
         $iterable = $this->iterable->compile();
-        $loopVar = '$__loop_' . uniqid('', true);
+        $loopVar = '$__loop_' . str_replace('.', '_', uniqid('', true));
 
         $loopVars = $this->keyVariable === null
             ? "\${$this->valueVariable}"

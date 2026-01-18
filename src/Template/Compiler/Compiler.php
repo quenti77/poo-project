@@ -19,8 +19,8 @@ class Compiler
         $extendsNode = $this->findExtendsNode($nodes);
 
         $body = $nodes
-            ->filter(static fn (NodeInterface $node) => !($node instanceof ExtendsNode))
-            ->map(static fn (NodeInterface $node) => $node->compile())
+            ->filter(static fn (int $key, NodeInterface $node) => !($node instanceof ExtendsNode))
+            ->map(static fn (int $key, NodeInterface $node) => $node->compile())
             ->join();
 
         $parentTemplate = $extendsNode !== null
@@ -29,12 +29,11 @@ class Compiler
 
         return <<<PHP
         <?php
-        
+
         declare(strict_types=1);
-        
-        use Throwable;
-        use Tuto\Template\Compiler\CompiledTemplate
-        
+
+        use Tuto\Template\Compiler\CompiledTemplate;
+
         /**
          * Auto-generated template class
          * Source: {$templateName}
@@ -44,16 +43,16 @@ class Compiler
         {
             /** @var string|null \$parentTemplate */
             protected string|null \$parentTemplate = {$parentTemplate};
-            
+
             /**
              * @param array \$context
-             $ @return string
+             * @return string
              */
             protected function doRender(array \$context): string
             {
                 extract(\$context);
                 ob_start();
-                
+
                 try {
                     ?>{$body}<?php
                     return ob_get_clean();
@@ -83,7 +82,7 @@ class Compiler
      */
     private function findExtendsNode(Collection $nodes): ExtendsNode|null
     {
-        return $nodes->find(static fn (NodeInterface $node) => $node instanceof ExtendsNode);
+        return $nodes->find(static fn (int $key, NodeInterface $node) => $node instanceof ExtendsNode);
     }
 
     /**
