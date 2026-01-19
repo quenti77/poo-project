@@ -18,12 +18,14 @@ class CliApplication extends BaseApplication
     /** @var Collection<string, AbstractCommand> $commands */
     private Collection $commands;
 
+    /**
+     * @param Input $input
+     * @param Output $output
+     */
     public function __construct(
         private readonly Input $input,
         private readonly Output $output,
     ) {
-        parent::__construct();
-
         $this->commands = collect();
     }
 
@@ -45,11 +47,19 @@ class CliApplication extends BaseApplication
         $this->run();
     }
 
+    /**
+     * @param string $command
+     * @return $this
+     */
     public function addCommand(string $command): self
     {
         return $this->addCommandInstance(container($command));
     }
 
+    /**
+     * @param AbstractCommand $command
+     * @return $this
+     */
     public function addCommandInstance(AbstractCommand $command): self
     {
         $this->commands[$command->getName()] = $command;

@@ -18,9 +18,11 @@ use Tuto\Middleware\MiddlewareStack;
 
 class HttpApplication extends BaseApplication
 {
+    /**
+     * @param Request $request
+     */
     public function __construct(private readonly Request $request)
     {
-        parent::__construct();
     }
 
     /**

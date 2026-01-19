@@ -11,6 +11,7 @@ class ServiceProviderLoader implements LoaderInterface
      */
     public function load(): void
     {
+        /** @see .docs/informations.md (## ServiceProvider) */
         $serviceProviders = container()->getWithoutError('service.provider', []);
         foreach ($serviceProviders as $serviceProviderClass) {
             $serviceProvider = container($serviceProviderClass);

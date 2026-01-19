@@ -7,10 +7,9 @@ use Tuto\Collections\Collection;
 
 abstract class BaseApplication
 {
-    public function __construct()
-    {
-    }
-
+    /**
+     * @return void
+     */
     public function boot(): void
     {
         ob_start();

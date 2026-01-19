@@ -8,6 +8,7 @@ use Tuto\Collections\Collection;
 
 class Environment
 {
+    /** @var Collection<string, bool|float|int|string|null> $fields */
     private Collection $fields;
 
     /**
@@ -79,7 +80,7 @@ class Environment
      */
     public function get(string $key, bool|float|int|string|null $defaultValue = null): bool|float|int|string|null
     {
-        // Priority 1: Check system environment variables (CLI variables have highest priority)
+        // Priority 1: Check system environment variables (CLI variables have the highest priority)
         $env = getenv($key);
         if ($env !== false) {
             return $this->processValue($env);

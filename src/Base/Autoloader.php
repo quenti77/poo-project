@@ -9,6 +9,8 @@ class Autoloader
 
     public function __construct()
     {
+        // spl_autoload_register is a native PHP function
+        // When class is not load, this function is called before emit error
         spl_autoload_register($this->resolve(...));
     }
 

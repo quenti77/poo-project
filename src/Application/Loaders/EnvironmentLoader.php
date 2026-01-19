@@ -17,6 +17,10 @@ class EnvironmentLoader implements LoaderInterface
         $this->loadEnvFile(".env.{$currentEnv}.local");
     }
 
+    /**
+     * @param string $filepath
+     * @return void
+     */
     private function loadEnvFile(string $filepath): void
     {
         $path = ROOT . "/{$filepath}";
