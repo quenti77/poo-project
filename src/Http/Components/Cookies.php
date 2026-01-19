@@ -49,6 +49,9 @@ class Cookies extends Collection
 
     public function export(): void
     {
+        if (headers_sent()) {
+            return;
+        }
         foreach ($this->items as $cookie) {
             $cookie->export();
         }

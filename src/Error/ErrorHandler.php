@@ -108,6 +108,7 @@ class ErrorHandler
             request()->cookies->export();
             $response->renderHeaders();
             echo $response->getBody();
+            exit();
         } catch (Throwable $exception) {
             // Call fallback
             static::logError(ErrorFactory::fromThrowable($exception, LoggerLevel::EMERGENCY));
