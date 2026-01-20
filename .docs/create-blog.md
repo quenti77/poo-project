@@ -29,22 +29,21 @@ Table **comments** :
 | created_at | datetime | -                           |
 | updated_at | datetime | -                           |
 
-
 ### Routing
 
 Ensuite on a besoin de quelles routes ? (Toute basé sur `/{lang?}/`)
 
 Routes pour les **articles** :
 
-| method | path                    | name          | middlewares               |
-| -----: | ----------------------- | ------------- | ------------------------- |
-|    GET | /posts                  | posts.index   | -                         |
-|    GET | /posts/{postId}         | posts.show    | -                         |
-|    GET | /posts/create           | posts.create  | auth:user                 |
-|   POST | /posts                  | posts.store   | auth:user                 |
-|    GET | /posts/{postId}/edit    | posts.edit    | auth:user if author,admin |
-|  PATCH | /posts/{postId}         | posts.update  | auth:user if author,admin |
-| DELETE | /posts/{postId}         | posts.delete  | auth:user if author,admin |
+| method | path                 | name         | middlewares               |
+| -----: | -------------------- | ------------ | ------------------------- |
+|    GET | /posts               | posts.index  | -                         |
+|    GET | /posts/{postId}      | posts.show   | -                         |
+|    GET | /posts/create        | posts.create | auth:user                 |
+|   POST | /posts               | posts.store  | auth:user                 |
+|    GET | /posts/{postId}/edit | posts.edit   | auth:user if author,admin |
+|  PATCH | /posts/{postId}      | posts.update | auth:user if author,admin |
+| DELETE | /posts/{postId}      | posts.delete | auth:user if author,admin |
 
 Routes pour les **commentaires** :
 
@@ -70,11 +69,10 @@ Routes pour les **admins** : (Toutes les routes auront le middleware `auth:admin
 |  PATCH | /admin/comments/{commentId}          | admin.comments.update   | -           |
 | DELETE | /admin/comments/{commentId}          | admin.comments.delete   | -           |
 
-
 On remarque que l'on aura besoin de plusieurs middlewares :
-- Un middleware qui vérifie si on est connecté et le rang minimum à avoir
-- Un middleware qui regarde si l'auteur est le même que la personne connecté ou que c'est un admin.
 
+- Un middleware qui vérifie si on est connecté et le rang minimum à avoir
+- Un middleware qui regarde si l'auteur est le même que la personne connectée ou que c'est un admin.
 
 ### Les vues
 
