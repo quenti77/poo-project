@@ -5,6 +5,7 @@ namespace Tuto\Database\Seeders;
 use Throwable;
 use Tuto\Console\Components\Output;
 use Tuto\Database\ConnectionInterface;
+use Tuto\Utils\CurrentTime;
 
 abstract class AbstractSeeder implements SeederInterface
 {
@@ -13,9 +14,12 @@ abstract class AbstractSeeder implements SeederInterface
 
     /**
      * @param ConnectionInterface $connection
+     * @param CurrentTime $currentTime
      */
-    public function __construct(protected readonly ConnectionInterface $connection)
-    {
+    public function __construct(
+        protected readonly ConnectionInterface $connection,
+        protected readonly CurrentTime $currentTime,
+    ) {
     }
 
     /**

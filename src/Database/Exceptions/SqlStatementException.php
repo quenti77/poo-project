@@ -17,6 +17,6 @@ class SqlStatementException extends RuntimeException
             $previous->getMessage(),
         );
 
-        parent::__construct($message, $previous->getCode(), $previous);
+        parent::__construct($message, (int) $previous->getCode(), $previous);
     }
 }

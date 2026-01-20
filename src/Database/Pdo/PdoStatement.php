@@ -2,11 +2,13 @@
 
 namespace Tuto\Database\Pdo;
 
+use BackedEnum;
 use DateTimeInterface;
 use JsonException;
 use PDO;
 use Tuto\Database\StatementInterface;
 use Tuto\Utils\ValueObject\Ulid;
+use UnitEnum;
 
 class PdoStatement implements StatementInterface
 {
@@ -34,6 +36,10 @@ class PdoStatement implements StatementInterface
             $value = $value->format('Y-m-d H:i:s');
         } elseif ($value instanceof Ulid) {
             $value = (string) $value;
+        } elseif ($value instanceof BackedEnum) {
+            $value = $value->value;
+        } elseif ($value instanceof UnitEnum) {
+            $value = $value->name;
         } elseif (is_array($value)) {
             $value = json_encode($value, JSON_THROW_ON_ERROR);
         } elseif (array_key_exists($parameterType, self::TYPE)) {
