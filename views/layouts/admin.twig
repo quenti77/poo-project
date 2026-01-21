@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="fr" class="remember-theme">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{{ title | default('Administration') }} - Admin</title>
+
+    <link rel="shortcut icon" href="/assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/media/favicons/apple-touch-icon-180x180.png">
+
+    <link rel="stylesheet" id="css-main" href="/assets/styles/codebase.min.css">
+
+    {% block styles %}{% endblock %}
+
+    <script src="/assets/scripts/setTheme.js"></script>
+    <script src="/assets/scripts/codebase.app.min.js" defer></script>
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+    <div id="page-container" class="sidebar-o sidebar-dark enable-page-overlay side-scroll page-header-fixed main-content-boxed">
+
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-content">
+                <!-- Side Header -->
+                <div class="content-header justify-content-lg-center">
+                    <div>
+                        <span class="smini-visible fw-bold tracking-wide fs-lg">
+                            A<span class="text-primary">d</span>
+                        </span>
+                        <a class="link-fx fw-bold tracking-wide mx-auto" href="/admin">
+                            <span class="smini-hidden">
+                                <i class="fa fa-fire text-primary"></i>
+                                <span class="fs-4 text-dual">Admin</span>
+                            </span>
+                        </a>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-alt-danger d-lg-none" data-toggle="layout" data-action="sidebar_close">
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- END Side Header -->
+
+                <!-- Sidebar Scrolling -->
+                <div class="js-sidebar-scroll">
+                    <!-- Side User -->
+                    <div class="content-side content-side-user px-0 py-0">
+                        <div class="smini-visible-block animated fadeIn px-3">
+                            <img class="img-avatar img-avatar32" src="/assets/media/avatars/avatar15.jpg" alt="">
+                        </div>
+                        <div class="smini-hidden text-center mx-auto">
+                            <a class="img-link" href="/admin/profile">
+                                <img class="img-avatar" src="/assets/media/avatars/avatar15.jpg" alt="">
+                            </a>
+                            <ul class="list-inline mt-3 mb-0">
+                                <li class="list-inline-item">
+                                    <a class="link-fx text-dual fs-sm fw-semibold text-uppercase" href="/admin/profile">{{ user.name | default('Admin') }}</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="link-fx text-dual" data-toggle="layout" data-action="dark_mode_toggle" href="javascript:void(0)">
+                                        <i class="far fa-fw fa-moon" data-dark-mode-icon></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="link-fx text-dual" href="/logout">
+                                        <i class="fa fa-sign-out-alt"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Side User -->
+
+                    <!-- Side Navigation -->
+                    <div class="content-side content-side-full">
+                        <ul class="nav-main">
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin">
+                                    <i class="nav-main-link-icon fa fa-house-user"></i>
+                                    <span class="nav-main-link-name">Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-heading">Blog</li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin/posts">
+                                    <i class="nav-main-link-icon fa fa-file-alt"></i>
+                                    <span class="nav-main-link-name">Articles</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin/categories">
+                                    <i class="nav-main-link-icon fa fa-folder"></i>
+                                    <span class="nav-main-link-name">Categories</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin/comments">
+                                    <i class="nav-main-link-icon fa fa-comments"></i>
+                                    <span class="nav-main-link-name">Commentaires</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-heading">Administration</li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin/users">
+                                    <i class="nav-main-link-icon fa fa-users"></i>
+                                    <span class="nav-main-link-name">Utilisateurs</span>
+                                </a>
+                            </li>
+                            <li class="nav-main-item">
+                                <a class="nav-main-link" href="/admin/settings">
+                                    <i class="nav-main-link-icon fa fa-cog"></i>
+                                    <span class="nav-main-link-name">Parametres</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END Side Navigation -->
+                </div>
+                <!-- END Sidebar Scrolling -->
+            </div>
+        </nav>
+        <!-- END Sidebar -->
+
+        <!-- Header -->
+        <header id="page-header">
+            <div class="content-header">
+                <!-- Left Section -->
+                <div class="space-x-1">
+                    <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="layout" data-action="sidebar_toggle">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-alt-secondary" data-toggle="layout" data-action="header_search_on">
+                        <i class="fa fa-fw fa-search"></i>
+                    </button>
+                </div>
+                <!-- END Left Section -->
+
+                <!-- Right Section -->
+                <div class="space-x-1">
+                    <!-- User Dropdown -->
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user d-sm-none"></i>
+                            <span class="d-none d-sm-inline-block fw-semibold">{{ user.name | default('Admin') }}</span>
+                            <i class="fa fa-angle-down opacity-50 ms-1"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
+                            <div class="px-2 py-3 bg-body-light rounded-top">
+                                <h5 class="h6 text-center mb-0">{{ user.name | default('Admin') }}</h5>
+                            </div>
+                            <div class="p-2">
+                                <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1" href="/admin/profile">
+                                    <span>Profil</span>
+                                    <i class="fa fa-fw fa-user opacity-25"></i>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item d-flex align-items-center justify-content-between space-x-1" href="/logout">
+                                    <span>Deconnexion</span>
+                                    <i class="fa fa-fw fa-sign-out-alt opacity-25"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END User Dropdown -->
+
+                    <!-- Notifications -->
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-notifications" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-flag"></i>
+                            <span class="text-primary">&bull;</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications">
+                            <div class="px-2 py-3 bg-body-light rounded-top">
+                                <h5 class="h6 text-center mb-0">Notifications</h5>
+                            </div>
+                            <ul class="nav-items my-2 fs-sm">
+                                <li>
+                                    <a class="text-dark d-flex py-2" href="javascript:void(0)">
+                                        <div class="flex-shrink-0 me-2 ms-3">
+                                            <i class="fa fa-fw fa-check text-success"></i>
+                                        </div>
+                                        <div class="flex-grow-1 pe-2">
+                                            <p class="fw-medium mb-1">Aucune notification</p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Notifications -->
+                </div>
+                <!-- END Right Section -->
+            </div>
+
+            <!-- Header Search -->
+            <div id="page-header-search" class="overlay-header bg-body-extra-light">
+                <div class="content-header">
+                    <form class="w-100" action="/admin/search" method="POST">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-secondary" data-toggle="layout" data-action="header_search_off">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                            <input type="text" class="form-control" placeholder="Rechercher..." id="page-header-search-input" name="search">
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fa fa-fw fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- END Header Search -->
+
+            <!-- Header Loader -->
+            <div id="page-header-loader" class="overlay-header bg-primary">
+                <div class="content-header">
+                    <div class="w-100 text-center">
+                        <i class="far fa-sun fa-spin text-white"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END Header Loader -->
+        </header>
+        <!-- END Header -->
+
+        <!-- Main Container -->
+        <main id="main-container">
+            {% block content %}{% endblock %}
+        </main>
+        <!-- END Main Container -->
+
+        <!-- Footer -->
+        <footer id="page-footer">
+            <div class="content py-3">
+                <div class="row fs-sm">
+                    <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
+                        Propulse par <a class="fw-semibold" href="/">Mon Application</a>
+                    </div>
+                    <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
+                        <span data-toggle="year-copy"></span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- END Footer -->
+    </div>
+</body>
+</html>

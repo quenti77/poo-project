@@ -19,11 +19,4 @@ router()->group([
     ], static function (Router $router) {
     });
 
-    $router->group([
-        'prefix' => 'admin/',
-        'name' => 'admin.',
-        // 'middleware' => [],
-    ], static function (Router $router) {
-    });
-
 });
