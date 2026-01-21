@@ -118,9 +118,9 @@
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <span class="fw-semibold">{{ comment.author }}</span>
+                                    <span class="fw-semibold">{{ comment.author.name }}</span>
                                     <span class="text-muted">sur</span>
-                                    <a href="/admin/posts/{{ comment.postId }}">{{ comment.postTitle }}</a>
+                                    <a href="/admin/posts/{{ comment.post.id }}">{{ comment.post.title }}</a>
                                 </div>
                                 <span class="fs-sm text-muted">{{ comment.createdAt | date('d/m/Y') }}</span>
                             </div>
@@ -143,28 +143,28 @@
         </div>
         <div class="block-content">
             <div class="row text-center">
-                <div class="col-6 col-md-3 py-3">
-                    <a class="btn btn-alt-primary w-100" href="/admin/posts/create">
-                        <i class="fa fa-plus fa-2x mb-2 d-block"></i>
-                        Nouvel article
+                <div class="col-6 col-md-3 py-3 d-flex align-items-center">
+                    <a class="btn btn-alt-primary w-100 py-2 d-flex justify-content-between align-items-center" href="/admin/posts/create">
+                        <div class="d-block">Nouvel article</div>
+                        <i class="fa fa-plus fa-2x"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 py-3">
-                    <a class="btn btn-alt-info w-100" href="/admin/categories/create">
-                        <i class="fa fa-folder-plus fa-2x mb-2 d-block"></i>
-                        Nouvelle categorie
+                <div class="col-6 col-md-3 py-3 d-flex align-items-center">
+                    <a class="btn btn-alt-info w-100 py-2 d-flex justify-content-between align-items-center" href="/admin/categories/create">
+                        <div class="d-block0">Nouvelle catégorie</div>
+                        <i class="fa fa-folder-plus fa-2x"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 py-3">
-                    <a class="btn btn-alt-success w-100" href="/admin/users/create">
-                        <i class="fa fa-user-plus fa-2x mb-2 d-block"></i>
-                        Nouvel utilisateur
+                <div class="col-6 col-md-3 py-3 d-flex align-items-center">
+                    <a class="btn btn-alt-success w-100 py-2 d-flex justify-content-between align-items-center" href="/admin/users/create">
+                        <div class="d-block">Nouvel utilisateur</div>
+                        <i class="fa fa-user-plus fa-2x"></i>
                     </a>
                 </div>
-                <div class="col-6 col-md-3 py-3">
-                    <a class="btn btn-alt-warning w-100" href="/admin/settings">
-                        <i class="fa fa-cog fa-2x mb-2 d-block"></i>
-                        Parametres
+                <div class="col-6 col-md-3 py-3 d-flex align-items-center">
+                    <a class="btn btn-alt-warning w-100 py-2 d-flex justify-content-between align-items-center" href="/admin/settings">
+                        <div class="d-block">Paramètres</div>
+                        <i class="fa fa-cog fa-2x"></i>
                     </a>
                 </div>
             </div>
