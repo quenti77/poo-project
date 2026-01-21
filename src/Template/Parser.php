@@ -343,6 +343,9 @@ class Parser
             TokenType::OPEN_BRACKETS => $this->parseArray(),
             TokenType::OPEN_BRACES => $this->parseHash(),
             TokenType::UNARY_OPERATOR => $this->parseUnary(),
+            TokenType::DOT => throw new InvalidArgumentException(
+                "Unexpected dot at start of expression. Property access requires an object before the dot."
+            ),
             default => throw new InvalidArgumentException("Unexpected token in expression: {$token->type->value}"),
         };
     }

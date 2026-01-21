@@ -143,13 +143,15 @@ class Lexer
                     $op .= $chars->shift();
                 }
                 $this->pushBaseToken($op === '=' ? TokenType::EQUALS : TokenType::BINARY_OPERATOR, $op);
-            } elseif ($this->isNumberPart($current)) {
+            } elseif ($current === '.') {
                 $next = $chars->get(0, '');
                 if ($this->isNumber($next)) {
                     $this->processNumber($current, $chars);
                 } else {
                     $this->pushBaseToken(TokenType::DOT, $current);
                 }
+            } elseif ($this->isNumber($current)) {
+                $this->processNumber($current, $chars);
             } elseif (in_array($current, ['"', "'"], true)) {
                 $this->processString($current, $chars);
             } elseif ($this->isIdentifier($current, false)) {

@@ -4,6 +4,7 @@ namespace Tuto\Template;
 
 use Closure;
 use DateTimeImmutable;
+use DateTimeInterface;
 use RuntimeException;
 use Tuto\Template\Compiler\CompiledTemplate;
 use Tuto\Template\Compiler\Compiler;
@@ -240,9 +241,9 @@ class Engine
         $this->addFilter('reverse', static fn ($v) => is_array($v) ? array_reverse($v) : strrev((string) $v));
         $this->addFilter('keys', static fn ($v) => array_keys((array) $v));
         $this->addFilter('values', static fn ($v) => array_values((array) $v));
-        $this->addFilter('slice', static fn ($v, $s, $l = null) => array_slice((array) $v, $s, $l));
+        $this->addFilter('slice', static fn ($v, $s, $l = null) => is_array($v) ? array_slice($v, $s, $l) : mb_substr((string) $v, $s, $l));
 
-        $this->addFilter('date', static fn ($v, $f = 'Y-m-d') => new DateTimeImmutable($v)->format($f));
+        $this->addFilter('date', static fn ($v, $f = 'Y-m-d') => ($v instanceof DateTimeInterface ? $v : new DateTimeImmutable($v))->format($f));
         $this->addFilter('abs', static fn ($v) => abs($v));
         $this->addFilter('round', static fn ($v, $p = 0) => round($v, $p));
         $this->addFilter('nl2br', static fn ($v) => nl2br((string) $v));
