@@ -31,6 +31,9 @@ class Engine
     /** @var array<string, CompiledTemplate> $loadedTemplates */
     private array $loadedTemplates = [];
 
+    /** @var array<string, mixed> $globalVariables */
+    private array $globalVariables = [];
+
     /**
      * @param string $templatePath
      * @param string $cachePath
@@ -96,11 +99,22 @@ class Engine
 
     /**
      * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function addGlobalVariable(string $name, mixed $value): void
+    {
+        $this->globalVariables[$name] = $value;
+    }
+
+    /**
+     * @param string $name
      * @param array<string, mixed> $context
      * @return string
      */
     public function render(string $name, array $context = []): string
     {
+        $context = [...$this->globalVariables, ...$context];
         return $this->load($name)->render($context);
     }
 
