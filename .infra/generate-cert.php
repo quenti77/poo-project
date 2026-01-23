@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-const DOMAINS = ["poo.localhost"];
+const DOMAINS = ["poo.test"];
 const SSL_DIR = __DIR__ . '/nginx/ssl';
 
 $emojis = [
