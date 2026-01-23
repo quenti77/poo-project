@@ -47,6 +47,14 @@ class Translator
     }
 
     /**
+     * @return Locale
+     */
+    public function getCurrentLocale(): Locale
+    {
+        return $this->current ?? $this->fallback;
+    }
+
+    /**
      * @param Locale $locale
      * @return void
      */

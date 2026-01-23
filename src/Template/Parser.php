@@ -527,7 +527,7 @@ class Parser
      */
     private function parseHash(): ArrayExpression
     {
-        $elements = $this->parseHashVariables(TokenType::OPEN_BRACKETS, TokenType::CLOSE_BRACKETS);
+        $elements = $this->parseHashVariables(TokenType::OPEN_BRACES, TokenType::CLOSE_BRACES);
         return new ArrayExpression($elements, true);
     }
 
