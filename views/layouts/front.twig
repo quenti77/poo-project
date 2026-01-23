@@ -33,62 +33,53 @@
     {% block scripts %}{% endblock %}
 </head>
 <body>
-    <!-- Page Container -->
-    <div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-glass main-content-boxed">
+<!-- Page Container -->
+<div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-glass main-content-boxed">
 
-        <!-- Sidebar (Mobile) -->
-        <nav id="sidebar">
-            <div class="sidebar-content">
-                <!-- Side Header -->
-                <div class="content-header justify-content-lg-center bg-black-10">
-                    <div>
+    <!-- Sidebar (Mobile) -->
+    <nav id="sidebar">
+        <div class="sidebar-content">
+            <!-- Side Header -->
+            <div class="content-header justify-content-lg-center bg-black-10">
+                <div>
                         <span class="smini-visible fw-bold tracking-wide fs-lg">
-                            M<span class="text-primary">S</span>
+                            P
+                            <span class="text-primary">P</span>
                         </span>
-                        <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
+                    <a class="link-fx fw-bold tracking-wide mx-auto" href="/">
                             <span class="smini-hidden">
                                 <i class="fa fa-fire text-primary"></i>
-                                <span class="fs-4 text-dual">Mon</span><span class="fs-4 text-primary">Site</span>
+                                <span class="fs-4 text-dual">POO</span><span class="fs-4 text-primary">Project</span>
                             </span>
-                        </a>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-sm btn-alt-danger d-lg-none" data-toggle="layout" data-action="sidebar_close">
-                            <i class="fa fa-fw fa-times"></i>
-                        </button>
-                    </div>
+                    </a>
                 </div>
-                <!-- END Side Header -->
+                <div>
+                    <button type="button" class="btn btn-sm btn-alt-danger d-lg-none" data-toggle="layout"
+                            data-action="sidebar_close"
+                    >
+                        <i class="fa fa-fw fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- END Side Header -->
 
-                <!-- Sidebar Scrolling -->
-                <div class="js-sidebar-scroll">
-                    <div class="content-side content-side-full">
-                        <ul class="nav-main">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link" href="/">
-                                    <i class="nav-main-link-icon fa fa-home"></i>
-                                    <span class="nav-main-link-name">Accueil</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link" href="/blog">
-                                    <i class="nav-main-link-icon fa fa-newspaper"></i>
-                                    <span class="nav-main-link-name">Blog</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link" href="/about">
-                                    <i class="nav-main-link-icon fa fa-info-circle"></i>
-                                    <span class="nav-main-link-name">A propos</span>
-                                </a>
-                            </li>
-                            <li class="nav-main-item">
-                                <a class="nav-main-link" href="/contact">
-                                    <i class="nav-main-link-icon fa fa-envelope"></i>
-                                    <span class="nav-main-link-name">Contact</span>
-                                </a>
-                            </li>
-                            {% if user %}
+            <!-- Sidebar Scrolling -->
+            <div class="js-sidebar-scroll">
+                <div class="content-side content-side-full">
+                    <ul class="nav-main">
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="/">
+                                <i class="nav-main-link-icon fa fa-home"></i>
+                                <span class="nav-main-link-name">Accueil</span>
+                            </a>
+                        </li>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link" href="/blog">
+                                <i class="nav-main-link-icon fa fa-newspaper"></i>
+                                <span class="nav-main-link-name">Blog</span>
+                            </a>
+                        </li>
+                        {% if user %}
                             <li class="nav-main-heading">Mon compte</li>
                             <li class="nav-main-item">
                                 <a class="nav-main-link" href="/profile">
@@ -99,10 +90,10 @@
                             <li class="nav-main-item">
                                 <a class="nav-main-link" href="/logout">
                                     <i class="nav-main-link-icon fa fa-sign-out-alt"></i>
-                                    <span class="nav-main-link-name">Deconnexion</span>
+                                    <span class="nav-main-link-name">Déconnexion</span>
                                 </a>
                             </li>
-                            {% else %}
+                        {% else %}
                             <li class="nav-main-heading">Connexion</li>
                             <li class="nav-main-item">
                                 <a class="nav-main-link" href="/login">
@@ -116,132 +107,147 @@
                                     <span class="nav-main-link-name">S'inscrire</span>
                                 </a>
                             </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-                <!-- END Sidebar Scrolling -->
-            </div>
-        </nav>
-        <!-- END Sidebar -->
-
-        <!-- Header -->
-        <header id="page-header">
-            <div class="content-header">
-                <!-- Left Section -->
-                <div class="space-x-1">
-                    <!-- Logo -->
-                    <a class="link-fx fw-bold" href="/">
-                        <i class="fa fa-fire text-primary"></i>
-                        <span class="fs-4 text-dual">Mon</span><span class="fs-4 text-primary">Site</span>
-                    </a>
-                    <!-- END Logo -->
-                </div>
-                <!-- END Left Section -->
-
-                <!-- Right Section -->
-                <div class="d-flex align-items-center space-x-2">
-                    <!-- Header Navigation (Desktop) -->
-                    <ul class="nav-main nav-main-horizontal nav-main-hover d-none d-lg-block">
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="/">
-                                <span class="nav-main-link-name">Accueil</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="/blog">
-                                <span class="nav-main-link-name">Blog</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="/about">
-                                <span class="nav-main-link-name">A propos</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link" href="/contact">
-                                <span class="nav-main-link-name">Contact</span>
-                            </a>
-                        </li>
+                        {% endif %}
                     </ul>
-                    <!-- END Header Navigation -->
+                </div>
+            </div>
+            <!-- END Sidebar Scrolling -->
+        </div>
+    </nav>
+    <!-- END Sidebar -->
 
-                    <!-- Color Themes -->
-                    <div class="dropdown d-inline-block">
-                        <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-themes-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-fw fa-brush"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-themes-dropdown">
-                            <div class="px-3 py-2 bg-body-light rounded-top">
-                                <h5 class="fs-sm text-center mb-0">Themes</h5>
-                            </div>
-                            <div class="p-3">
-                                <div class="row g-0 text-center">
-                                    <div class="col-2">
-                                        <a class="text-default" data-toggle="theme" data-theme="default" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="text-elegance" data-toggle="theme" data-theme="/assets/styles/themes/elegance.min.css" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="text-pulse" data-toggle="theme" data-theme="/assets/styles/themes/pulse.min.css" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="text-flat" data-toggle="theme" data-theme="/assets/styles/themes/flat.min.css" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="text-corporate" data-toggle="theme" data-theme="/assets/styles/themes/corporate.min.css" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-2">
-                                        <a class="text-earth" data-toggle="theme" data-theme="/assets/styles/themes/earth.min.css" href="javascript:void(0)">
-                                            <i class="fa fa-2x fa-circle"></i>
-                                        </a>
-                                    </div>
+    <!-- Header -->
+    <header id="page-header">
+        <div class="content-header">
+            <!-- Left Section -->
+            <div class="space-x-1">
+                <!-- Logo -->
+                <a class="link-fx fw-bold" href="/">
+                    <i class="fa fa-fire text-primary"></i>
+                    <span class="fs-4 text-dual">POO</span><span class="fs-4 text-primary">Project</span>
+                </a>
+                <!-- END Logo -->
+            </div>
+            <!-- END Left Section -->
+
+            <!-- Right Section -->
+            <div class="d-flex align-items-center space-x-2">
+                <!-- Header Navigation (Desktop) -->
+                <ul class="nav-main nav-main-horizontal nav-main-hover d-none d-lg-block">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link" href="/">
+                            <span class="nav-main-link-name">Accueil</span>
+                        </a>
+                    </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link" href="/blog">
+                            <span class="nav-main-link-name">Blog</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- END Header Navigation -->
+
+                <!-- Color Themes -->
+                <div class="dropdown d-inline-block">
+                    <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-themes-dropdown"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true"
+                            aria-expanded="false"
+                    >
+                        <i class="fa fa-fw fa-brush"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                         aria-labelledby="page-header-themes-dropdown"
+                    >
+                        <div class="px-3 py-2 bg-body-light rounded-top">
+                            <h5 class="fs-sm text-center mb-0">Themes</h5>
+                        </div>
+                        <div class="p-3">
+                            <div class="row g-0 text-center">
+                                <div class="col-2">
+                                    <a class="text-default" data-toggle="theme" data-theme="default"
+                                       href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="text-elegance" data-toggle="theme"
+                                       data-theme="/assets/styles/themes/elegance.min.css" href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="text-pulse" data-toggle="theme"
+                                       data-theme="/assets/styles/themes/pulse.min.css" href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="text-flat" data-toggle="theme"
+                                       data-theme="/assets/styles/themes/flat.min.css" href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="text-corporate" data-toggle="theme"
+                                       data-theme="/assets/styles/themes/corporate.min.css" href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="text-earth" data-toggle="theme"
+                                       data-theme="/assets/styles/themes/earth.min.css" href="javascript:void(0)"
+                                    >
+                                        <i class="fa fa-2x fa-circle"></i>
+                                    </a>
                                 </div>
                             </div>
-                            <div class="px-3 py-2 bg-body-light">
-                                <h5 class="fs-sm text-center mb-0">Mode sombre</h5>
-                            </div>
-                            <div class="px-2 py-3">
-                                <div class="row g-1 text-center">
-                                    <div class="col-4">
-                                        <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2" data-toggle="layout" data-action="dark_mode_off" data-dark-mode="off">
-                                            <i class="far fa-sun fa-fw opacity-50"></i>
-                                            <span class="fs-sm fw-medium">Clair</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2" data-toggle="layout" data-action="dark_mode_on" data-dark-mode="on">
-                                            <i class="fa fa-moon fa-fw opacity-50"></i>
-                                            <span class="fs-sm fw-medium">Sombre</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2" data-toggle="layout" data-action="dark_mode_system" data-dark-mode="system">
-                                            <i class="fa fa-desktop fa-fw opacity-50"></i>
-                                            <span class="fs-sm fw-medium">Auto</span>
-                                        </button>
-                                    </div>
+                        </div>
+                        <div class="px-3 py-2 bg-body-light">
+                            <h5 class="fs-sm text-center mb-0">Mode sombre</h5>
+                        </div>
+                        <div class="px-2 py-3">
+                            <div class="row g-1 text-center">
+                                <div class="col-4">
+                                    <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2"
+                                            data-toggle="layout" data-action="dark_mode_off" data-dark-mode="off"
+                                    >
+                                        <i class="far fa-sun fa-fw opacity-50"></i>
+                                        <span class="fs-sm fw-medium">Clair</span>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2"
+                                            data-toggle="layout" data-action="dark_mode_on" data-dark-mode="on"
+                                    >
+                                        <i class="fa fa-moon fa-fw opacity-50"></i>
+                                        <span class="fs-sm fw-medium">Sombre</span>
+                                    </button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="dropdown-item mb-0 d-flex align-items-center gap-2"
+                                            data-toggle="layout" data-action="dark_mode_system" data-dark-mode="system"
+                                    >
+                                        <i class="fa fa-desktop fa-fw opacity-50"></i>
+                                        <span class="fs-sm fw-medium">Auto</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- END Color Themes -->
+                </div>
+                <!-- END Color Themes -->
 
-                    <!-- User / Auth Buttons -->
-                    {% if user %}
+                <!-- User / Auth Buttons -->
+                {% if user %}
                     <div class="dropdown d-inline-block d-none d-lg-block">
-                        <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-sm btn-alt-secondary" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        >
                             <i class="fa fa-user me-1"></i>
                             <span class="fw-semibold">{{ user.name }}</span>
                             <i class="fa fa-angle-down opacity-50 ms-1"></i>
@@ -251,141 +257,147 @@
                                 <a class="dropdown-item" href="/profile">
                                     <i class="fa fa-fw fa-user me-1"></i> Profil
                                 </a>
-                                {% if user.isAdmin %}
-                                <a class="dropdown-item" href="/admin">
-                                    <i class="fa fa-fw fa-cog me-1"></i> Administration
-                                </a>
+                                {% if can(adminLevel()) %}
+                                    <a class="dropdown-item" href="/admin">
+                                        <i class="fa fa-fw fa-cog me-1"></i> Administration
+                                    </a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="/logout">
-                                    <i class="fa fa-fw fa-sign-out-alt me-1"></i> Deconnexion
+                                    <i class="fa fa-fw fa-sign-out-alt me-1"></i> Déconnexion
                                 </a>
                             </div>
                         </div>
                     </div>
-                    {% else %}
+                {% else %}
                     <a class="btn btn-sm btn-alt-secondary d-none d-lg-inline-block" href="/login">
                         <i class="fa fa-sign-in-alt me-1"></i> Connexion
                     </a>
                     <a class="btn btn-sm btn-primary d-none d-lg-inline-block" href="/register">
                         <i class="fa fa-user-plus me-1"></i> Inscription
                     </a>
-                    {% endif %}
-                    <!-- END User / Auth Buttons -->
+                {% endif %}
+                <!-- END User / Auth Buttons -->
 
-                    <!-- Toggle Sidebar (Mobile) -->
-                    <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout" data-action="sidebar_toggle">
-                        <i class="fa fa-fw fa-bars"></i>
-                    </button>
-                    <!-- END Toggle Sidebar -->
-                </div>
-                <!-- END Right Section -->
+                <!-- Toggle Sidebar (Mobile) -->
+                <button type="button" class="btn btn-sm btn-alt-secondary d-lg-none" data-toggle="layout"
+                        data-action="sidebar_toggle"
+                >
+                    <i class="fa fa-fw fa-bars"></i>
+                </button>
+                <!-- END Toggle Sidebar -->
             </div>
+            <!-- END Right Section -->
+        </div>
 
-            <!-- Header Search -->
-            <div id="page-header-search" class="overlay-header bg-body-extra-light">
-                <div class="content-header">
-                    <form class="w-100" action="/search" method="GET">
+        <!-- Header Search -->
+        <div id="page-header-search" class="overlay-header bg-body-extra-light">
+            <div class="content-header">
+                <form class="w-100" action="/search" method="GET">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-secondary" data-toggle="layout"
+                                data-action="header_search_off"
+                        >
+                            <i class="fa fa-fw fa-times"></i>
+                        </button>
+                        <input type="text" class="form-control" placeholder="Rechercher..."
+                               id="page-header-search-input" name="q"
+                        >
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fa fa-fw fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Header Search -->
+
+        <!-- Header Loader -->
+        <div id="page-header-loader" class="overlay-header bg-primary">
+            <div class="content-header">
+                <div class="w-100 text-center">
+                    <i class="far fa-sun fa-spin text-white"></i>
+                </div>
+            </div>
+        </div>
+        <!-- END Header Loader -->
+    </header>
+    <!-- END Header -->
+
+    <!-- Main Container -->
+    <main id="main-container">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- END Main Container -->
+
+    <!-- Footer -->
+    <footer id="page-footer" class="bg-body-extra-light">
+        <div class="content content-full">
+            <!-- Footer Navigation -->
+            <div class="row items-push-2x mt-4">
+                <div class="col-6 col-md-4">
+                    <h3 class="h5 fw-bold">Navigation</h3>
+                    <ul class="list list-simple-mini fs-sm">
+                        <li>
+                            <a class="link-fx fw-semibold" href="/">Accueil</a>
+                        </li>
+                        <li>
+                            <a class="link-fx fw-semibold" href="/blog">Blog</a>
+                        </li>
+                        <li>
+                            <a class="link-fx fw-semibold" href="/about">A propos</a>
+                        </li>
+                        <li>
+                            <a class="link-fx fw-semibold" href="/contact">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-4">
+                    <h3 class="h5 fw-bold">Legal</h3>
+                    <ul class="list list-simple-mini fs-sm">
+                        <li>
+                            <a class="link-fx fw-semibold" href="/privacy">Politique de confidentialite</a>
+                        </li>
+                        <li>
+                            <a class="link-fx fw-semibold" href="/terms">Conditions d'utilisation</a>
+                        </li>
+                        <li>
+                            <a class="link-fx fw-semibold" href="/cookies">Cookies</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3 class="h5 fw-bold">{{ siteName | default('Mon Site') }}</h3>
+                    <div class="fs-sm mb-4">
+                        {{ siteDescription | default('Votre description ici.') }}
+                    </div>
+                    <h3 class="h5 fw-bold">Newsletter</h3>
+                    <form action="/newsletter/subscribe" method="POST">
                         <div class="input-group">
-                            <button type="button" class="btn btn-secondary" data-toggle="layout" data-action="header_search_off">
-                                <i class="fa fa-fw fa-times"></i>
-                            </button>
-                            <input type="text" class="form-control" placeholder="Rechercher..." id="page-header-search-input" name="q">
+                            <input type="email" class="form-control" name="email" placeholder="Votre email...">
                             <button type="submit" class="btn btn-secondary">
-                                <i class="fa fa-fw fa-search"></i>
+                                S'abonner
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
-            <!-- END Header Search -->
+            <!-- END Footer Navigation -->
 
-            <!-- Header Loader -->
-            <div id="page-header-loader" class="overlay-header bg-primary">
-                <div class="content-header">
-                    <div class="w-100 text-center">
-                        <i class="far fa-sun fa-spin text-white"></i>
-                    </div>
+            <!-- Copyright Info -->
+            <div class="row g-0 fs-sm border-top pt-3">
+                <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
+                    Propulse par <a class="fw-semibold" href="/">{{ siteName | default('Mon Site') }}</a>
+                </div>
+                <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
+                    &copy; <span data-toggle="year-copy"></span>
                 </div>
             </div>
-            <!-- END Header Loader -->
-        </header>
-        <!-- END Header -->
-
-        <!-- Main Container -->
-        <main id="main-container">
-            {% block content %}{% endblock %}
-        </main>
-        <!-- END Main Container -->
-
-        <!-- Footer -->
-        <footer id="page-footer" class="bg-body-extra-light">
-            <div class="content content-full">
-                <!-- Footer Navigation -->
-                <div class="row items-push-2x mt-4">
-                    <div class="col-6 col-md-4">
-                        <h3 class="h5 fw-bold">Navigation</h3>
-                        <ul class="list list-simple-mini fs-sm">
-                            <li>
-                                <a class="link-fx fw-semibold" href="/">Accueil</a>
-                            </li>
-                            <li>
-                                <a class="link-fx fw-semibold" href="/blog">Blog</a>
-                            </li>
-                            <li>
-                                <a class="link-fx fw-semibold" href="/about">A propos</a>
-                            </li>
-                            <li>
-                                <a class="link-fx fw-semibold" href="/contact">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md-4">
-                        <h3 class="h5 fw-bold">Legal</h3>
-                        <ul class="list list-simple-mini fs-sm">
-                            <li>
-                                <a class="link-fx fw-semibold" href="/privacy">Politique de confidentialite</a>
-                            </li>
-                            <li>
-                                <a class="link-fx fw-semibold" href="/terms">Conditions d'utilisation</a>
-                            </li>
-                            <li>
-                                <a class="link-fx fw-semibold" href="/cookies">Cookies</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <h3 class="h5 fw-bold">{{ siteName | default('Mon Site') }}</h3>
-                        <div class="fs-sm mb-4">
-                            {{ siteDescription | default('Votre description ici.') }}
-                        </div>
-                        <h3 class="h5 fw-bold">Newsletter</h3>
-                        <form action="/newsletter/subscribe" method="POST">
-                            <div class="input-group">
-                                <input type="email" class="form-control" name="email" placeholder="Votre email...">
-                                <button type="submit" class="btn btn-secondary">
-                                    S'abonner
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <!-- END Footer Navigation -->
-
-                <!-- Copyright Info -->
-                <div class="row g-0 fs-sm border-top pt-3">
-                    <div class="col-sm-6 order-sm-2 py-1 text-center text-sm-end">
-                        Propulse par <a class="fw-semibold" href="/">{{ siteName | default('Mon Site') }}</a>
-                    </div>
-                    <div class="col-sm-6 order-sm-1 py-1 text-center text-sm-start">
-                        &copy; <span data-toggle="year-copy"></span>
-                    </div>
-                </div>
-                <!-- END Copyright Info -->
-            </div>
-        </footer>
-        <!-- END Footer -->
-    </div>
-    <!-- END Page Container -->
+            <!-- END Copyright Info -->
+        </div>
+    </footer>
+    <!-- END Footer -->
+</div>
+<!-- END Page Container -->
 </body>
 </html>
