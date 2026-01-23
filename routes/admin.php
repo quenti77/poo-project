@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\AdminDashboardController;
+use App\Controllers\Admin\AdminDashboardController;
 use App\Middlewares\AuthMiddleware;
 use Tuto\Routing\Router;
 

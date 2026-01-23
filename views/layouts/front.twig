@@ -96,12 +96,11 @@
                         {% else %}
                             <li class="nav-main-heading">Connexion</li>
                             <li class="nav-main-item">
-                                <a class="nav-main-link" href="/login">
+                                <a class="nav-main-link" href="{{ transPath('auth.sign-in') }}">
                                     <i class="nav-main-link-icon fa fa-sign-in-alt"></i>
-                                    <span class="nav-main-link-name">Se connecter</span>
+                                    <span class="nav-main-link-name">{{ 'auth.login.card.login' | trans }}</span>
                                 </a>
                             </li>
-                            <li class="nav-main-item">
                                 <a class="nav-main-link" href="/register">
                                     <i class="nav-main-link-icon fa fa-user-plus"></i>
                                     <span class="nav-main-link-name">S'inscrire</span>
@@ -270,8 +269,9 @@
                         </div>
                     </div>
                 {% else %}
-                    <a class="btn btn-sm btn-alt-secondary d-none d-lg-inline-block" href="/login">
-                        <i class="fa fa-sign-in-alt me-1"></i> Connexion
+                    <a class="btn btn-sm btn-alt-secondary d-none d-lg-inline-block" href="{{ transPath('auth.sign-in') }}">
+                        <i class="fa fa-sign-in-alt me-1"></i>
+                        {{ 'auth.login.card.login' | trans }}
                     </a>
                     <a class="btn btn-sm btn-primary d-none d-lg-inline-block" href="/register">
                         <i class="fa fa-user-plus me-1"></i> Inscription
