@@ -228,7 +228,7 @@ class Engine
         $this->addFilter('capitalize', static fn ($v) => $v |> mb_strtolower(...) |> ucfirst(...));
         $this->addFilter('title', static fn ($v) => $v |> mb_strtolower(...) |> ucwords(...));
         $this->addFilter('trim', trim(...));
-        $this->addFilter('length', static fn ($v) => is_array($v) ? count($v) : mb_strlen($v));
+        $this->addFilter('length', static fn ($v) => is_array($v) ? count($v) : mb_strlen($v ?? ''));
 
         $this->addFilter('default', static fn ($v, $d = '') => $v ?? $d);
         $this->addFilter('escape', static fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'));
