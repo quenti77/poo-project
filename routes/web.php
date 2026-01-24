@@ -1,7 +1,6 @@
 <?php
 
 use App\Controllers\AuthController;
-use App\Middlewares\AuthMiddleware;
 use Tuto\Routing\Router;
 
 router()->group([
@@ -14,7 +13,7 @@ router()->group([
 
     $router->get('', static function () {
         return view('layouts/front.twig');
-    })->middleware(container(AuthMiddleware::class)->withMinimumLevel(10));
+    });
 
     $router->group([
         'prefix' => 'posts/',
