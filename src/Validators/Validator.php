@@ -58,4 +58,12 @@ class Validator
 
         return $this->validated;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasErrors(): bool
+    {
+        return $this->errors->isEmpty() === false;
+    }
 }

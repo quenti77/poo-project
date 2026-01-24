@@ -11,6 +11,14 @@ class RequestValidator extends Validator
     protected Request|null $request = null;
 
     /**
+     * @return Request|null
+     */
+    public function getRequest(): Request|null
+    {
+        return $this->request;
+    }
+
+    /**
      * @param Request $request
      * @return static
      */
