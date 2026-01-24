@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr" class="remember-theme">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{{ title | default('Accueil') }}</title>
+
+    <meta name="description" content="{{ description | default('') }}">
+    <meta name="author" content="{{ author | default('') }}">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="{{ title | default('Accueil') }}">
+    <meta property="og:site_name" content="{{ siteName | default('Mon Site') }}">
+    <meta property="og:description" content="{{ description | default('') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url | default('') }}">
+    <meta property="og:image" content="{{ ogImage | default('') }}">
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="/assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/media/favicons/favicon-192x192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/media/favicons/apple-touch-icon-180x180.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" id="css-main" href="/assets/styles/codebase.min.css">
+
+    {% block styles %}{% endblock %}
+
+    <!-- Scripts -->
+    <script src="/assets/scripts/setTheme.js"></script>
+    <script src="/assets/scripts/codebase.app.min.js" defer></script>
+    {% block scripts %}{% endblock %}
+</head>
+<body>
+<!-- Page Container -->
+<div id="page-container" class="sidebar-dark side-scroll page-header-fixed page-header-glass main-content-boxed">
+    <!-- Main Container -->
+    <main id="main-container">
+        {% block content %}{% endblock %}
+    </main>
+    <!-- END Main Container -->
+</div>
+</body>
+</html>
