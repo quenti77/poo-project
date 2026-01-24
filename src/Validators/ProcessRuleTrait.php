@@ -75,6 +75,8 @@ trait ProcessRuleTrait
     protected function processRules(string $fieldName, Collection $rules): void
     {
         $success = true;
+        $validatedValue = null;
+
         foreach ($rules as $rule) {
             $rule->withFieldName($fieldName);
             $rule->withData($this->data);
@@ -84,6 +86,12 @@ trait ProcessRuleTrait
             if ($success === true && $validated === false) {
                 $success = false;
             }
+
+            $ruleValue = $rule->getValidatedValue();
+            if ($ruleValue !== null) {
+                $validatedValue = $ruleValue;
+            }
+
             if ($validated === false && $rule->stopOnFailure()) {
                 return;
             }
@@ -91,6 +99,8 @@ trait ProcessRuleTrait
 
         if ($success === true) {
             $this->validated[$fieldName] = $this->data[$fieldName] ?? null;
+        } elseif ($validatedValue !== null) {
+            $this->validated[$fieldName] = $validatedValue;
         }
     }
 }

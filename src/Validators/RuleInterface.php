@@ -33,4 +33,9 @@ interface RuleInterface
      * @return bool
      */
     public function validate(): bool;
+
+    /**
+     * @return mixed
+     */
+    public function getValidatedValue(): mixed;
 }

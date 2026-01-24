@@ -62,6 +62,14 @@ abstract class AbstractRule implements RuleInterface
     abstract public function validate(): bool;
 
     /**
+     * @return mixed
+     */
+    public function getValidatedValue(): mixed
+    {
+        return null;
+    }
+
+    /**
      * @param string $fieldName
      * @param string $errorName
      * @param string $error
