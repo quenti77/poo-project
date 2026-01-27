@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+env:
+  ENV: local
+  COMPOSE_PROJECT_NAME: poo-project-{{.ENV}}
+
+dotenv: ['.env', '.env.{{.ENV}}', '{{.HOME}}/.env']
+
+vars:
+  DOCKER_COMPOSE_FILE: docker-compose.{{.ENV}}.yml
+  DOCKER_COMMAND: docker compose -f {{.DOCKER_COMPOSE_FILE}}
+
+tasks:
+  init:
+    desc: Création des fichiers de bases
+    cmds:
+      - echo "🛠️  Initialisation du projet"
+      - php infra/init.php
+    silent: true
+
+  build:
+    desc: Création des images Docker
+    cmds:
+      - echo "🛠️  Création des images pour l'environnement {{.ENV}}"
+      - "{{.DOCKER_COMMAND}} build --no-cache"
+    silent: true
+
+  up:
+    desc: Lancement des containers
+    cmds:
+      - echo "⬆️  Lancement du projet"
+      - "{{.DOCKER_COMMAND}} up -d"
+      - task: key:generate
+    silent: true
+
+  key:generate:
+    desc: Génère APP_KEY si manquante
+    cmds:
+      - echo "🔑 Génération de APP_KEY..."
+      - "{{.DOCKER_COMMAND}} exec app php artisan key:generate"
+      - task: up
+    silent: true
+    status:
+      - grep -q "^APP_KEY=base64:" app/.env
+
+  down:
+    desc: Arrêt des containers
+    cmds:
+      - echo "⬇️  Arrêt du projet"
+      - "{{.DOCKER_COMMAND}} down"
+    silent: true
+
+  logs:
+    desc: Afficher les logs des containers
+    cmds:
+      - echo "📃 Affichage des logs (CTRL+C pour arrêter)"
+      - "{{.DOCKER_COMMAND}} logs -f"
+    silent: true
+    ignore_error: true
+
+  shell:
+    desc: Ouvrir un shell dans le container app
+    cmds:
+      - echo ">_  Ouverture du shell dans le container php "
+      - "{{.DOCKER_COMMAND}} exec app /bin/bash"
+    silent: true

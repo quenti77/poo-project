@@ -42,15 +42,44 @@ Voici les versions minimum des outils à avoir :
   - Yarn version 1.22
   - pnpm version 10
   - ⚠️ Bun.js (pas complètement compatible)
+- TaskFile (Remplace MakeFile)
+- mkcert (installé automatiquement par `task init` si manquant)
 
 
 ## Installation et lancement
 
-WIP ...
+Les commandes suivantes permettent de lancer le projet :
+
+```bash
+# Récupère le projet
+git clone https://github.com/quenti77/poo-project
+cd poo-project
+
+# Compile et lance le projet
+task init    # Crée les fichiers .env et certificats SSL
+task build   # Compile les images Docker
+task up      # Lance les containers (génère APP_KEY si manquante)
+```
+
+Ajouter `poo.test` dans `/etc/hosts` :
+
+```bash
+echo "127.0.0.1 poo.test" | sudo tee -a /etc/hosts
+```
+
+Accéder au projet : https://poo.test
+
+Vous pouvez utiliser ces commandes :
+
+```bash
+task -l       # Voir la liste des commandes
+task down     # Arrêter le projet
+task logs     # Voir les logs
+```
 
 
 ## État du projet
 
 🚧 En cours de développement
 
-- [ ] WIP ...
+- [ ] Avoir une infra potable pour le dev
