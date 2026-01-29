@@ -5,8 +5,8 @@ ARG UID=1000
 ARG GID=1000
 
 # Installation des dépendances système
-RUN apt-get update && \
-    apt-get upgrade && \
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
     apt-get install -y \
         git \
         unzip \
@@ -54,11 +54,11 @@ USER app_user
 
 FROM base-php AS production-php
 
-# Suppression des packages non nécessaire
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Installation des dépendances sans les versions de dev
 RUN composer install --no-interaction --no-dev --prefer-dist
+
+# Suppression des packages non nécessaire
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && rm /usr/bin/composer
 
 # Optimisation Laravel
 RUN php artisan config:clear && \

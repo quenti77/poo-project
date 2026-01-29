@@ -35,7 +35,6 @@ de simplicité et de problème potentiel.
 Voici les versions minimum des outils à avoir :
 
 - PHP version 8.5
-- Vue.js version 3.5
 - Docker engine version 29
 - Un environnement Node :
   - Node.js version 24
